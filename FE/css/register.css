@@ -1,0 +1,208 @@
+
+.frame-child {
+    width: 39.031rem;
+    position: relative;
+    height: 44.294rem;
+    object-fit: cover;
+}
+.create-account {
+    align-self: stretch;
+    position: relative;
+    line-height: 2.5rem;
+}
+.image-939-icon {
+    width: 2.081rem;
+    position: relative;
+    height: 2.25rem;
+    object-fit: cover;
+}
+.sign-up-with {
+    flex: 1;
+    position: relative;
+    letter-spacing: 0.08em;
+    line-height: 2.5rem;
+}
+.image-939-parent {
+    width: 18.5rem;
+    border-radius: 12px;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    height: 4.625rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    gap: 0.75rem;
+}
+.image-940-icon {
+    width: 2.431rem;
+    position: relative;
+    height: 2.625rem;
+    object-fit: cover;
+}
+.frame-group {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+    font-family: Poppins;
+}
+.create-account-parent {
+    width: 39rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    font-family: Volkhov;
+}
+.frame-item {
+    width: 1.863rem;
+    position: relative;
+    background-color: #838383;
+    height: 0.313rem;
+}
+.or {
+    width: 2.856rem;
+    position: relative;
+    letter-spacing: 0.08em;
+    line-height: 2.5rem;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.rectangle-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    color: #838383;
+}
+.first-name {
+    position: absolute;
+    top: 0rem;
+    left: 0.031rem;
+    letter-spacing: 0.08em;
+    line-height: 2.5rem;
+}
+.input-name-child {
+    position: absolute;
+    top: 3.168rem;
+    left: -0.031rem;
+    border-top: 1px solid #9d9d9d;
+    box-sizing: border-box;
+    width: 18.5rem;
+    height: 0.063rem;
+}
+.input-name {
+    width: 18.438rem;
+    position: relative;
+    height: 3.2rem;
+}
+.last-name {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    letter-spacing: 0.08em;
+    line-height: 2.5rem;
+}
+.input-name-item {
+    position: absolute;
+    top: 2.918rem;
+    left: -0.031rem;
+    border-top: 1px solid #9d9d9d;
+    box-sizing: border-box;
+    width: 18.5rem;
+    height: 0.063rem;
+}
+.input-name1 {
+    width: 18.438rem;
+    position: relative;
+    height: 2.95rem;
+}
+.input-name-parent {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.sign-in1 {
+    position: relative;
+    letter-spacing: 0.08em;
+    line-height: 2.5rem;
+    font-weight: 600;
+    border-color: #5b86e5;
+}
+.sign-in-wrapper {
+    width: 39rem;
+    border-radius: 12px;
+    background-color: #5b86e5;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    box-sizing: border-box;
+}
+.login {
+    color: #5b86e5;
+}
+.already-have-an-container {
+    align-self: stretch;
+    position: relative;
+    letter-spacing: 0.08em;
+    line-height: 2.5rem;
+    text-align: center;
+    color: #000;
+}
+.frame-div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1.125rem;
+    color: #fff;
+}
+.frame-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 2.5rem;
+    font-size: 1rem;
+    color: #9d9d9d;
+}
+.frame-parent {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.rectangle-parent {
+    position: absolute;
+    top: calc(50% - 354px);
+    left: calc(50% - 640px);
+    width: 80rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2rem;
+}
+.sign-in {
+    width: 100%;
+    position: relative;
+    background-color: #fff;
+    height: 64rem;
+    overflow: hidden;
+    text-align: left;
+    font-size: 1.875rem;
+    color: #000;
+    font-family: Poppins;
+}
