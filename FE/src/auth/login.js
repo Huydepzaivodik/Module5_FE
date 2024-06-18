@@ -1,73 +1,136 @@
-showFormLogin();
-
 function showFormLogin() {
-    document.getElementById('main').innerHTML = `
-<div class="d">
-    <div class="rectangle-parent">
-        <img class="frame-child" alt="" src="https://wallpapers.com/images/featured/food-4k-1pf6px6ryqfjtnyr.jpg" style="border-radius: 3px">
-        <div class="frame-parent">
-            <div class="sign-in-to-fasco-parent">
-                <div class="sign-in-to"><b>Trưa Nay Ăn Gì?</b></div>
-                <div class="frame-group">
-                    <div class="image-939-parent">
-                        <img class="image-939-icon" alt="" src="https://i.pinimg.com/564x/ce/59/e2/ce59e210c1e61eaccd1074f9701e847e.jpg">
-                        <div class="sign-up-with">Sign up with Google</div>
-                    </div>
-                    <div class="image-939-parent">
-                        <img class="image-940-icon" alt="" src="https://xneelo.co.za/help-centre/wp-content/uploads/2016/12/gmail-logo-1.png">
+    showMain();
+    document.getElementById("app-content").innerHTML = `  
+  <!--====== Section 1 ======-->
+            <div class="u-s-p-y-60">
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="breadcrumb">
+                            <div class="breadcrumb__wrap">
+                                <ul class="breadcrumb__list">
+                                    <li class="has-separator">
 
-                        <div class="sign-up-with">Sign up with Email</div>
-                    </div>
-                </div>
-            </div>
-            <div class="rectangle-group">
-                <div class="frame-item">
-                </div>
-                <b class="or">OR</b>
-                <div class="frame-item">
-                </div>
-            </div>
-            <div class="frame-container">
-                    <div class="mb-3">
-                        <label for="username" class="form-label"><b>User Name</b></label>
-                        <input type="text" class="form-control" id="username" aria-describedby="emailHelp">
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label"><b>Password</b></label>
-                        <input type="password" class="form-control" id="password">
-                    </div>
+                                        <a href="#" onclick="showMain()">Home</a></li>
+                                    <li class="is-marked">
 
-                <div class="frame-div">
-                 <span id="error-sign-up" style="color: red"></span>
-                    <button class="sign-in-wrapper"  type="submit">
-                        <div class="sign-in" style="font-family: Poppins;font-size: 15px;color: white" onclick="login()">Sign In</div>
-                    </button>
-                    <div class="frame-parent1">
-                       <button class="sign-in-wrapper-register" onclick="showFormRegister()">
-                        <div class="sign-in" style="font-family: Poppins;font-size: 15px;color: cornflowerblue">Register</div>
-                    </button>
-                        <b class="forget-password">Forget Password?</b>
+                                        <a href="#">Signin</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!--====== End - Section 1 ======-->
+
+
+            <!--====== Section 2 ======-->
+            <div class="u-s-p-b-60">
+
+                <!--====== Section Intro ======-->
+                <div class="section__intro u-s-m-b-60">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="section__text-wrap">
+                                    <h1 class="section__heading u-c-secondary">ALREADY REGISTERED?</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Intro ======-->
+
+
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="row row--center">
+                            <div class="col-lg-6 col-md-8 u-s-m-b-30">
+                                <div class="l-f-o">
+                                    <div class="l-f-o__pad-box">
+                                        <h1 class="gl-h1">I'M NEW CUSTOMER</h1>
+
+                                        <span class="gl-text u-s-m-b-30">By creating an account with our store, you will be able to move through the checkout process faster, store shipping addresses, view and track your orders in your account and more.</span>
+                                        <div class="u-s-m-b-15">
+
+                                            <a class="l-f-o__create-link btn--e-transparent-brand-b-2" href="signup.html">CREATE AN ACCOUNT</a></div>
+                                        <h1 class="gl-h1">SIGNIN</h1>
+
+                                        <span class="gl-text u-s-m-b-30">If you have an account with us, please log in.</span>
+                                        <form class="l-f-o__form">
+                                            <div class="gl-s-api">
+                                                <div class="u-s-m-b-15">
+
+                                                    <button class="gl-s-api__btn gl-s-api__btn--fb" type="button"><i class="fab fa-facebook-f"></i>
+
+                                                        <span>Signin with Facebook</span></button></div>
+                                                <div class="u-s-m-b-15">
+
+                                                    <button class="gl-s-api__btn gl-s-api__btn--gplus" type="button"><i class="fab fa-google"></i>
+
+                                                        <span>Signin with Google</span></button></div>
+                                            </div>
+                                            <div class="u-s-m-b-30">
+
+                                                <label class="gl-label" for="login-email">USER NAME *</label>
+
+                                                <input class="input-text input-text--primary-style" type="text" id="login-username" placeholder="Enter User Name"></div>
+                                            <div class="u-s-m-b-30">
+
+                                                <label class="gl-label" for="login-password">PASSWORD *</label>
+
+                                                <input class="input-text input-text--primary-style" type="text" id="login-password" placeholder="Enter Password"></div>
+                                            <div class="gl-inline">
+                                                <div class="u-s-m-b-30">
+
+                                                    <button class="btn btn--e-transparent-brand-b-2"  onclick="login()">LOGIN</button></div>
+                                                <div class="u-s-m-b-30">
+
+                                                    <a class="gl-link" href="lost-password.html">Lost Your Password?</a></div>
+                                            </div>
+                                            <div class="u-s-m-b-30">
+
+                                                <!--====== Check Box ======-->
+                                                <div class="check-box">
+
+                                                    <input type="checkbox" id="remember-me">
+                                                    <div class="check-box__state check-box__state--primary">
+
+                                                        <label class="check-box__label" for="remember-me">Remember Me</label></div>
+                                                         <span style="color: red;font-size: medium" id="error-sign-up"></span>
+
+                                                </div>
+                                                
+                                                <!--====== End - Check Box ======-->
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
+            </div>
+            <!--====== End - Section 2 ======-->
         </div>
-    </div>
-</div>`;
+        <!--====== End - App Content ======-->
+`;
 }
 
 function login() {
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
+    console.log("Login funtion!")
+    let username = document.getElementById("login-username").value;
+    let password = document.getElementById("login-password").value;
     let user = {
         username: username,
         password: password
     }
-    axios.post("http://localhost:8080/login", user).then((response) => {
-        let data = response.data;
-        localStorage.setItem("currentUser", JSON.stringify(data));
-        showHome();
+    axios.post("http://localhost:8080/login", user).then(({data}) => {
+        localStorage.setItem("auth", JSON.stringify(data));
+        showMain();
     }).catch(({response}) => {
         document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Login failed !</b>';
     })
 }
-

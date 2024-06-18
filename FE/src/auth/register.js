@@ -1,106 +1,164 @@
 function showFormRegister() {
-    document.getElementById("main").innerHTML = `<div class="d"  style="background-image: url('https://wallpapers.com/images/hd/food-4k-3gsi5u6kjma5zkj0.jpg');
-">
-    <div class="rectangle-parent">
-        <img class="frame-child" alt="" src="https://play-lh.googleusercontent.com/eafAaAaJFqETPuSjnWXMR6E2iOqCxp4ekQHdY1OJ4UwVDHrd5BI8X1tUUBEtvRsyUa8" style="border-radius: 3px">
-        <div class="frame-parent">
-            <div class="sign-in-to-fasco-parent">
-                <div class="sign-in-to"><b>Trưa Nay Ăn Gì?</b></div>
-                <div class="frame-group">
-                    <div class="image-939-parent">
-                        <img class="image-939-icon" alt="" src="https://i.pinimg.com/564x/ce/59/e2/ce59e210c1e61eaccd1074f9701e847e.jpg">
-                        <div class="sign-up-with">Sign up with Google</div>
+    showMain();
+    document.getElementById("app-content").innerHTML = `
+            <!--====== Section 1 ======-->
+            <div class="u-s-p-y-60">
+
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="breadcrumb">
+                            <div class="breadcrumb__wrap">
+                                <ul class="breadcrumb__list">
+                                    <li class="has-separator">
+
+                                        <a href="index.html">Home</a></li>
+                                    <li class="is-marked">
+
+                                        <a href="signup.html">Signup</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="image-939-parent">
-                        <img class="image-940-icon" alt="" src="https://xneelo.co.za/help-centre/wp-content/uploads/2016/12/gmail-logo-1.png">
-                        <div class="sign-up-with">Sign up with Email</div>
+                </div>
+            </div>
+            <!--====== End - Section 1 ======-->
+
+
+            <!--====== Section 2 ======-->
+            <div class="u-s-p-b-60">
+
+                <!--====== Section Intro ======-->
+                <div class="section__intro u-s-m-b-60">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="section__text-wrap">
+                                    <h1 class="section__heading u-c-secondary">CREATE AN ACCOUNT</h1>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="rectangle-group">
-                <div class="frame-item">
-                </div>
-                <b class="or">OR</b>
-                <div class="frame-item">
-                </div>
-            </div>
-            <div class="frame-container">
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                  <label for="username" class="form-label"><b>User Name</b></label>
-                  <input style="width: 100%" type="text" class="form-control" id="username" aria-describedby="emailHelp">
-                </div>
-                <div class="col-md-4 mb-3">
-                  <label for="password" class="form-label"><b>Password</b></label>
-                  <input style="width: 100%" type="password" class="form-control" id="password">
-                </div>
-                <div class="col-md-4 mb-3">
-                  <label for="cfPassword" class="form-label"><b>Confirm Password</b></label>
-                  <input style="width: 100%" type="password" class="form-control" id="cfPassword">
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                  <label for="name" class="form-label"><b>Name</b></label>
-                  <input style="width: 100%" type="text" class="form-control" id="name" aria-describedby="emailHelp">
-                </div>
-                <div class="col-md-4 mb-3">
-                  <label for="email" class="form-label"><b>Email</b></label>
-                  <input style="width: 100%" type="text" class="form-control" id="email">
-                </div>
-                <div class="col-md-4 mb-3">
-                  <label for="address" class="form-label"><b>Address</b></label>
-                  <input style="width: 100%" type="text" class="form-control" id="address">
-                </div>
-            </div>
-            
-           
-            <div class="col-md-12 mb-3">
-               <label for="phoneNumber" class="form-label"><b>Phone Number</b></label>
-               <input style="width: 100%" type="text" class="form-control" id="phoneNumber" aria-describedby="emailHelp">
-            </div>
+                <!--====== End - Section Intro ======-->
+
+
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="row row--center">
+                            <div class="col-lg-6 col-md-8 u-s-m-b-30">
+                                <div class="l-f-o">
+                                    <div class="l-f-o__pad-box">
+                                        <h1 class="gl-h1">PERSONAL INFORMATION</h1>
+                                        <form class="l-f-o__form">
+                                            <div class="gl-s-api">
+                                                <div class="u-s-m-b-15">
+
+                                                    <button class="gl-s-api__btn gl-s-api__btn--fb" type="button"><i class="fab fa-facebook-f"></i>
+
+                                                        <span>Signup with Facebook</span></button></div>
+                                                <div class="u-s-m-b-30">
+
+                                                    <button class="gl-s-api__btn gl-s-api__btn--gplus" type="button"><i class="fab fa-google"></i>
+
+                                                        <span>Signup with Google</span></button></div>
+                                            </div>
+                                            
                                                 
-                <div class="frame-div">       
-                    <div class="frame-parent1">
-                    <span id="error-sign-up" style="color: red"></span>
-                       <button class="sign-in-wrapper-register" onclick="signUp()">
-                        <div class="sign-in" style="font-family: Poppins;font-size: 15px;color: cornflowerblue">Register</div>
-                    </button>
-                       <b>Already had account? <a href="#" style="text-decoration: none" onclick="showFormLogin()">Login</a></b>
+                                            <div class="gl-inline">      
+                                             <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="reg-fname">FIRST NAME *</label>
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-fname" placeholder="First Name"></div>                                                                                              
+                                            <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="reg-lname">LAST NAME *</label>
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-lname" placeholder="Last Name"></div>
+                                             </div>
+                                            
+                                            <div class="gl-inline">                                           
+                                               <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="reg-address">ADDRESS *</label>
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-address" placeholder="Address"></div>                                              
+                                             <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="reg-phone-number">PHONE NUMBER *</label>
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-phone-number" placeholder="Phone Number"></div>                                              
+                                            </div>   
+                                                                                               
+                                            <div class="gl-inline">                                           
+                                                <div class="u-s-m-b-30">
+                                                    <label class="gl-label" for="gender">GENDER</label><select class="select-box select-box--primary-style u-w-100" id="gender">
+                                                        <option selected>Select</option>
+                                                        <option value="male">Male</option>
+                                                        <option value="female">Female</option>
+                                                    </select>
+                                                </div>
+                                                
+                                               <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="reg-email">EMAIL *</label>
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-email" placeholder="Email"></div>                                                                                                                                        
+                                            </div>
+                                            
+                                            
+                                            <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="reg-username">USER NAME *</label>
+
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-username" placeholder="Enter User name"></div>
+                                            <div class="u-s-m-b-30">
+
+                                                <label class="gl-label" for="reg-password">PASSWORD *</label>
+
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-password" placeholder="Enter Password"></div>
+                                                
+                                             <div class="u-s-m-b-30">
+
+                                                <label class="gl-label" for="reg-cfPassword">CONFIRM PASSWORD *</label>
+
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-cfPassword" placeholder="Re-Enter Password"></div>    
+                                                               
+                                                               <span id="error-sign-up" style="color: red;font-size: medium"></span>                               
+                                            <div class="u-s-m-b-15">
+
+                                                <button class="btn btn--e-transparent-brand-b-2" type="submit" onclick="register()">CREATE</button></div>
+
+                                            <a class="gl-link" href="#">Return to Store</a>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!--====== End - Section Content ======-->
             </div>
-        </div>
-    </div>
-</div>`
-
-
+            <!--====== End - Section 2 ======-->`;
 }
 
-function signUp() {
-    let username = document.getElementById('username').value;
-    let password = document.getElementById('password').value;
-    let email = document.getElementById('email').value;
-    let confirmPassword = document.getElementById('cfPassword').value;
-    let name = document.getElementById('name').value;
-    let address = document.getElementById('address').value;
-    let phoneNumber = document.getElementById('phoneNumber').value;
-
+function register() {
+    let username = document.getElementById("reg-username").value;
+    let email = document.getElementById("reg-email").value;
+    let password = document.getElementById("reg-password").value;
+    let confirmPassword = document.getElementById("reg-cfPassword").value;
+    let firstName = document.getElementById("reg-fname").value;
+    let lastName = document.getElementById("reg-lname").value;
+    let phoneNumber = document.getElementById("reg-phone-number").value;
+    let gender = document.getElementById("gender").value;
+    let address = document.getElementById("reg-address").value;
+    let name = firstName + " " + lastName;
     let user = {
         username: username,
         password: password,
-        email: email,
         confirmPassword: confirmPassword,
-        name: name,
         address: address,
-        phoneNumber: phoneNumber,
+        gender: gender,
+        email: email,
+        name: name,
+        phoneNumber: phoneNumber
     }
     axios.post("http://localhost:8080/register", user).then(() => {
         alert("Đăng ký thành công!")
         showFormLogin();
     }).catch(({response}) => {
-        document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Register failed !</b>';
+        document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Sign Up Failed !</b>';
     })
 
 }
