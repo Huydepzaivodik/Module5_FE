@@ -58,7 +58,7 @@ function showFormLogin() {
                                         <h1 class="gl-h1">SIGNIN</h1>
 
                                         <span class="gl-text u-s-m-b-30">If you have an account with us, please log in.</span>
-                                        <form class="l-f-o__form">
+                                        <div class="l-f-o__form">
                                             <div class="gl-s-api">
                                                 <div class="u-s-m-b-15">
 
@@ -104,7 +104,7 @@ function showFormLogin() {
                                                 
                                                 <!--====== End - Check Box ======-->
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -127,10 +127,11 @@ function login() {
         username: username,
         password: password
     }
+    console.log(user)
     axios.post("http://localhost:8080/login", user).then(({data}) => {
-        localStorage.setItem("auth", JSON.stringify(data));
+        localStorage.setItem("currentUser", JSON.stringify(data));
         showMain();
-    }).catch(({response}) => {
+    }).catch((error) => {
         document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Login failed !</b>';
     })
 }

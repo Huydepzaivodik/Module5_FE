@@ -51,7 +51,7 @@ function showFormRegister() {
                                 <div class="l-f-o">
                                     <div class="l-f-o__pad-box">
                                         <h1 class="gl-h1">PERSONAL INFORMATION</h1>
-                                        <form class="l-f-o__form">
+                                        <div class="l-f-o__form">
                                             <div class="gl-s-api">
                                                 <div class="u-s-m-b-15">
 
@@ -121,6 +121,114 @@ function showFormRegister() {
                                                 <button class="btn btn--e-transparent-brand-b-2" type="submit" onclick="register()">CREATE</button></div>
 
                                             <a class="gl-link" href="#">Return to Store</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
+            </div>
+            <!--====== End - Section 2 ======-->`;
+}
+function showMerchantRegister(){
+    document.getElementById("app-content").innerHTML = `
+            <!--====== Section 1 ======-->
+            <div class="u-s-p-y-60">
+
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="breadcrumb">
+                            <div class="breadcrumb__wrap">
+                                <ul class="breadcrumb__list">
+                                    <li class="has-separator">
+
+                                        <a href="index.html">Home</a></li>
+                                    <li class="is-marked">
+
+                                        <a href="signup.html">Signup</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--====== End - Section 1 ======-->
+
+
+            <!--====== Section 2 ======-->
+            <div class="u-s-p-b-60">
+
+                <!--====== Section Intro ======-->
+                <div class="section__intro u-s-m-b-60">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="section__text-wrap">
+                                    <h1 class="section__heading u-c-secondary">CREATE AN ACCOUNT</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Intro ======-->
+
+
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="row row--center">
+                            <div class="col-lg-6 col-md-8 u-s-m-b-30">
+                                <div class="l-f-o">
+                                    <div class="l-f-o__pad-box">
+                                        <h1 class="gl-h1">SHOP INFORMATION</h1>
+                                        <div class="l-f-o__form>
+                                        <div class="gl-inline">      
+                                             <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="regm-image"> AVATAR IMAGE *</label>
+                                                <input class="input-text input-text--primary-style" type="file" id="imageUpload" placeholder="Avatar image" onchange="uploadImage(event)">
+                                              </div>
+                                              <div class="u-s-m-b-30">
+                                                <img id="imagePreview" src="" alt="Your Image" class="img-thumbnail rounded-circle" style="display:none; width: 300px; height: 400px; ">
+                                            </div> 
+                                         </div>                                                                                     
+                                            <div class="gl-inline">      
+                                             <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="regm-name"> NAME *</label>
+                                                <input class="input-text input-text--primary-style" type="text" id="regm-name" placeholder="Name">
+                                                </div>
+                                             </div>                                                                                              
+                                            <div class="gl-inline">                                           
+                                               <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="regm-address">ADDRESS *</label>
+                                                <input class="input-text input-text--primary-style" type="text" id="regm-address" placeholder="Address"></div>                                              
+                                             <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="regm-phone-number">PHONE NUMBER *</label>
+                                                <input class="input-text input-text--primary-style" type="text" id="regm-phone-number" placeholder="Phone Number"></div>                                              
+                                            </div>   
+                                                                                               
+                                            <div class="gl-inline">                                          
+                                               <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="regm-email">EMAIL *</label>
+                                                <input class="input-text input-text--primary-style" type="text" id="regm-email" placeholder="Email"></div>                                                                                                                                        
+                                            </div>
+                                            
+                                            <div class="gl-inline">                                          
+                                               <div class="u-s-m-b-30">
+                                                   <label class="gl-label" for="regm-otime">OPENING TIME *</label>
+                                                   <input class="input-text input-text--primary-style" type="time" id="regm-otime" placeholder="OPENING TIME">
+                                               </div>
+                                               <div class="u-s-m-b-30">
+                                                   <label class="gl-label" for="regm-ctime">CLOSING TIME *</label>
+                                                   <input class="input-text input-text--primary-style" type="time" id="regm-ctime" placeholder="CLOSING TIME">
+                                               </div>                                                                                                                                        
+                                            </div>                             
+                                            <div class="u-s-m-b-15">
+                                                <button class="btn btn--e-transparent-brand-b-2" type="submit" onclick="registerMerchant()">CREATE</button>
+                                            </div>
+                                            <a class="gl-link" href="#">Return to Store</a>
                                         </form>
                                     </div>
                                 </div>
@@ -132,7 +240,6 @@ function showFormRegister() {
             </div>
             <!--====== End - Section 2 ======-->`;
 }
-
 function register() {
     let username = document.getElementById("reg-username").value;
     let email = document.getElementById("reg-email").value;
@@ -159,6 +266,35 @@ function register() {
         showFormLogin();
     }).catch(({response}) => {
         document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Sign Up Failed !</b>';
+    })
+
+}
+
+function registerMerchant(){
+         let name = document.getElementById("regm-name").value;
+         let address = document.getElementById("regm-address").value;
+         let email = document.getElementById("regm-email").value;
+         let phone = document.getElementById("regm-phone-number").value;
+         let image = localStorage.getItem("regm-image");
+         let otime = document.getElementById("regm-otime").valueAsDate;
+         let ctime = document.getElementById("regm-ctime").valueAsDate;
+         let user = JSON.parse(localStorage.getItem('currentUser'));
+         let shop = {
+             name: name,
+             address: address,
+             email: email,
+             phone: phone,
+             image: image,
+             opening_time: otime,
+             closing_time: ctime,
+             user: {
+                 id: user.id,
+             }
+         }
+    axios.post("http://localhost:8080/merchant/register", shop).then(() => {
+        alert("Đăng ký thành công!")
+    }).catch(({response}) => {
+        showMain();
     })
 
 }

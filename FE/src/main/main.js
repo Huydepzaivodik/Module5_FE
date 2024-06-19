@@ -1,7 +1,7 @@
 showMain();
 
 function showMain() {
-    let currentUser = localStorage.getItem('auth');
+    let currentUser = localStorage.getItem('currentUser');
 
     let userMenu = '';
 
@@ -9,7 +9,7 @@ function showMain() {
         userMenu = `
             <ul style="width:120px">
                 <li>
-                    <a href="#"><i class="fas fa-user-circle u-s-m-r-6"></i><span>Account</span></a>
+                    <a href="#" onclick="showMerchantEdit()"><i class="fas fa-user-circle u-s-m-r-6" ></i><span>Account</span></a>
                 </li>              
                 <li>
                     <a href="#" onclick="logout()"><i class="fas fa-lock-open u-s-m-r-6"></i><span>Signout</span></a>
@@ -45,13 +45,13 @@ function showMain() {
 
 
                         <!--====== Search Form ======-->
-                        <form class="main-form">
+                        <div class="main-form">
 
                             <label for="main-search"></label>
 
                             <input class="input-text input-text--border-radius input-text--style-1" type="text" id="main-search" placeholder="Search">
 
-                            <button class="btn btn--icon fas fa-search main-search-button" type="submit"></button></form>
+                            <button class="btn btn--icon fas fa-search main-search-button" type="submit"></button></div>
                         <!--====== End - Search Form ======-->
 
 
@@ -1351,8 +1351,7 @@ function showMain() {
         
         <!--====== App Content ======-->
         <div class="app-content" id="app-content">
-        
-        
+            
         </div>
         <!--====== End - App Content ======-->
         
@@ -1453,7 +1452,7 @@ function showMain() {
                             <div class="outer-footer__content">
 
                                 <span class="outer-footer__content-title">Join our Newsletter</span>
-                                <form class="newsletter">
+                                <div class="newsletter">
                                     <div class="u-s-m-b-15">
                                         <div class="radio-box newsletter__radio">
 
@@ -1479,7 +1478,7 @@ function showMain() {
                                         <button class="btn btn--e-brand newsletter__btn" type="submit">SUBSCRIBE</button></div>
 
                                     <span class="newsletter__text">Subscribe to the mailing list to receive updates on promotions, new arrivals, discount and coupons.</span>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1514,7 +1513,5 @@ function showMain() {
             </div>
         </footer>
         <!--====== End - Main App ======-->
-
-
 `
 }
