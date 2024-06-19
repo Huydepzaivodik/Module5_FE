@@ -12,7 +12,7 @@ function showFormRegister() {
                                 <ul class="breadcrumb__list">
                                     <li class="has-separator">
 
-                                        <a href="index.html">Home</a></li>
+                                        <a onclick="showMain()">Home</a></li>
                                     <li class="is-marked">
 
                                         <a href="signup.html">Signup</a></li>
@@ -51,35 +51,25 @@ function showFormRegister() {
                                 <div class="l-f-o">
                                     <div class="l-f-o__pad-box">
                                         <h1 class="gl-h1">PERSONAL INFORMATION</h1>
-                                        <div class="l-f-o__form">
-                                            <div class="gl-s-api">
-                                                <div class="u-s-m-b-15">
-
-                                                    <button class="gl-s-api__btn gl-s-api__btn--fb" type="button"><i class="fab fa-facebook-f"></i>
-
-                                                        <span>Signup with Facebook</span></button></div>
-                                                <div class="u-s-m-b-30">
-
-                                                    <button class="gl-s-api__btn gl-s-api__btn--gplus" type="button"><i class="fab fa-google"></i>
-
-                                                        <span>Signup with Google</span></button></div>
-                                            </div>
-                                            
-                                                
+                                        <div class="l-f-o__form">                                                                                                                   
                                             <div class="gl-inline">      
                                              <div class="u-s-m-b-30">
+                                                <b><span id="error-reg-fname" style="font-size: small;color: red"></span></b>
                                                 <label class="gl-label" for="reg-fname">FIRST NAME *</label>
                                                 <input class="input-text input-text--primary-style" type="text" id="reg-fname" placeholder="First Name"></div>                                                                                              
                                             <div class="u-s-m-b-30">
+                                                <b><span id="error-reg-lname" style="font-size: small;color: red"></span></b>
                                                 <label class="gl-label" for="reg-lname">LAST NAME *</label>
                                                 <input class="input-text input-text--primary-style" type="text" id="reg-lname" placeholder="Last Name"></div>
                                              </div>
                                             
                                             <div class="gl-inline">                                           
-                                               <div class="u-s-m-b-30">
+                                               <div class="u-s-m-b-30">    
+                                                <b><span id="error-reg-address" style="font-size: small;color:red;"></span></b>
                                                 <label class="gl-label" for="reg-address">ADDRESS *</label>
                                                 <input class="input-text input-text--primary-style" type="text" id="reg-address" placeholder="Address"></div>                                              
                                              <div class="u-s-m-b-30">
+                                                <b><span id="error-reg-phone-number" style="font-size: small;color: red"></span></b>
                                                 <label class="gl-label" for="reg-phone-number">PHONE NUMBER *</label>
                                                 <input class="input-text input-text--primary-style" type="text" id="reg-phone-number" placeholder="Phone Number"></div>                                              
                                             </div>   
@@ -87,39 +77,35 @@ function showFormRegister() {
                                             <div class="gl-inline">                                           
                                                 <div class="u-s-m-b-30">
                                                     <label class="gl-label" for="gender">GENDER</label><select class="select-box select-box--primary-style u-w-100" id="gender">
-                                                        <option selected>Select</option>
+                                                        <option selected>Male</option>
                                                         <option value="male">Male</option>
                                                         <option value="female">Female</option>
                                                     </select>
                                                 </div>
                                                 
                                                <div class="u-s-m-b-30">
+                                                <b><span id="error-reg-email" style="font-size: small;color: red"></span></b>
                                                 <label class="gl-label" for="reg-email">EMAIL *</label>
                                                 <input class="input-text input-text--primary-style" type="text" id="reg-email" placeholder="Email"></div>                                                                                                                                        
                                             </div>
                                             
                                             
                                             <div class="u-s-m-b-30">
+                                                <b><span id="error-reg-username" style="font-size: small;color: red"></span></b>
                                                 <label class="gl-label" for="reg-username">USER NAME *</label>
-
                                                 <input class="input-text input-text--primary-style" type="text" id="reg-username" placeholder="Enter User name"></div>
                                             <div class="u-s-m-b-30">
-
+                                                <b><span id="error-reg-password" style="color: red;font-size: small"></span></b>
                                                 <label class="gl-label" for="reg-password">PASSWORD *</label>
-
                                                 <input class="input-text input-text--primary-style" type="text" id="reg-password" placeholder="Enter Password"></div>
                                                 
                                              <div class="u-s-m-b-30">
-
+                                                <b><span id="error-reg-cfPassword" style="font-size: small;color: red"></span></b>
                                                 <label class="gl-label" for="reg-cfPassword">CONFIRM PASSWORD *</label>
-
-                                                <input class="input-text input-text--primary-style" type="text" id="reg-cfPassword" placeholder="Re-Enter Password"></div>    
-                                                               
-                                                               <span id="error-sign-up" style="color: red;font-size: medium"></span>                               
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-cfPassword" placeholder="Re-Enter Password"></div>                                                                  
                                             <div class="u-s-m-b-15">
-
                                                 <button class="btn btn--e-transparent-brand-b-2" type="submit" onclick="register()">CREATE</button></div>
-
+                                                 <span id="error-sign-up" style="color: red;font-size: medium"></span>                               
                                             <a class="gl-link" href="#">Return to Store</a>
                                         </div>
                                     </div>
@@ -228,7 +214,7 @@ function showMerchantRegister(){
                                             <div class="u-s-m-b-15">
                                                 <button class="btn btn--e-transparent-brand-b-2" type="submit" onclick="registerMerchant()">CREATE</button>
                                             </div>
-                                            <a class="gl-link" href="#">Return to Store</a>
+                                            <a class="gl-link" onclick="showFormLogin()">Return Login</a>
                                         </form>
                                     </div>
                                 </div>
@@ -251,22 +237,95 @@ function register() {
     let gender = document.getElementById("gender").value;
     let address = document.getElementById("reg-address").value;
     let name = firstName + " " + lastName;
-    let user = {
-        username: username,
-        password: password,
-        confirmPassword: confirmPassword,
-        address: address,
-        gender: gender,
-        email: email,
-        name: name,
-        phoneNumber: phoneNumber
+
+
+    const passwordLengthRegex = /^.{6,}$/;
+    let check = true;
+
+    if (!passwordLengthRegex.test(password)) {
+        document.getElementById("error-reg-password").innerHTML = 'At least 6 characters long';
+        document.getElementById("error-reg-cfPassword").innerHTML = '';
+        check = false;
+    } else if (password !== confirmPassword) {
+        document.getElementById("error-reg-cfPassword").innerHTML = 'Password equal confirm password ?';
+        document.getElementById("error-reg-password").innerHTML = '';
+        check = false;
+
+    } else {
+        document.getElementById("error-reg-password").innerHTML = '';
+        document.getElementById("error-reg-cfPassword").innerHTML = '';
     }
-    axios.post("http://localhost:8080/register", user).then(() => {
-        alert("Đăng ký thành công!")
-        showFormLogin();
-    }).catch(({response}) => {
-        document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Sign Up Failed !</b>';
-    })
+
+    const nameRegex = /^[a-zA-Z]+$/;
+    if (!nameRegex.test(username)) {
+        document.getElementById("error-reg-username").innerHTML = "Invalid User Name"
+        check = false;
+    } else {
+        document.getElementById("error-reg-username").innerHTML = ""
+
+    }
+
+    if (!nameRegex.test(firstName)) {
+        document.getElementById("error-reg-fname").innerHTML = "Invalid First Name";
+        check = false;
+    } else {
+        document.getElementById("error-reg-fname").innerHTML = ""
+
+    }
+
+    if (!nameRegex.test(lastName)) {
+        document.getElementById("error-reg-lname").innerHTML = "Invalid Last Name"
+        check = false;
+    } else {
+        document.getElementById("error-reg-lname").innerHTML = ""
+
+    }
+
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailRegex.test(email)) {
+        document.getElementById("error-reg-email").innerHTML = "";
+    } else {
+        document.getElementById("error-reg-email").innerHTML = "Invalid Email";
+        check = false;
+
+    }
+
+    const phoneRegex = /^\d{10,15}$/;
+
+    if (phoneRegex.test(phoneNumber)) {
+        document.getElementById("error-reg-phone-number").innerHTML = "";
+    } else {
+        document.getElementById("error-reg-phone-number").innerHTML = "Invalid Phone Number";
+        check = false;
+    }
+
+    if (address.trim() === '') {
+        document.getElementById("error-reg-address").innerHTML = 'Invalid Address';
+        check = false;
+    } else {
+        document.getElementById("error-reg-address").innerHTML = '';
+    }
+
+    if (check === true) {
+        let user = {
+            username: username,
+            password: password,
+            confirmPassword: confirmPassword,
+            address: address,
+            gender: gender,
+            email: email,
+            name: name,
+            phoneNumber: phoneNumber
+        }
+        axios.post("http://localhost:8080/register", user).then(() => {
+            alert("Đăng ký thành công!")
+            showFormLogin();
+        }).catch(({response}) => {
+            document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Sign Up Failed !</b>';
+        })
+    }
+
 
 }
 

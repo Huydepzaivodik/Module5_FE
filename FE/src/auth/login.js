@@ -54,34 +54,26 @@ function showFormLogin() {
                                         <span class="gl-text u-s-m-b-30">By creating an account with our store, you will be able to move through the checkout process faster, store shipping addresses, view and track your orders in your account and more.</span>
                                         <div class="u-s-m-b-15">
 
-                                            <a class="l-f-o__create-link btn--e-transparent-brand-b-2" href="signup.html">CREATE AN ACCOUNT</a></div>
+                                            <a class="l-f-o__create-link btn--e-transparent-brand-b-2" onclick="showFormRegister()">CREATE AN ACCOUNT</a></div>
                                         <h1 class="gl-h1">SIGNIN</h1>
 
                                         <span class="gl-text u-s-m-b-30">If you have an account with us, please log in.</span>
                                         <div class="l-f-o__form">
-                                            <div class="gl-s-api">
-                                                <div class="u-s-m-b-15">
-
-                                                    <button class="gl-s-api__btn gl-s-api__btn--fb" type="button"><i class="fab fa-facebook-f"></i>
-
-                                                        <span>Signin with Facebook</span></button></div>
-                                                <div class="u-s-m-b-15">
-
-                                                    <button class="gl-s-api__btn gl-s-api__btn--gplus" type="button"><i class="fab fa-google"></i>
-
-                                                        <span>Signin with Google</span></button></div>
-                                            </div>
+                                     
                                             <div class="u-s-m-b-30">
-
                                                 <label class="gl-label" for="login-email">USER NAME *</label>
-
+                                                 <b><span id="error-login-username" style="color: red;font-size: small"></span></b>
                                                 <input class="input-text input-text--primary-style" type="text" id="login-username" placeholder="Enter User Name"></div>
+                                               
+
                                             <div class="u-s-m-b-30">
-
                                                 <label class="gl-label" for="login-password">PASSWORD *</label>
-
+                                                <b><span id="error-login-password" style="color: red;font-size: small"></span></b>
                                                 <input class="input-text input-text--primary-style" type="text" id="login-password" placeholder="Enter Password"></div>
+                                                 
+
                                             <div class="gl-inline">
+                                            
                                                 <div class="u-s-m-b-30">
 
                                                     <button class="btn btn--e-transparent-brand-b-2"  onclick="login()">LOGIN</button></div>
@@ -120,18 +112,33 @@ function showFormLogin() {
 }
 
 function login() {
-    console.log("Login funtion!")
+
     let username = document.getElementById("login-username").value;
     let password = document.getElementById("login-password").value;
-    let user = {
-        username: username,
-        password: password
+
+    let check = true;
+    if (username.trim() === "") {
+        document.getElementById("error-login-username").innerHTML = "Please enter username";
+        check = false;
     }
-    console.log(user)
-    axios.post("http://localhost:8080/login", user).then(({data}) => {
-        localStorage.setItem("currentUser", JSON.stringify(data));
-        showMain();
-    }).catch((error) => {
-        document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Login failed !</b>';
-    })
+    if (password.trim() === "") {
+        document.getElementById("error-login-password").innerHTML = "Please enter password";
+        check = false;
+    }
+
+    if (check === true) {
+        let user = {
+            username: username,
+            password: password
+        }
+        console.log(user)
+        axios.post("http://localhost:8080/login", user).then(({data}) => {
+            localStorage.setItem("currentUser", JSON.stringify(data));
+            showMain();
+        }).catch(({response}) => {
+            document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Login failed !</b>';
+        })
+    }
+
 }
+
