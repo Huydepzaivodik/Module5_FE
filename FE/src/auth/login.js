@@ -128,7 +128,7 @@ function login() {
         password: password
     }
     axios.post("http://localhost:8080/login", user).then(({data}) => {
-        localStorage.setItem("auth", JSON.stringify(data));
+        localStorage.setItem("currentUser", JSON.stringify(data));
         showMain();
     }).catch(({response}) => {
         document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Login failed !</b>';

@@ -1,7 +1,7 @@
 showMain();
 
 function showMain() {
-    let currentUser = localStorage.getItem('auth');
+    let currentUser = localStorage.getItem('currentUser');
 
     let userMenu = '';
 
