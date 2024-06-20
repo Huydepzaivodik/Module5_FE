@@ -127,6 +127,7 @@ function login() {
         username: username,
         password: password
     }
+    console.log(user)
     axios.post("http://localhost:8080/login", user).then(({data}) => {
         localStorage.setItem("currentUser", JSON.stringify(data));
         showMain();
