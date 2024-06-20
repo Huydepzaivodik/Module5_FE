@@ -1,5 +1,5 @@
 function logout() {
-    localStorage.removeItem("auth");
+    localStorage.removeItem("currentUser");
     showMain();
 
 }

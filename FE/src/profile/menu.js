@@ -1,6 +1,7 @@
 function showMenuOption(){
     document.getElementById("app-content").innerHTML = `
                            <div class="container">
+                            <div class="gl-inline">
                                       <div class="col-lg-3 col-md-12">
 
                                     <!--====== Dashboard Features ======-->
@@ -69,6 +70,7 @@ function showMenuOption(){
                                 </div>
                                 <div class="col-lg-9 col-md-12" id="right-dashboard">
                                                                                      
+                                </div>
                                 </div>
                            </div>
     `

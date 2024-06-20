@@ -1,7 +1,6 @@
 
 function showMerchantEdit(){
-    console.log("Merchant")
-       showMenuOption();
+        showMenuOption()
        document.getElementById("right-dashboard").innerHTML = `
                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
                                         <div class="dash__pad-2">
@@ -9,35 +8,31 @@ function showMerchantEdit(){
                                             <div class="dash__link dash__link--secondary u-s-m-b-30">
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <form class="dash-edit-p">
+                                                    <div class="dash-edit-p">
                                                         <div class="gl-inline">
                                                             <div class="u-s-m-b-30">
-                                                                <label class="gl-label" for="">Name *</label>
+                                                                <label class="gl-label" for="regm-name">Name *</label>
                                                                 <input class="input-text input-text--primary-style" type="text" id="regm-name" placeholder="">
                                                             </div>
                                                             <div class="u-s-m-b-30">
-                                                                <label class="gl-label" for="">Avatar *</label>
-                                                                <input class="input-text input-text--primary-style" type="file" id="regm-image" placeholder="">
+                                                                <label class="gl-label">Avatar *</label>
+                                                                <img class="u-img-fluid u-d-block" id="image" style="width: 50px !important; height: 50px !important;">
                                                             </div>
                                                         </div>
                                                         <div class="gl-inline">
                                                             <div class="u-s-m-b-30">
-                                                                <label class="gl-label" for="">Address *</label>
+                                                                <label class="gl-label" for="regm-address">Address *</label>
                                                                 <input class="input-text input-text--primary-style" type="text" id="regm-address" placeholder="">
-                                                            </div>
-                                                            <div class="u-s-m-b-30">
-                                                                <label class="gl-label" for="">Name *</label>
-                                                                <input class="input-text input-text--primary-style" type="text" id="regm-name" placeholder="">
                                                             </div>
                                                         </div>
                                                          <div class="gl-inline">
                                                             <div class="u-s-m-b-30">
-                                                                <label class="gl-label" for="">Opening Time *</label>
-                                                                <input class="input-text input-text--primary-style" type="text" id="regm-otime" placeholder="">
+                                                                <label class="gl-label" for="regm-otime">Opening Time *</label>
+                                                                <input class="input-text input-text--primary-style" type="time" id="regm-otime" placeholder="">
                                                             </div>
                                                             <div class="u-s-m-b-30">
-                                                                <label class="gl-label" for="">Closing Time *</label>
-                                                                <input class="input-text input-text--primary-style" type="text" id="regm-ctime" placeholder="">
+                                                                <label class="gl-label" for="regm-ctime">Closing Time *</label>
+                                                                <input class="input-text input-text--primary-style" type="time" id="regm-ctime" placeholder="">
                                                             </div>
                                                         </div>
                                                         <div class="gl-inline">
@@ -50,13 +45,13 @@ function showMerchantEdit(){
                                                                 <span class="dash__text" id="regm-phone"></span
                                                             </div>
                                                         </div>
-                                                        <button class="btn btn--e-brand-b-2" type="submit">SAVE</button>
-                                                    </form>
+                                                        <button class="btn btn--e-brand-b-2" onclick="saveMerchant()">SAVE</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>     
-                                   </div>     
+                                  </div>     
        `
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let auth = {
@@ -66,13 +61,44 @@ function showMerchantEdit(){
     }
     let id = currentUser.id;
     axios.get(`http://localhost:8080/merchant/edit/${id}`,auth).then(respone => {
-        let data = respone.data();
+        let data = respone.data;
         document.getElementById('regm-name').value = data.name;
-        document.getElementById('regm-email').value = data.email;
-        document.getElementById('regm-phone').value = data.phone;
-        document.getElementById('regm-otime').value = data.opening_time;
-        document.getElementById('regm-ctime').value = data.closing_time;
-    }).catch(({response}) => {
-        showMain();
+        document.getElementById('regm-email').innerText = data.email;
+        document.getElementById('regm-phone').innerText = data.phone;
+        document.getElementById('regm-address').value = data.address;
+        let otime = data.opening_time.slice(11,16);
+        document.getElementById('regm-otime').value = otime;
+        let ctime = data.closing_time.slice(11,16);
+        document.getElementById('regm-ctime').value = ctime;
+        document.getElementById('image').src = data.image;
+    })
+}
+function saveMerchant(){
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    }
+    let id = currentUser.id;
+    let name = document.getElementById('regm-name').value;
+    let opening_time = document.getElementById('regm-otime').value;
+    let closing_time = document.getElementById('regm-ctime').value;
+    let email = document.getElementById('regm-email').innerText;
+    let address = document.getElementById('regm-ctime').innerText;
+    let image = document.getElementById('image').src;
+    let shop = {
+        name: name,
+        address: address,
+        opening_time: opening_time,
+        closing_time: closing_time,
+        email: email,
+        image: image,
+        user: {
+            id: id
+        }
+    }
+    axios.post(`http://localhost:8080/merchant/edit/${id}`,shop,auth).then(respone => {
+
     })
 }
