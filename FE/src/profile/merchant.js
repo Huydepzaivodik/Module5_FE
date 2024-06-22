@@ -82,11 +82,12 @@ function saveMerchant(){
     }
     let id = currentUser.id;
     let name = document.getElementById('regm-name').value;
-    let opening_time = document.getElementById('regm-otime').value;
-    let closing_time = document.getElementById('regm-ctime').value;
+    let opening_time = document.getElementById('regm-otime').valueAsDate;
+    let closing_time = document.getElementById('regm-ctime').valueAsDate;
     let email = document.getElementById('regm-email').innerText;
-    let address = document.getElementById('regm-ctime').innerText;
+    let address = document.getElementById('regm-address').value;
     let image = document.getElementById('image').src;
+    let phone = document.getElementById('regm-phone').innerText;
     let shop = {
         name: name,
         address: address,
@@ -94,11 +95,12 @@ function saveMerchant(){
         closing_time: closing_time,
         email: email,
         image: image,
+        phone: phone,
         user: {
             id: id
         }
     }
-    axios.post(`http://localhost:8080/merchant/edit/${id}`,shop,auth).then(respone => {
-
+    axios.post(`http://localhost:8080/merchant/edit`,shop,auth).then(respone => {
+         alert("Sửa thành công")
     })
 }

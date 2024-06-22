@@ -119,19 +119,34 @@ function showFormLogin() {
 `;
 }
 
+
 function login() {
-    console.log("Login funtion!")
+
     let username = document.getElementById("login-username").value;
     let password = document.getElementById("login-password").value;
-    let user = {
-        username: username,
-        password: password
+
+    let check = true;
+    if (username.trim() === "") {
+        document.getElementById("error-login-username").innerHTML = "Please enter username";
+        check = false;
     }
-    console.log(user)
-    axios.post("http://localhost:8080/login", user).then(({data}) => {
-        localStorage.setItem("currentUser", JSON.stringify(data));
-        showMain();
-    }).catch((error) => {
-        document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Login failed !</b>';
-    })
+    if (password.trim() === "") {
+        document.getElementById("error-login-password").innerHTML = "Please enter password";
+        check = false;
+    }
+
+    if (check === true) {
+        let user = {
+            username: username,
+            password: password
+        }
+        console.log(user)
+        axios.post("http://localhost:8080/login", user).then(({data}) => {
+            localStorage.setItem("currentUser", JSON.stringify(data));
+            showMain();
+        }).catch(({response}) => {
+            document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Login failed !</b>';
+        })
+    }
+
 }
