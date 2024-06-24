@@ -27,3 +27,4 @@ function uploadImage(e) {
             document.getElementById('imagePreview').style.display = 'block';
         });
 }
+

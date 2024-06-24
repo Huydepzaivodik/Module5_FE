@@ -54,7 +54,7 @@ function showFormLogin() {
                                         <span class="gl-text u-s-m-b-30">By creating an account with our store, you will be able to move through the checkout process faster, store shipping addresses, view and track your orders in your account and more.</span>
                                         <div class="u-s-m-b-15">
 
-                                            <a class="l-f-o__create-link btn--e-transparent-brand-b-2" href="signup.html">CREATE AN ACCOUNT</a></div>
+                                            <a class="l-f-o__create-link btn--e-transparent-brand-b-2" onclick="showFormRegister()">CREATE AN ACCOUNT</a></div>
                                         <h1 class="gl-h1">SIGNIN</h1>
 
                                         <span class="gl-text u-s-m-b-30">If you have an account with us, please log in.</span>
@@ -72,12 +72,13 @@ function showFormLogin() {
                                                         <span>Signin with Google</span></button></div>
                                             </div>
                                             <div class="u-s-m-b-30">
-
+                                                 <b><span style="color: red;font-size: small" id="error-login-username"></span></b>
                                                 <label class="gl-label" for="login-email">USER NAME *</label>
 
                                                 <input class="input-text input-text--primary-style" type="text" id="login-username" placeholder="Enter User Name"></div>
                                             <div class="u-s-m-b-30">
-
+                                                <b><span style="color: red;font-size: small" id="error-login-password"></span>
+</b> 
                                                 <label class="gl-label" for="login-password">PASSWORD *</label>
 
                                                 <input class="input-text input-text--primary-style" type="text" id="login-password" placeholder="Enter Password"></div>

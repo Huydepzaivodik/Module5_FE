@@ -59,20 +59,21 @@ function showMerchantEdit(){
         }
     }
     let id = currentUser.id;
-    axios.get(`http://localhost:8080/merchant/edit/${id}`,auth).then(respone => {
+    axios.get(`http://localhost:8080/merchant/edit/${id}`, auth).then(respone => {
         let data = respone.data;
         document.getElementById('regm-name').value = data.name;
         document.getElementById('regm-email').innerText = data.email;
         document.getElementById('regm-phone').innerText = data.phone;
         document.getElementById('regm-address').value = data.address;
-        let otime = data.opening_time.slice(11,16);
+        let otime = data.opening_time.slice(11, 16);
         document.getElementById('regm-otime').value = otime;
-        let ctime = data.closing_time.slice(11,16);
+        let ctime = data.closing_time.slice(11, 16);
         document.getElementById('regm-ctime').value = ctime;
         document.getElementById('image').src = data.image;
     })
 }
-function saveMerchant(){
+
+function saveMerchant() {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let auth = {
         headers: {
@@ -99,7 +100,7 @@ function saveMerchant(){
             id: id
         }
     }
-    axios.post(`http://localhost:8080/merchant/edit`,shop,auth).then(respone => {
-         alert("Sửa thành công")
+    axios.post(`http://localhost:8080/merchant/edit`, shop, auth).then(respone => {
+        alert("Sửa thành công")
     })
 }

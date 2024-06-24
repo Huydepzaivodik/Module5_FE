@@ -106,7 +106,7 @@ function showFormRegister() {
                                             <div class="u-s-m-b-15">
                                                 <button class="btn btn--e-transparent-brand-b-2" type="submit" onclick="register()">CREATE</button></div>
                                                  <span id="error-sign-up" style="color: red;font-size: medium"></span>                               
-                                            <a class="gl-link" href="#">Return to Store</a>
+                                            <a class="gl-link" onclick="showFormLogin()">Return to Login</a>
                                         </div>
                                     </div>
                                 </div>
@@ -146,7 +146,6 @@ function showMerchantRegister(){
 
             <!--====== Section 2 ======-->
             <div class="u-s-p-b-60">
-
                 <!--====== Section Intro ======-->
                 <div class="section__intro u-s-m-b-60">
                     <div class="container">
