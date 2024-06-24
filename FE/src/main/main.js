@@ -9,7 +9,7 @@ function showMain() {
         userMenu = `
             <ul style="width:120px">
                 <li>
-                    <a href="#" onclick="showMerchantEdit()"><i class="fas fa-user-circle u-s-m-r-6" ></i><span>Account</span></a>
+                    <a href="#" onclick="showMyProfile()"><i class="fas fa-user-circle u-s-m-r-6" ></i><span>Account</span></a>
                 </li>              
                 <li>
                     <a href="#" onclick="logout()"><i class="fas fa-lock-open u-s-m-r-6"></i><span>Signout</span></a>

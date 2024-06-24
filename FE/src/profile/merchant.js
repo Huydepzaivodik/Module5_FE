@@ -1,6 +1,5 @@
 
 function showMerchantEdit(){
-        showMenuOption()
        document.getElementById("right-dashboard").innerHTML = `
                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
                                         <div class="dash__pad-2">

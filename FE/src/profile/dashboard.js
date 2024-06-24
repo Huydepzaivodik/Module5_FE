@@ -1,4 +1,5 @@
 function showMyProfile(){
+    showMenuOption()
     document.getElementById('right-dashboard').innerHTML = `                                    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                         <div class="dash__pad-2">
                                             <h1 class="dash__h1 u-s-m-b-14">My Profile</h1>
@@ -60,7 +61,7 @@ function showMyOrder(){
                                             <h1 class="dash__h1 u-s-m-b-14">My Orders</h1>
 
                                             <span class="dash__text u-s-m-b-30">Here you can see all products that have been delivered.</span>
-                                            <form class="m-order u-s-m-b-30">
+                                            <div class="m-order u-s-m-b-30">
                                                 <div class="m-order__select-wrapper">
 
                                                     <label class="u-s-m-r-8" for="my-order-sort">Show:</label><select class="select-box select-box--primary-style" id="my-order-sort">
@@ -71,7 +72,7 @@ function showMyOrder(){
                                                         <option>Orders placed in 2018</option>
                                                         <option>All Orders</option>
                                                     </select></div>
-                                            </form>
+                                            </div>
                                             <div class="m-order__list">
                                                 <div class="m-order__get">
                                                     <div class="manage-o__header u-s-m-b-30">
@@ -203,7 +204,7 @@ function showEditProfile(){
                                                 <a data-modal="modal" data-modal-id="#dash-newsletter">Subscribe Newsletter</a></div>
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <form class="dash-edit-p">
+                                                    <div class="dash-edit-p">
                                                         <div class="gl-inline">
                                                             <div class="u-s-m-b-30">
 
@@ -271,7 +272,7 @@ function showEditProfile(){
                                                         </div>
 
                                                         <button class="btn btn--e-brand-b-2" type="submit">SAVE</button>
-                                                    </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

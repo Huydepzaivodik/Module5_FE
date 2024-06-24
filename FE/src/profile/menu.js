@@ -13,23 +13,11 @@ function showMenuOption(){
                                                 <li>
                                                     <a class="dash-active">Manage My Account</a></li>
                                                 <li>
-
-                                                    <a href="dash-my-profile.html">My Profile</a></li>
+                                                    <a onclick="showMyProfile()">My Profile</a></li>
                                                 <li>
-
-                                                    <a href="dash-address-book.html">Address Book</a></li>
+                                                    <a onclick="showMyOrder()">My Orders</a></li>
                                                 <li>
-
-                                                    <a href="dash-track-order.html">Track Order</a></li>
-                                                <li>
-
-                                                    <a href="dash-my-order.html">My Orders</a></li>
-                                                <li>
-
-                                                    <a href="dash-payment-option.html">My Payment Options</a></li>
-                                                <li>
-
-                                                    <a href="dash-cancellation.html">My Returns & Cancellations</a></li>
+                                                    <a onclick="showMerchantEdit()">My Shop</a></li>
                                             </ul>
                                         </div>
                                     </div>
