@@ -1,6 +1,7 @@
 showMain();
 
 function showMain() {
+
     let currentUser = localStorage.getItem('currentUser');
 
     let userMenu = '';
@@ -1212,7 +1213,7 @@ function showMain() {
 
                                                             <a class="mini-product__link" href="product-detail.html">
 
-                                                                <img class="u-img-fluid" src="images/product/electronic/product3.jpg" alt=""></a></div>
+                                                                <img class="u-img-fluid" src="../../images/product/electronic/ga-sot-pho-mai.jpg" alt=""></a></div>
                                                         <div class="mini-product__info-wrapper">
 
                                                             <span class="mini-product__category">
@@ -1532,7 +1533,7 @@ function showMain() {
 
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                        <img src="shirmp-burger.jpg"  alt=""  class="aspect__img" ></a>
+                                                        <img src="images/product/electronic/hamburger-shrimp.jpg"  alt=""  class="aspect__img" ></a>
                                                     <div class="product-o__action-wrap">
                                                         <ul class="product-o__action-list">
                                                             <li>
@@ -1573,7 +1574,7 @@ function showMain() {
 
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                        <img class="aspect__img" src="images/product/electronic/product3.jpg" alt=""></a>
+                                                        <img class="aspect__img" src="images/product/electronic/ga-sot-pho-mai.jpg" alt=""></a>
                                                     <div class="product-o__action-wrap">
                                                         <ul class="product-o__action-list">
                                                             <li>
@@ -1614,7 +1615,7 @@ function showMain() {
 
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                        <img class="aspect__img" src="images/product/electronic/product4.jpg" alt=""></a>
+                                                        <img class="aspect__img" src="images/product/electronic/ga-sot-pho-mai.jpg" alt=""></a>
                                                     <div class="product-o__action-wrap">
                                                         <ul class="product-o__action-list">
                                                             <li>

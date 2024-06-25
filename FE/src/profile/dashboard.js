@@ -92,7 +92,7 @@ function showMyOrder(){
                                                         <div class="description__container">
                                                             <div class="description__img-wrap">
 
-                                                                <img class="u-img-fluid" src="../../images/product/electronic/product3.jpg" alt=""></div>
+                                                                <img class="u-img-fluid" src="../../images/product/electronic/hamburger-shrimp.jpg" alt=""></div>
                                                             <div class="description-title">Yellow Wireless Headphone</div>
                                                         </div>
                                                         <div class="description__info-wrap">
@@ -345,7 +345,7 @@ function showOrderDetails(index){
                                                     <div class="description__container">
                                                         <div class="description__img-wrap">
 
-                                                            <img class="u-img-fluid" src="../../images/product/electronic/product3.jpg" alt=""></div>
+                                                            <img class="u-img-fluid" src="../../images/product/electronic/hamburger-shrimp.jpg" alt=""></div>
                                                         <div class="description-title">Yellow Wireless Headphone</div>
                                                     </div>
                                                     <div class="description__info-wrap">
