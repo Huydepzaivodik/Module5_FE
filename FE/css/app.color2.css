@@ -624,6 +624,9 @@ body {
 .u-c-silver {
   color: #a0a0a0 !important; }
 
+.u-c-green {
+  color: greenyellow !important;
+}
 /*
   * Display Utility
  */

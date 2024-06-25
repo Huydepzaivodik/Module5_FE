@@ -37,6 +37,7 @@
 <script src="src/auth/login.js"></script>
 <script src="src/auth/register.js"></script>
 <script src="src/auth/logout.js"></script>
+<script src="src/auth/foodList.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
 <script src="src/profile/menu.js"></script>
 <script src="src/profile/merchant.js"></script>
@@ -52,9 +53,29 @@
         measurementId: "G-DLSK3MYRFK"
     };
     firebase.initializeApp(firebaseConfig);
-    showMerchantRegister()
 </script>
 <script src="src/firebase.js"></script>
+<script>
+    window.ga = function() {
+        ga.q.push(arguments)
+    };
+    ga.q = [];
+    ga.l = +new Date;
+    ga('create', 'UA-XXXXX-Y', 'auto');
+    ga('send', 'pageview')
+</script>
+
+<script src="https://www.google-analytics.com/analytics.js" async defer></script>
+
+<!--====== Vendor Js ======-->
+<script src="js/vendor.js"></script>
+
+<!--====== jQuery Shopnav plugin ======-->
+<script src="js/jquery.shopnav.js"></script>
+
+<!--====== App ======-->
+<script src="js/app.js"></script>
+
 
 
 </body>
