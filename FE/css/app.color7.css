@@ -1980,12 +1980,24 @@ input::-ms-clear {
   padding: 0 36px 0 18px;
   width: 100%; }
 
+#main-search-food {
+  padding: 0 36px 0 18px;
+  width: 100%; }
+
 .main-search-button {
   position: absolute;
   top: 50%;
   right: 15px;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
+  font-size: 18px; }
+
+.main-search-button-food {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
   font-size: 18px; }
 
 /* 6.2 Secondary Nav */
