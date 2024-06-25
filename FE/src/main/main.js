@@ -1163,7 +1163,7 @@ function showMain() {
                                         <a href="shop-side-version-2.html">VALUE OF THE DAY</a></li>
                                     <li>
 
-                                        <a href="shop-side-version-2.html">GIFT CARDS</a></li>
+                                        <a onClick="showFood()">SHOW FOOD</a></li>
                                 </ul>
                                 <!--====== End - List ======-->
                             </div>
