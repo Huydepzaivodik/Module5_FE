@@ -1,6 +1,5 @@
-
-function showMerchantEdit(){
-       document.getElementById("right-dashboard").innerHTML = `
+function showMerchantEdit() {
+    document.getElementById("right-dashboard").innerHTML = `
                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
                                         <div class="dash__pad-2">
                                             <h1 class="dash__h1 u-s-m-b-14">Edit Merchant Profile</h1>
@@ -99,7 +98,13 @@ function saveMerchant(){
             id: id
         }
     }
+<<<<<<< HEAD
     axios.post(`http://localhost:8080/merchant/edit`,shop,auth).then(respone => {
          alert("Sửa thành công")
+=======
+    console.log(shop);
+    axios.post(`http://localhost:8080/merchant/edit`, shop, auth).then((respone) => {
+        alert("Sửa thành công")
+>>>>>>> origin/main
     })
 }
