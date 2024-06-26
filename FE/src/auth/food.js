@@ -69,7 +69,7 @@ function showFood(){
                                             <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
                                         <div class="product-m__add-cart">
 
-                                            <a class="btn--e-brand" data-modal="modal"  onClick="showEdit()" >Update</a></div>
+                                            <a class="btn--e-brand" data-modal="modal" onClick="showEdit() " >Update</a></div>
 
                                     </div>
                                     <div class="product-m__content">
@@ -90,7 +90,7 @@ function showFood(){
                                             <div class="product-m__wishlist">
 
                                                 <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
-                                             <button class="button-5" role="button">Delete</button>
+                                             <button class="button-5" role="button" >Delete</button>
                                         </div>
                                     </div>
                                 </div>
