@@ -98,13 +98,12 @@ function saveMerchant(){
             id: id
         }
     }
-<<<<<<< HEAD
     axios.post(`http://localhost:8080/merchant/edit`,shop,auth).then(respone => {
          alert("Sửa thành công")
-=======
+
     console.log(shop);
     axios.post(`http://localhost:8080/merchant/edit`, shop, auth).then((respone) => {
         alert("Sửa thành công")
->>>>>>> origin/main
     })
+})
 }
