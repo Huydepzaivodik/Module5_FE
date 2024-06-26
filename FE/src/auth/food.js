@@ -52,39 +52,51 @@ function showFood() {
                         <div class="row is-grid-active">`;
 
         for (let i = 0; i < list.length; i++) {
-            html += `<div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="product-m">
-                            <div class="product-m__thumb">
-                                <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
-                                    <img class="aspect__img" src="${list[i].image}" alt=""></a>
-                                <div class="product-m__quick-look">
-                                    <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
-                                <div class="product-m__add-cart">
-                                    <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart">Cập Nhật</a></div>
-                            </div>
-                            <div class="product-m__content">
-                                <div class="product-m__category">
-                                    <a href="shop-side-version-2.html">${list[i].id}</a></div>
-                                <div class="product-m__name">
-                                    <a href="product-detail.html">${list[i].name}</a></div>
-<div class="product-m__rating gl-rating-style">
-                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i>
-                                    <span class="product-m__review">(${list[i].quantity})</span></div>
-                                <div class="product-m__price">${list[i].price}</div>
-                                <div class="product-m__hover">
-                                    <div class="product-m__preview-description">
-                                        <span>${list[i].description}</span></div>
-                                    <div class="product-m__wishlist">
-                                        <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
-                                    <button class="button-5" role="button" onclick="deleteFood(${list[i].id})">Xóa</button>
+             html += `                 <div class="col-lg-3 col-md-4 col-sm-6">
+                                <div class="product-m">
+                                    <div class="product-m__thumb">
+
+                                        <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
+
+                                            <img class="aspect__img" src="${list[i].image}" alt=""></a>
+                                        <div class="product-m__quick-look">
+
+                                            <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
+                                        <div class="product-m__add-cart">
+
+                                            <a class="btn--e-brand" data-modal="modal" onClick="showEdit() " >Update</a></div>
+
+                                    </div>
+                                    <div class="product-m__content">
+                                        <div class="product-m__category">
+
+                                            <a href="shop-side-version-2.html">${list[i].id}</a></div>
+                                        <div class="product-m__name">
+
+                                            <a href="product-detail.html">${list[i].name}</a></div>
+                                        <div class="product-m__rating gl-rating-style"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+
+                                            <span class="product-m__review">(${list[i].quantity})</span></div>
+                                        <div class="product-m__price">${list[i].price}</div>
+                                        <div class="product-m__hover">
+                                            <div class="product-m__preview-description">
+
+                                                <span>${list[i].description}</span></div>
+                                            <div class="product-m__wishlist">
+
+                                                <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
+                                             <button class="button-5" role="button" >Delete</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>`;
+`
         }
         html += `
                         </div>
                     </div>
+                    
+                    
                     <div class="u-s-p-y-60">
                         <ul class="shop-p__pagination">
                             <li class="is-active"><a href="shop-grid-full.html">1</a></li>
@@ -96,7 +108,7 @@ function showFood() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div>        
     </div>
 </div>`;
         document.getElementById("app-content").innerHTML = html;
