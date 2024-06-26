@@ -1,191 +1,299 @@
-function showEdit(id){
+function showFood() {
     showMain();
-    axios.get(`http://localhost:8080/foods/${id}`).then((response) => {
+    axios.get("http://localhost:8080/foods").then((response) => {
         let list = response.data;
-        document.getElementById("app-content").innerHTML = `<!--====== Section 1 ======-->
-<div class="u-s-p-y-60">
-
-    <!--====== Section Content ======-->
-    <div class="section__content">
-        <div class="container">
-            <div class="breadcrumb">
-                <div class="breadcrumb__wrap">
-                    <ul class="breadcrumb__list">
-                        <li class="has-separator">
-
-                            <a href="index.html">Home</a></li>
-                        <li class="is-marked">
-
-                            <a href="dash-edit-profile.html">My Account</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        let html = `
+<div class="u-s-p-y-90">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shop-p">
+                    <div class="shop-p__toolbar u-s-m-b-30">
+                        <div class="shop-p__meta-wrap u-s-m-b-60">
+                            <span class="shop-p__meta-text-1">FOUND ${list.length} RESULTS</span>
+                            <div class="shop-p__meta-text-2">
+                                <span>Related Searches:</span>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">men's clothing</a>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">mobiles & tablets</a>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">books & audible</a>
+                            </div>
+                        </div>
+                        <!--====== Search Form ======-->
+                        <div class="main-form" style="margin-bottom: 20px">
+                            <label for="main-search-food"></label>
+                            <input class="input-text input-text--border-radius input-text--style-1" type="text" id="main-search-food" placeholder="Search" name="foodName">
+                            <button class="btn btn--icon fas fa-search main-search-button-food" onclick="searchFood()"></button>
+                        </div>
+                        <!--====== End - Search Form ======-->
+                        <div class="shop-p__tool-style">
+                            <button class="js-shop-filter-target" data-side="#side-filter" onclick="toggleAddFoodForm()">Add</button>
+                            <div class="tool-style__form-wrap">
+                                <div class="u-s-m-b-8"><select class="select-box select-box--transparent-b-2">
+                                    <option>Show: 8</option>
+                                    <option selected>Show: 12</option>
+                                    <option>Show: 16</option>
+                                    <option>Show: 28</option>
+                                </select></div>
+                                <div class="u-s-m-b-8"><select class="select-box select-box--transparent-b-2">
+                                    <option selected>Sort By: Newest Items</option>
+                                    <option>Sort By: Latest Items</option>
+                                    <option>Sort By: Best Selling</option>
+                                    <option>Sort By: Best Rating</option>
+                                    <option>Sort By: Lowest Price</option>
+                                    <option>Sort By: Highest Price</option>
+                                </select></div>
+                            </div>
+                        </div>
+</div>
+                   <div id="add-food-form" style="display: none;">
+    <h2 class="u-s-m-b-15">Thêm Món Ăn Mới</h2>
+    <div class="u-s-m-b-30">
+        <label for="food-name" class="gl-label">Tên Món Ăn</label>
+        <input class="input-text input-text--border-radius input-text--style-1" type="text" id="food-name" placeholder="Nhập tên món ăn" required>
+    </div>
+    <div class="u-s-m-b-30">
+        <label for="food-description" class="gl-label">Mô Tả</label>
+        <textarea class="textarea textarea--border-radius textarea--style-1" id="food-description" placeholder="Nhập mô tả" rows="3" required></textarea>
+    </div>
+    <div class="u-s-m-b-30">
+        <label for="food-price" class="gl-label">Giá Tiền (VNĐ)</label>
+        <input class="input-text input-text--border-radius input-text--style-1" type="number" id="food-price" placeholder="Nhập giá tiền" required>
+    </div>
+    <div class="u-s-m-b-30">
+        <label for="food-quantity" class="gl-label">Số Lượng</label>
+        <input class="input-text input-text--border-radius input-text--style-1" type="number" id="food-quantity" placeholder="Nhập số lượng" required>
+    </div>
+    <div class="u-s-m-b-30">
+        <label for="food-image" class="gl-label">URL Hình Ảnh</label>
+        <input class="input-text input-text--border-radius input-text--style-1" type="text" id="food-image" placeholder="Nhập URL hình ảnh" required>
+    </div>
+    <div>
+        <button class="btn btn--e-brand-shadow" onclick="addFood()">Thêm Món Ăn</button>
     </div>
 </div>
-<!--====== End - Section 1 ======-->
+                    <div class="shop-p__collection">
+                        <div class="row is-grid-active">`;
 
-
-<!--====== Section 2 ======-->
-<div class="u-s-p-b-60">
-
-    <!--====== Section Content ======-->
-    <div class="section__content">
-        <div class="dash">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 col-md-12">
-
-                        <!--====== Dashboard Features ======-->
-                        <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
-                            <div class="dash__pad-1">
-
-                                <span class="dash__text u-s-m-b-16">Hello, John Doe</span>
-                                <ul class="dash__f-list">
-                                    <li>
-
-                                        <a class="dash-active" href="dashboard.html">Manage My Account</a></li>
-                                    <li>
-
-                                        <a href="dash-my-profile.html">My Profile</a></li>
-                                    <li>
-
-                                        <a href="dash-address-book.html">Address Book</a></li>
-                                    <li>
-
-                                        <a href="dash-track-order.html">Track Order</a></li>
-                                    <li>
-
-                                        <a href="dash-my-order.html">My Orders</a></li>
-                                    <li>
-
-                                        <a href="dash-payment-option.html">My Payment Options</a></li>
-                                    <li>
-
-                                        <a href="dash-cancellation.html">My Returns & Cancellations</a></li>
-                                </ul>
+        for (let i = 0; i < list.length; i++) {
+            html += `<div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="product-m">
+                            <div class="product-m__thumb">
+                                <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
+                                    <img class="aspect__img" src="${list[i].image}" alt=""></a>
+                                <div class="product-m__quick-look">
+                                    <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
+                                <div class="product-m__add-cart">
+                                    <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart">Cập Nhật</a></div>
                             </div>
-                        </div>
-                        <div class="dash__box dash__box--bg-white dash__box--shadow dash__box--w">
-                            <div class="dash__pad-1">
-                                <ul class="dash__w-list">
-                                    <li>
-                                        <div class="dash__w-wrap">
-
-                                            <span class="dash__w-icon dash__w-icon-style-1"><i class="fas fa-cart-arrow-down"></i></span>
-
-                                            <span class="dash__w-text">4</span>
-
-                                            <span class="dash__w-name">Orders Placed</span></div>
-                                    </li>
-                                    <li>
-                                        <div class="dash__w-wrap">
-
-                                            <span class="dash__w-icon dash__w-icon-style-2"><i class="fas fa-times"></i></span>
-
-                                            <span class="dash__w-text">0</span>
-
-                                            <span class="dash__w-name">Cancel Orders</span></div>
-                                    </li>
-                                    <li>
-                                        <div class="dash__w-wrap">
-
-                                            <span class="dash__w-icon dash__w-icon-style-3"><i class="far fa-heart"></i></span>
-
-                                            <span class="dash__w-text">0</span>
-
-                                            <span class="dash__w-name">Wishlist</span></div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!--====== End - Dashboard Features ======-->
-                    </div>
-                    <div class="col-lg-9 col-md-12">
-                        <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
-                            <div class="dash__pad-2">
-                                <h1 class="dash__h1 u-s-m-b-14">Edit </h1>
-
-                                <div class="dash__link dash__link--secondary u-s-m-b-30">
-
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <form class="dash-edit-p">
-                                            <div class="gl-inline">
-                                                <div class="u-s-m-b-30">
-
-                                                    <label class="gl-label" for="reg-fname"> NAME *</label>
-
-                                                    <input class="input-text input-text--primary-style" type="text" id="reg-fname" placeholder="Name" value="${list.name}"></div>
-                                                <div class="u-s-m-b-30">
-
-                                                    <label class="gl-label" for="reg-lname">Picture</label>
-
-                                                    <input class="input-text input-text--primary-style" type="text" id="reg-lname" placeholder="Imgae" value="${list.image}"></div>
-                                            </div>
-                                            <div class="gl-inline">
-                                                <div class="u-s-m-b-30">
-
-                                                    <!--====== Date of Birth Select-Box ======-->
-
-                                                    <span class="gl-label">QUANTITY AND PRICE</span>
-                                                    <div class="gl-dob">
-
-                                                        <input class="input-text input-text--primary-style" type="text" id="reg-nname" placeholder="Quantity" value="${list.quantity}">
-
-                                                        <input class="input-text input-text--primary-style" type="text" id="reg-pname" placeholder="Price" value="${list.price}">
-                                                    </div>
-                                                    <!--====== End - Date of Birth Select-Box ======-->
-                                                </div>
-                                           
-                                            </div>
-                                            <div class="gl-inline">
-                                            <div class="u-s-m-b-30">
-                                             <label class="gl-label" for="reg-lname">Description</label>
-
-                                            <input class="input-text input-text--primary-style" type="text" id="reg-iname" placeholder="Description" value="${list.description}">
-                                            </div>
-                                            </div>
-
-
-                                            <button class="btn btn--e-brand-b-2" type="submit" onclick="edit(${list.id})">SAVE</button>
-                                        </form>
-                                    </div>
+                            <div class="product-m__content">
+                                <div class="product-m__category">
+                                    <a href="shop-side-version-2.html">${list[i].id}</a></div>
+                                <div class="product-m__name">
+                                    <a href="product-detail.html">${list[i].name}</a></div>
+<div class="product-m__rating gl-rating-style">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                    <span class="product-m__review">(${list[i].quantity})</span></div>
+                                <div class="product-m__price">${list[i].price}</div>
+                                <div class="product-m__hover">
+                                    <div class="product-m__preview-description">
+                                        <span>${list[i].description}</span></div>
+                                    <div class="product-m__wishlist">
+                                        <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
+                                    <button class="button-5" role="button" onclick="deleteFood(${list[i].id})">Xóa</button>
                                 </div>
                             </div>
                         </div>
+                    </div>`;
+        }
+        html += `
+                        </div>
+                    </div>
+                    <div class="u-s-p-y-60">
+                        <ul class="shop-p__pagination">
+                            <li class="is-active"><a href="shop-grid-full.html">1</a></li>
+                            <li><a href="shop-grid-full.html">2</a></li>
+                            <li><a href="shop-grid-full.html">3</a></li>
+                            <li><a href="shop-grid-full.html">4</a></li>
+                            <li><a class="fas fa-angle-right" href="shop-grid-full.html"></a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--====== End - Section Content ======-->
-</div>
 </div>`;
-
-});
+        document.getElementById("app-content").innerHTML = html;
+    });
 }
 
+function toggleAddFoodForm() {
+    let form = document.getElementById("add-food-form");
+    if (form.style.display === "none") {
+        form.style.display = "block";
+    } else {
+        form.style.display = "none";
+    }
+}
 
+function addFood() {
+    let name = document.getElementById('food-name').value;
+    let description = document.getElementById('food-description').value;
+    let price = document.getElementById('food-price').value;
+    let quantity = document.getElementById('food-quantity').value;
+    let image = document.getElementById('food-image').value;
 
-function edit(id) {
-    let name = document.getElementById("reg-fname").value;
-    let image = document.getElementById("reg-lname").value;
-    let quantity = document.getElementById("reg-nname").value;
-    let price = document.getElementById("reg-pname").value;
-    let description = document.getElementById("reg-iname").value;
-
-    let updatedFood = {
+    let food = {
         name: name,
-        image: image,
-        quantity: quantity,
+        description: description,
         price: price,
-        description: description
+        quantity: quantity,
+        image: image
     };
 
-    console.log(updatedFood);
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    }
 
-    axios.put(`http://localhost:8080/foods/${id}`, updatedFood).then(() => {
-        // Handle the successful update
+    axios.post("http://localhost:8080/foods", food, auth).then((response) => {
+        alert("Thêm món ăn thành công!");
+        showFood();
+    }).catch((error) => {
+        alert("Thêm món ăn thất bại.");
     });
+}
+
+function deleteFood(foodId) {
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    }
+
+    axios.delete(`http://localhost:8080/foods/${foodId}`, auth).then((response) => {
+        alert("Xóa món ăn thành công!");
+        showFood();
+    }).catch((error) => {
+        alert("Xóa món ăn thất bại.");
+    });
+}
+
+function searchFood() {
+    let foodName = document.getElementById('main-search-food').value;
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    }
+    axios.get(`http://localhost:8080/foods/search`, {
+        params: {
+            foodName: foodName
+        }
+    }).then((response) => {
+        let list = response.data;
+        let html = '';
+        if (list.length === 0) {
+            html = `<div style="font-size: 30px">No Product...</div>`;
+            document.getElementById("shop-p__collection").innerHTML = html;
+        }  else {
+            html = `
+<div class="u-s-p-y-90">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shop-p">
+                    <div class="shop-p__toolbar u-s-m-b-30">
+                        <div class="shop-p__meta-wrap u-s-m-b-60">
+                            <span class="shop-p__meta-text-1">FOUND ${list.length} RESULTS</span>
+                            <div class="shop-p__meta-text-2">
+                                <span>Related Searches:</span>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">men's clothing</a>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">mobiles & tablets</a>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">books & audible</a>
+                            </div>
+                        </div>
+                        <!--====== Search Form ======-->
+                        <div class="main-form" style="margin-bottom: 20px">
+                            <label for="main-search-food"></label>
+                            <input class="input-text input-text--border-radius input-text--style-1" type="text" id="main-search-food" placeholder="Search" name="foodName">
+                            <button class="btn btn--icon fas fa-search main-search-button-food" onclick="searchFood()"></button>
+                        </div>
+                        <!--====== End - Search Form ======-->
+                        <div class="shop-p__tool-style">
+                            <div class="tool-style__form-wrap">
+                                <div class="u-s-m-b-8"><select class="select-box select-box--transparent-b-2">
+                                    <option>Show: 8</option>
+<option selected>Show: 12</option>
+                                    <option>Show: 16</option>
+                                    <option>Show: 28</option>
+                                </select></div>
+                                <div class="u-s-m-b-8"><select class="select-box select-box--transparent-b-2">
+                                    <option selected>Sort By: Newest Items</option>
+                                    <option>Sort By: Latest Items</option>
+                                    <option>Sort By: Best Selling</option>
+                                    <option>Sort By: Best Rating</option>
+                                    <option>Sort By: Lowest Price</option>
+                                    <option>Sort By: Highest Price</option>
+                                </select></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="shop-p__collection" id="shop-p__collection">
+                        <div class="row is-grid-active">`;
+
+            for (let i = 0; i < list.length; i++) {
+                html += `<div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="product-m">
+                                <div class="product-m__thumb">
+                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
+                                        <img class="aspect__img" src="${list[i].image}" alt=""></a>
+                                    <div class="product-m__quick-look">
+                                        <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
+                                    <div class="product-m__add-cart">
+                                        <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart">Cập Nhật</a></div>
+                                </div>
+                                <div class="product-m__content">
+                                    <div class="product-m__category">
+                                        <a href="shop-side-version-2.html">${list[i].id}</a></div>
+                                    <div class="product-m__name">
+                                        <a href="product-detail.html">${list[i].name}</a></div>
+                                    <div class="product-m__rating gl-rating-style">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                        <span class="product-m__review">(${list[i].quantity})</span></div>
+                                    <div class="product-m__price">${list[i].price}</div>
+                                    <div class="product-m__hover">
+<div class="product-m__preview-description">
+                                            <span>${list[i].description}</span></div>
+                                        <div class="product-m__wishlist">
+                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
+                                        <button class="button-5" role="button" onclick="deleteFood(${list[i].id})">Xóa</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+            }
+            html += `
+                        </div>
+                    </div>
+                    <div class="u-s-p-y-60">
+                        <ul class="shop-p__pagination">
+                            <li class="is-active"><a href="shop-grid-full.html">1</a></li>
+                            <li><a href="shop-grid-full.html">2</a></li>
+                            <li><a href="shop-grid-full.html">3</a></li>
+                            <li><a href="shop-grid-full.html">4</a></li>
+                            <li><a class="fas fa-angle-right" href="shop-grid-full.html"></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`;
+            document.getElementById("app-content").innerHTML = html;
+        }
+    })
 }
