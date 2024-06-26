@@ -41,7 +41,7 @@ function showMain() {
 
                         <a class="main-logo" onclick="showMain()">
 
-                            <img src="images/logo/logo-1.png" alt=""></a>
+                            <img src="./images/logo/logo-1.png" alt=""></a>
                         <!--====== End - Main Logo ======-->
 
 
@@ -1213,7 +1213,7 @@ function showMain() {
 
                                                             <a class="mini-product__link" href="product-detail.html">
 
-                                                                <img class="u-img-fluid" src="../../images/product/electronic/ga-sot-pho-mai.jpg" alt=""></a></div>
+                                                                <img class="u-img-fluid" src="images/product/electronic/ga-sot-pho-mai.jpg" alt=""></a></div>
                                                         <div class="mini-product__info-wrapper">
 
                                                             <span class="mini-product__category">

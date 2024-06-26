@@ -26,7 +26,9 @@ function showFood() {
                         </div>
                         <!--====== End - Search Form ======-->
                         <div class="shop-p__tool-style">
-                            <button class="js-shop-filter-target" data-side="#side-filter" onclick="toggleAddFoodForm()">Add</button>
+                            <button class="js-shop-filter-target" data-side="#side-filter" onclick="AddFoodForm()">Add Product</button>
+                            <!-- Button trigger modal -->
+
                             <div class="tool-style__form-wrap">
                                 <div class="u-s-m-b-8"><select class="select-box select-box--transparent-b-2">
                                     <option>Show: 8</option>
@@ -45,33 +47,8 @@ function showFood() {
                             </div>
                         </div>
 </div>
-                   <div id="add-food-form" style="display: none;">
-    <h2 class="u-s-m-b-15">Thêm Món Ăn Mới</h2>
-    <div class="u-s-m-b-30">
-        <label for="food-name" class="gl-label">Tên Món Ăn</label>
-        <input class="input-text input-text--border-radius input-text--style-1" type="text" id="food-name" placeholder="Nhập tên món ăn" required>
-    </div>
-    <div class="u-s-m-b-30">
-        <label for="food-description" class="gl-label">Mô Tả</label>
-        <textarea class="textarea textarea--border-radius textarea--style-1" id="food-description" placeholder="Nhập mô tả" rows="3" required></textarea>
-    </div>
-    <div class="u-s-m-b-30">
-        <label for="food-price" class="gl-label">Giá Tiền (VNĐ)</label>
-        <input class="input-text input-text--border-radius input-text--style-1" type="number" id="food-price" placeholder="Nhập giá tiền" required>
-    </div>
-    <div class="u-s-m-b-30">
-        <label for="food-quantity" class="gl-label">Số Lượng</label>
-        <input class="input-text input-text--border-radius input-text--style-1" type="number" id="food-quantity" placeholder="Nhập số lượng" required>
-    </div>
-    <div class="u-s-m-b-30">
-        <label for="food-image" class="gl-label">URL Hình Ảnh</label>
-        <input class="input-text input-text--border-radius input-text--style-1" type="text" id="food-image" placeholder="Nhập URL hình ảnh" required>
-    </div>
-    <div>
-        <button class="btn btn--e-brand-shadow" onclick="addFood()">Thêm Món Ăn</button>
-    </div>
-</div>
-                    <div class="shop-p__collection">
+
+                    <div class="shop-p__collection" id="shop-p__collection">
                         <div class="row is-grid-active">`;
 
         for (let i = 0; i < list.length; i++) {
@@ -126,14 +103,36 @@ function showFood() {
     });
 }
 
-function toggleAddFoodForm() {
-    let form = document.getElementById("add-food-form");
-    if (form.style.display === "none") {
-        form.style.display = "block";
-    } else {
-        form.style.display = "none";
-    }
+function AddFoodForm() {
+    let html = ` <h2 class="u-s-m-b-15">Thêm Món Ăn Mới</h2>
+    <div class="u-s-m-b-30">
+        <label for="food-name" class="gl-label">Tên Món Ăn</label>
+        <input class="input-text input-text--border-radius input-text--style-1" type="text" id="food-name" placeholder="Nhập tên món ăn" required>
+    </div>
+    <div class="u-s-m-b-30">
+        <label for="food-description" class="gl-label">Mô Tả</label>
+        <textarea class="textarea textarea--border-radius textarea--style-1" id="food-description" placeholder="Nhập mô tả" rows="3" required></textarea>
+    </div>
+    <div class="u-s-m-b-30">
+        <label for="food-price" class="gl-label">Giá Tiền (VNĐ)</label>
+        <input class="input-text input-text--border-radius input-text--style-1" type="number" id="food-price" placeholder="Nhập giá tiền" required>
+    </div>
+    <div class="u-s-m-b-30">
+        <label for="food-quantity" class="gl-label">Số Lượng</label>
+        <input class="input-text input-text--border-radius input-text--style-1" type="number" id="food-quantity" placeholder="Nhập số lượng" required>
+    </div>
+    <div class="u-s-m-b-30">
+        <label for="food-image" class="gl-label">URL Hình Ảnh</label>
+        <input class="input-text input-text--border-radius input-text--style-1" type="text" id="food-image" placeholder="Nhập URL hình ảnh" required>
+    </div>
+    <div>
+        <button class="btn btn--e-brand-shadow" onclick="addFood()">Thêm Món Ăn</button>
+    </div>
+`
+    document.getElementById('shop-p__collection').innerHTML = html;
+
 }
+
 
 function addFood() {
     let name = document.getElementById('food-name').value;
@@ -159,7 +158,7 @@ function addFood() {
 
     axios.post("http://localhost:8080/foods", food, auth).then((response) => {
         alert("Thêm món ăn thành công!");
-        showFood();
+        searchFood();
     }).catch((error) => {
         alert("Thêm món ăn thất bại.");
     });
@@ -175,7 +174,7 @@ function deleteFood(foodId) {
 
     axios.delete(`http://localhost:8080/foods/${foodId}`, auth).then((response) => {
         alert("Xóa món ăn thành công!");
-        showFood();
+        searchFood();
     }).catch((error) => {
         alert("Xóa món ăn thất bại.");
     });
@@ -199,7 +198,7 @@ function searchFood() {
         if (list.length === 0) {
             html = `<div style="font-size: 30px">No Product...</div>`;
             document.getElementById("shop-p__collection").innerHTML = html;
-        }  else {
+        } else {
             html = `
 <div class="u-s-p-y-90">
     <div class="container">
@@ -222,12 +221,14 @@ function searchFood() {
                             <input class="input-text input-text--border-radius input-text--style-1" type="text" id="main-search-food" placeholder="Search" name="foodName">
                             <button class="btn btn--icon fas fa-search main-search-button-food" onclick="searchFood()"></button>
                         </div>
+                
                         <!--====== End - Search Form ======-->
                         <div class="shop-p__tool-style">
+                          <button class="js-shop-filter-target" data-side="#side-filter" onclick="AddFoodForm()">Add Product</button>
                             <div class="tool-style__form-wrap">
                                 <div class="u-s-m-b-8"><select class="select-box select-box--transparent-b-2">
                                     <option>Show: 8</option>
-<option selected>Show: 12</option>
+                                    <option selected>Show: 12</option>
                                     <option>Show: 16</option>
                                     <option>Show: 28</option>
                                 </select></div>

@@ -255,7 +255,7 @@ function register() {
         document.getElementById("error-reg-cfPassword").innerHTML = '';
     }
 
-    const nameRegex = /^[a-zA-Z]+$/;
+    const nameRegex = /^[a-zA-Z0-9]+$/;
     if (!nameRegex.test(username)) {
         document.getElementById("error-reg-username").innerHTML = "Invalid User Name"
         check = false;
