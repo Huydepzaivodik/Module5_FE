@@ -69,7 +69,7 @@ function showFood(){
                                             <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
                                         <div class="product-m__add-cart">
 
-                                            <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart">Update</a></div>
+                                            <a class="btn--e-brand" data-modal="modal"  onClick="showEdit()" >Update</a></div>
 
                                     </div>
                                     <div class="product-m__content">
@@ -94,11 +94,14 @@ function showFood(){
                                         </div>
                                     </div>
                                 </div>
-                            </div>`
+                            </div>
+`
         }
         html+= `
                          </div>
                     </div>
+                    
+                    
                     <div class="u-s-p-y-60">
 
                         <!--====== Pagination ======-->
@@ -123,11 +126,13 @@ function showFood(){
                     </div>
                 </div>
             </div>
-        </div>
+        </div>        
     </div>
 </div>
+
 `
         document.getElementById("app-content").innerHTML =html;
+
     });
     }
 
