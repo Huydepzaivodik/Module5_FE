@@ -267,7 +267,7 @@ function searchFood() {
                                     <div class="product-m__quick-look">
                                         <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
                                     <div class="product-m__add-cart">
-                                        <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart">Cập Nhật</a></div>
+                                            <a class="btn--e-brand" data-modal="modal" onClick="showEdit() " >Update</a></div>
                                 </div>
                                 <div class="product-m__content">
                                     <div class="product-m__category">
