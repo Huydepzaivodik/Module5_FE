@@ -148,7 +148,7 @@ function showEdit(id){
                                             </div>
 
 
-                                            <button class="btn btn--e-brand-b-2" type="submit" onclick="edit(${list.id})">SAVE</button>
+                                            <button class="btn btn--e-brand-b-2" type="submit" onClick="edit(id)">SAVE</button>
                                         </form>
                                     </div>
                                 </div>
@@ -169,22 +169,23 @@ function showEdit(id){
 
 
 function edit(id) {
-    let name = document.getElementById("name").value;
-    let image = document.getElementById("image").value;
-    let quantity = document.getElementById("quantity").value;
-    let price = document.getElementById("price").value;
-    let description = document.getElementById("description").value;
+    let name = document.getElementById("reg-fname").value;
+    let image = document.getElementById("reg-lname").value;
+    let quantity = document.getElementById("reg-nname").value;
+    let price = document.getElementById("reg-pname").value;
+    let description = document.getElementById("reg-iname").value;
 
     let updatedFood = {
         name: name,
-        image : image,
+        image: image,
         quantity: quantity,
-        price : price,
-        description : description
+        price: price,
+        description: description
     };
 
     console.log(updatedFood);
 
     axios.put(`http://localhost:8080/foods/${id}`, updatedFood).then(() => {
+        // Handle the successful update
     });
 }
