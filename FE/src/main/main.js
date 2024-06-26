@@ -1451,28 +1451,28 @@ function showMain() {
                                 <a class="collection" href="shop-side-version-2.html">
                                     <div class="aspect aspect--bg-grey aspect--square">
 
-                                        <img class="aspect__img collection__img" src="images/collection/coll-1.jpg" alt=""></div>
+                                        <img class="aspect__img collection__img" src="images/collection/890x890.jpg" alt=""></div>
                                 </a></div>
                             <div class="col-lg-7 col-md-7 u-s-m-b-30">
 
                                 <a class="collection" href="shop-side-version-2.html">
                                     <div class="aspect aspect--bg-grey aspect--1286-890">
 
-                                        <img class="aspect__img collection__img" src="images/collection/coll-2.jpg" alt=""></div>
+                                        <img class="aspect__img collection__img" src="images/collection/1280x800.jpg" alt=""></div>
                                 </a></div>
                             <div class="col-lg-7 col-md-7 u-s-m-b-30">
 
                                 <a class="collection" href="shop-side-version-2.html">
                                     <div class="aspect aspect--bg-grey aspect--1286-890">
 
-                                        <img class="aspect__img collection__img" src="images/collection/coll-3.jpg" alt=""></div>
+                                        <img class="aspect__img collection__img" src="images/collection/1281x800.jpg" alt=""></div>
                                 </a></div>
                             <div class="col-lg-5 col-md-5 u-s-m-b-30">
 
                                 <a class="collection" href="shop-side-version-2.html">
                                     <div class="aspect aspect--bg-grey aspect--square">
 
-                                        <img class="aspect__img collection__img" src="images/collection/coll-4.jpg" alt=""></div>
+                                        <img class="aspect__img collection__img" src="images/collection/768x960.jpg" alt=""></div>
                                 </a></div>
                         </div>
                     </div>
@@ -1574,7 +1574,7 @@ function showMain() {
 
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                        <img class="aspect__img" src="images/product/electronic/ga-sot-pho-mai.jpg" alt=""></a>
+                                                        <img class="aspect__img" src="images/product/electronic/burger-ga-tom-trung-pho-mai.jpg" alt=""></a>
                                                     <div class="product-o__action-wrap">
                                                         <ul class="product-o__action-list">
                                                             <li>
@@ -1615,7 +1615,7 @@ function showMain() {
 
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                        <img class="aspect__img" src="images/product/electronic/ga-sot-pho-mai.jpg" alt=""></a>
+                                                        <img class="aspect__img" src="images/product/electronic/ga-sot-dau.jpg" alt=""></a>
                                                     <div class="product-o__action-wrap">
                                                         <ul class="product-o__action-list">
                                                             <li>
@@ -1656,7 +1656,7 @@ function showMain() {
 
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                        <img class="aspect__img" src="images/product/electronic/product5.jpg" alt=""></a>
+                                                        <img class="aspect__img" src="images/product/electronic/ga-sot-pho-mai.jpg" alt=""></a>
                                                     <div class="product-o__action-wrap">
                                                         <ul class="product-o__action-list">
                                                             <li>
@@ -1697,7 +1697,7 @@ function showMain() {
 
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                        <img class="aspect__img" src="images/product/electronic/product6.jpg" alt=""></a>
+                                                        <img class="aspect__img" src="images/product/electronic/com-tam.png" alt=""></a>
                                                     <div class="product-o__action-wrap">
                                                         <ul class="product-o__action-list">
                                                             <li>
@@ -1738,7 +1738,7 @@ function showMain() {
 
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                        <img class="aspect__img" src="images/product/electronic/product7.jpg" alt=""></a>
+                                                        <img class="aspect__img" src="images/product/electronic/com-ga-sot-cay.jpg" alt=""></a>
                                                     <div class="product-o__action-wrap">
                                                         <ul class="product-o__action-list">
                                                             <li>
@@ -1779,7 +1779,7 @@ function showMain() {
 
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                        <img class="aspect__img" src="images/product/electronic/product8.jpg" alt=""></a>
+                                                        <img class="aspect__img" src="images/product/electronic/pizza-cheese.png" alt=""></a>
                                                     <div class="product-o__action-wrap">
                                                         <ul class="product-o__action-list">
                                                             <li>
@@ -1820,7 +1820,7 @@ function showMain() {
 
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                        <img class="aspect__img" src="images/product/electronic/product9.jpg" alt=""></a>
+                                                        <img class="aspect__img" src="images/product/electronic/pizza-vegetable.jpg" alt=""></a>
                                                     <div class="product-o__action-wrap">
                                                         <ul class="product-o__action-list">
                                                             <li>
@@ -1861,7 +1861,7 @@ function showMain() {
 
                                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                        <img class="aspect__img" src="images/product/electronic/product10.jpg" alt=""></a>
+                                                        <img class="aspect__img" src="images/product/electronic/pizza-trung-cut-xot-pho-mai-1.jpg" alt=""></a>
                                                     <div class="product-o__action-wrap">
                                                         <ul class="product-o__action-list">
                                                             <li>
@@ -1939,7 +1939,7 @@ function showMain() {
 
                                         <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                            <img class="aspect__img" src="images/product/electronic/product11.jpg" alt=""></a>
+                                            <img class="aspect__img" src="images/product/electronic/banh-bong-lan-9.jpg" alt=""></a>
                                         <div class="product-o__special-count-wrap">
                                             <div class="countdown countdown--style-special" data-countdown="2020/05/01"></div>
                                         </div>
@@ -1963,11 +1963,11 @@ function showMain() {
 
                                     <span class="product-o__category">
 
-                                        <a href="shop-side-version-2.html">Electronics</a></span>
+                                        <a href="shop-side-version-2.html">Cake </a></span>
 
                                     <span class="product-o__name">
 
-                                        <a href="product-detail.html">DJI Phantom Drone 4k</a></span>
+                                        <a href="product-detail.html">Bánh Bông Lan Trứng Muối</a></span>
                                     <div class="product-o__rating gl-rating-style"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
 
                                         <span class="product-o__review">(2)</span></div>
@@ -1983,7 +1983,7 @@ function showMain() {
 
                                         <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                            <img class="aspect__img" src="images/product/electronic/product12.jpg" alt=""></a>
+                                            <img class="aspect__img" src="images/product/electronic/bun-dau-mam-tom.jpg" alt=""></a>
                                         <div class="product-o__special-count-wrap">
                                             <div class="countdown countdown--style-special" data-countdown="2020/05/01"></div>
                                         </div>
@@ -2007,11 +2007,11 @@ function showMain() {
 
                                     <span class="product-o__category">
 
-                                        <a href="shop-side-version-2.html">Electronics</a></span>
+                                        <a href="shop-side-version-2.html">Rice Noodle</a></span>
 
                                     <span class="product-o__name">
 
-                                        <a href="product-detail.html">DJI Phantom Drone 2k</a></span>
+                                        <a href="product-detail.html">Bún Đậu Mắm Tôm</a></span>
                                     <div class="product-o__rating gl-rating-style"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
 
                                         <span class="product-o__review">(2)</span></div>
@@ -2060,7 +2060,7 @@ function showMain() {
 
                                             <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                <img class="aspect__img" src="images/product/electronic/product13.jpg" alt=""></a>
+                                                <img class="aspect__img" src="images/product/electronic/beef-burger.jpg" alt=""></a>
                                             <div class="product-o__action-wrap">
                                                 <ul class="product-o__action-list">
                                                     <li>
@@ -2081,11 +2081,11 @@ function showMain() {
 
                                         <span class="product-o__category">
 
-                                            <a href="shop-side-version-2.html">Electronics</a></span>
+                                            <a href="shop-side-version-2.html">Burger</a></span>
 
                                         <span class="product-o__name">
 
-                                            <a href="product-detail.html">Nikon DSLR 4K Camera</a></span>
+                                            <a href="product-detail.html">Beef Burger</a></span>
                                         <div class="product-o__rating gl-rating-style"><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
 
                                             <span class="product-o__review">(0)</span></div>
@@ -2101,7 +2101,7 @@ function showMain() {
 
                                             <a class="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                <img class="aspect__img" src="images/product/electronic/product14.jpg" alt=""></a>
+                                                <img class="aspect__img" src="images/product/electronic/Zinger_Burger.png" alt=""></a>
                                             <div class="product-o__action-wrap">
                                                 <ul class="product-o__action-list">
                                                     <li>
@@ -2122,11 +2122,11 @@ function showMain() {
 
                                         <span class="product-o__category">
 
-                                            <a href="shop-side-version-2.html">Electronics</a></span>
+                                            <a href="shop-side-version-2.html">Burger</a></span>
 
                                         <span class="product-o__name">
 
-                                            <a href="product-detail.html">Nikon DSLR 2K Camera</a></span>
+                                            <a href="product-detail.html">Zinger Burger</a></span>
                                         <div class="product-o__rating gl-rating-style"><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
 
                                             <span class="product-o__review">(0)</span></div>
