@@ -85,7 +85,7 @@ function showFood() {
                                             <div class="product-m__wishlist">
 
                                                 <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
-                                             <button class="button-5" role="button" >Delete</button>
+                                        <button class="button-5" role="button" onclick="deleteFood(${list[i].id})">Xóa</button>
                                         </div>
                                     </div>
                                 </div>
