@@ -9,12 +9,12 @@ function showMyProfile(){
                                                 <div class="col-lg-4 u-s-m-b-30">
                                                     <h2 class="dash__h2 u-s-m-b-8">Full Name</h2>
 
-                                                    <span class="dash__text">John Doe</span>
+                                                    <span class="dash__text" id="u-name"></span>
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
                                                     <h2 class="dash__h2 u-s-m-b-8">E-mail</h2>
 
-                                                    <span class="dash__text">johndoe@domain.com</span>
+                                                    <span class="dash__text" id="u-email"></span>
                                                     <div class="dash__link dash__link--secondary">
 
                                                         <a href="#">Change</a></div>
@@ -22,20 +22,21 @@ function showMyProfile(){
                                                 <div class="col-lg-4 u-s-m-b-30">
                                                     <h2 class="dash__h2 u-s-m-b-8">Phone</h2>
 
-                                                    <span class="dash__text">Please enter your mobile</span>
+                                                    <span class="dash__text" id="u-phone"></span>
                                                     <div class="dash__link dash__link--secondary">
-
-                                                        <a href="#">Add</a></div>
+                                                        <a href="#">Change</a></div>
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
-                                                    <h2 class="dash__h2 u-s-m-b-8">Birthday</h2>
+                                                    <h2 class="dash__h2 u-s-m-b-8">Address</h2>
 
-                                                    <span class="dash__text">1991-02-02</span>
+                                                    <span class="dash__text" id="u-address"></span>
+                                                      <div class="dash__link dash__link--secondary">
+                                                        <a href="#">Change</a></div>
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
                                                     <h2 class="dash__h2 u-s-m-b-8">Gender</h2>
 
-                                                    <span class="dash__text">Male</span>
+                                                    <span class="dash__text" id="u-gender">Male</span>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -45,7 +46,7 @@ function showMyProfile(){
                                                         <a data-modal="modal" data-modal-id="#dash-newsletter">Subscribe Newsletter</a></div>
                                                     <div class="u-s-m-b-16">
 
-                                                        <a class="dash__custom-link btn--e-transparent-brand-b-2" href="dash-edit-profile.html">Edit Profile</a></div>
+                                                        <a class="dash__custom-link btn--e-transparent-brand-b-2" onclick="showEditProfile()">Edit Profile</a></div>
                                                     <div>
 
                                                         <a class="dash__custom-link btn--e-brand-b-2" href="#">Change Password</a></div>
@@ -54,6 +55,21 @@ function showMyProfile(){
                                         </div>
                                     </div>
                                    `;
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    }
+    let userId = currentUser.id;
+    axios.get(`http://localhost:8080/users/${userId}`,auth).then((response) => {
+            let data = response.data;
+            document.getElementById("u-name").innerText = data.name;
+            document.getElementById("u-address").innerText = data.address;
+            document.getElementById("u-email").innerText = data.email;
+            document.getElementById("u-phone").innerText = data.phone;
+            document.getElementById("u-gender").innerText = data.gender;
+    })
 }
 function showMyOrder(){
     document.getElementById('right-dashboard').innerHTML = `                                    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
@@ -208,61 +224,36 @@ function showEditProfile(){
                                                         <div class="gl-inline">
                                                             <div class="u-s-m-b-30">
 
-                                                                <label class="gl-label" for="reg-fname">FIRST NAME *</label>
+                                                                <label class="gl-label" for="u-name">NAME *</label>
 
-                                                                <input class="input-text input-text--primary-style" type="text" id="reg-fname" placeholder="John"></div>
-                                                            <div class="u-s-m-b-30">
-
-                                                                <label class="gl-label" for="reg-lname">LAST NAME *</label>
-
-                                                                <input class="input-text input-text--primary-style" type="text" id="reg-lname" placeholder="Doe"></div>
+                                                                <input class="input-text input-text--primary-style" type="text" id="u-name" placeholder=""></div>
                                                         </div>
                                                         <div class="gl-inline">
                                                             <div class="u-s-m-b-30">
 
-                                                                <!--====== Date of Birth Select-Box ======-->
-
-                                                                <span class="gl-label">BIRTHDAY</span>
-                                                                <div class="gl-dob"><select class="select-box select-box--primary-style">
-                                                                        <option selected>Month</option>
-                                                                        <option value="male">January</option>
-                                                                        <option value="male">February</option>
-                                                                        <option value="male">March</option>
-                                                                        <option value="male">April</option>
-                                                                    </select><select class="select-box select-box--primary-style">
-                                                                        <option selected>Day</option>
-                                                                        <option value="01">01</option>
-                                                                        <option value="02">02</option>
-                                                                        <option value="03">03</option>
-                                                                        <option value="04">04</option>
-                                                                    </select><select class="select-box select-box--primary-style">
-                                                                        <option selected>Year</option>
-                                                                        <option value="1991">1991</option>
-                                                                        <option value="1992">1992</option>
-                                                                        <option value="1993">1993</option>
-                                                                        <option value="1994">1994</option>
-                                                                    </select></div>
-                                                                <!--====== End - Date of Birth Select-Box ======-->
+                                                                <label class="gl-label" for="u-gender">GENDER</label><select class="select-box select-box--primary-style u-w-100" id="u-gender">
+                                                                    <option selected id="selected"></option>
+                                                                    <option value="male">Male</option>
+                                                                    <option value="male">Female</option>
+                                                                </select>
                                                             </div>
                                                             <div class="u-s-m-b-30">
 
-                                                                <label class="gl-label" for="gender">GENDER</label><select class="select-box select-box--primary-style u-w-100" id="gender">
-                                                                    <option selected>Select</option>
-                                                                    <option value="male">Male</option>
-                                                                    <option value="male">Female</option>
-                                                                </select></div>
+                                                                <label class="gl-label" for="u-name">ADDRESS *</label>
+
+                                                                <input class="input-text input-text--primary-style" type="text" id="u-address" placeholder=""></div>
                                                         </div>
                                                         <div class="gl-inline">
                                                             <div class="u-s-m-b-30">
                                                                 <h2 class="dash__h2 u-s-m-b-8">E-mail</h2>
 
-                                                                <span class="dash__text">johndoe@domain.com</span>
+                                                                <span class="dash__text" id="u-email"></span>
                                                                 <div class="dash__link dash__link--secondary">
 
                                                                     <a href="#">Change</a></div>
                                                             </div>
                                                             <div class="u-s-m-b-30">
-                                                                <h2 class="dash__h2 u-s-m-b-8">Phone</h2>
+                                                                <h2 class="dash__h2 u-s-m-b-8" id="u-phone">Phone</h2>
 
                                                                 <span class="dash__text">Please enter your mobile</span>
                                                                 <div class="dash__link dash__link--secondary">
@@ -278,6 +269,21 @@ function showEditProfile(){
                                         </div>
                                     </div>
 `;
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    }
+    let userId = currentUser.id;
+    axios.get(`http://localhost:8080/users/${userId}`,auth).then((response) => {
+        let data = response.data;
+        document.getElementById("u-name").innerText = data.name;
+        document.getElementById("u-address").innerText = data.address;
+        document.getElementById("u-email").innerText = data.email;
+        document.getElementById("u-phone").innerText = data.phoneNumber;
+        document.getElementById("u-gender").innerText = data.gender;
+    })
 }
 function showOrderDetails(index){
     document.getElementById('right-dashboard').innerHTML = `<h1 class="dash__h1 u-s-m-b-30">Order Details</h1>
