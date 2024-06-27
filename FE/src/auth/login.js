@@ -81,7 +81,7 @@ function showFormLogin() {
 </b> 
                                                 <label class="gl-label" for="login-password">PASSWORD *</label>
 
-                                                <input class="input-text input-text--primary-style" type="text" id="login-password" placeholder="Enter Password"></div>
+                                                <input class="input-text input-text--primary-style" type="password" id="login-password" placeholder="Enter Password"></div>
                                             <div class="gl-inline">
                                                 <div class="u-s-m-b-30">
 
