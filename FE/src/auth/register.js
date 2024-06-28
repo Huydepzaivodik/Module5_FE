@@ -54,24 +54,29 @@ function showFormRegister() {
                                         <div class="l-f-o__form">                                                                                                                   
                                             <div class="gl-inline">      
                                              <div class="u-s-m-b-30">
-                                                <b><span id="error-reg-fname" style="font-size: small;color: red"></span></b>
+                                               
                                                 <label class="gl-label" for="reg-fname">FIRST NAME *</label>
-                                                <input class="input-text input-text--primary-style" type="text" id="reg-fname" placeholder="First Name"></div>                                                                                              
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-fname" placeholder="First Name">
+                                                 <b><span id="error-reg-fname" style="font-size: small;color: red"></span></b></div>  
+                                                                                                                                            
                                             <div class="u-s-m-b-30">
-                                                <b><span id="error-reg-lname" style="font-size: small;color: red"></span></b>
+                                               
                                                 <label class="gl-label" for="reg-lname">LAST NAME *</label>
-                                                <input class="input-text input-text--primary-style" type="text" id="reg-lname" placeholder="Last Name"></div>
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-lname" placeholder="Last Name">
+                                                 <b><span id="error-reg-lname" style="font-size: small;color: red"></span></b></div>
                                              </div>
                                             
                                             <div class="gl-inline">                                           
                                                <div class="u-s-m-b-30">    
-                                                <b><span id="error-reg-address" style="font-size: small;color:red;"></span></b>
+                                              
                                                 <label class="gl-label" for="reg-address">ADDRESS *</label>
-                                                <input class="input-text input-text--primary-style" type="text" id="reg-address" placeholder="Address"></div>                                              
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-address" placeholder="Address">
+                                                <b><span id="error-reg-address" style="font-size: small;color:red;"></span></b></div>                                              
                                              <div class="u-s-m-b-30">
-                                                <b><span id="error-reg-phone-number" style="font-size: small;color: red"></span></b>
+                                                
                                                 <label class="gl-label" for="reg-phone-number">PHONE NUMBER *</label>
-                                                <input class="input-text input-text--primary-style" type="text" id="reg-phone-number" placeholder="Phone Number"></div>                                              
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-phone-number" placeholder="Phone Number">
+                                                <b><span id="error-reg-phone-number" style="font-size: small;color: red"></span></b></div>                                              
                                             </div>   
                                                                                                
                                             <div class="gl-inline">                                           
@@ -84,25 +89,29 @@ function showFormRegister() {
                                                 </div>
                                                 
                                                <div class="u-s-m-b-30">
-                                                <b><span id="error-reg-email" style="font-size: small;color: red"></span></b>
+                                               
                                                 <label class="gl-label" for="reg-email">EMAIL *</label>
-                                                <input class="input-text input-text--primary-style" type="text" id="reg-email" placeholder="Email"></div>                                                                                                                                        
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-email" placeholder="Email">
+                                                 <b><span id="error-reg-email" style="font-size: small;color: red"></span></b></div>                                                                                                                                        
                                             </div>
                                             
                                             
                                             <div class="u-s-m-b-30">
-                                                <b><span id="error-reg-username" style="font-size: small;color: red"></span></b>
                                                 <label class="gl-label" for="reg-username">USER NAME *</label>
-                                                <input class="input-text input-text--primary-style" type="text" id="reg-username" placeholder="Enter User name"></div>
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-username" placeholder="Enter User name">
+                                                <b><span id="error-reg-username" style="font-size: small;color: red"></span></b>
+</div>
                                             <div class="u-s-m-b-30">
-                                                <b><span id="error-reg-password" style="color: red;font-size: small"></span></b>
+                                             
                                                 <label class="gl-label" for="reg-password">PASSWORD *</label>
-                                                <input class="input-text input-text--primary-style" type="text" id="reg-password" placeholder="Enter Password"></div>
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-password" placeholder="Enter Password">
+                                                <b><span id="error-reg-password" style="color: red;font-size: small"></span></b></div>
                                                 
                                              <div class="u-s-m-b-30">
-                                                <b><span id="error-reg-cfPassword" style="font-size: small;color: red"></span></b>
+                                               
                                                 <label class="gl-label" for="reg-cfPassword">CONFIRM PASSWORD *</label>
-                                                <input class="input-text input-text--primary-style" type="text" id="reg-cfPassword" placeholder="Re-Enter Password"></div>                                                                  
+                                                <input class="input-text input-text--primary-style" type="text" id="reg-cfPassword" placeholder="Re-Enter Password">
+                                                 <b><span id="error-reg-cfPassword" style="font-size: small;color: red"></span></b></div>                                                                  
                                             <div class="u-s-m-b-15">
                                                 <button class="btn btn--e-transparent-brand-b-2" type="submit" onclick="register()">CREATE</button></div>
                                                  <span id="error-sign-up" style="color: red;font-size: medium"></span>                               
