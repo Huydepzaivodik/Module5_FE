@@ -160,8 +160,8 @@ function AddFoodForm() {
                                                         
                                                           <div class="gl-inline">
                                                             <div class="u-s-m-b-30">
-                                                                <label class="gl-label" for="food-image">URL Image *</label>
-                                                                <input class="input-text input-text--primary-style" type="text" id="food-image" placeholder="">
+                                                                <label class="gl-label" for="food-image">Image *</label>
+                                                                <input class="input-text input-text--primary-style" type="file" id="food-image" placeholder="" onchange="uploadImage(event)">
                                                             </div>
                                                         </div>
                                                         <button class="btn btn--e-brand-b-1" onclick="showFood()" >Back Food List</button>
@@ -185,7 +185,7 @@ function addFood() {
     let description = document.getElementById('food-description').value;
     let price = document.getElementById('food-price').value;
     let quantity = document.getElementById('food-quantity').value;
-    let image = document.getElementById('food-image').value;
+    let image = localStorage.getItem("regm-image");
 
     let food = {
         name: name,
