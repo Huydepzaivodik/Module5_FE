@@ -698,7 +698,7 @@ function showFoodDetail(id){
                                         <div class="pd-detail-inline-2">
                                        <div class="u-s-m-b-15">
                                            <div> 
-                                           <button class="btn btn--e-brand-b-2" onclick="#" ><i class="fas fa-shopping-bag"></i> Shop</button> 
+                                           <button class="btn " onclick="#" ><i class="fas fa-shopping-bag"></i> Shop</button> 
                                            </div>
                                        </div>
                                         
