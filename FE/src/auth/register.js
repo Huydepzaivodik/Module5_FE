@@ -152,7 +152,7 @@ function showMerchantRegister(){
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary">CREATE AN ACCOUNT</h1>
+                                    <h1 class="section__heading u-c-secondary">MERCHANT APPLICATION</h1>
                                 </div>
                             </div>
                         </div>

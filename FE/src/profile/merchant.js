@@ -1,5 +1,7 @@
 function showMerchantEdit() {
-    document.getElementById("right-dashboard").innerHTML = `
+    let user = JSON.parse(localStorage.getItem('currentUser'));
+    if(user.roles[0].authority == "ROLE_MERCHANT") {
+        document.getElementById("right-dashboard").innerHTML = `
                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
                                         <div class="dash__pad-2">
                                             <h1 class="dash__h1 u-s-m-b-14">Edit Merchant Profile</h1>
@@ -51,25 +53,35 @@ function showMerchantEdit() {
                                     </div>     
                                   </div>     
        `
-    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    let auth = {
-        headers: {
-            "Authorization": `Bearer ${currentUser.accessToken}`
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        let auth = {
+            headers: {
+                "Authorization": `Bearer ${currentUser.accessToken}`
+            }
         }
+        let id = currentUser.id;
+        axios.get(`http://localhost:8080/merchant/edit/${id}`, auth).then(respone => {
+            let data = respone.data;
+            document.getElementById('regm-name').value = data.name;
+            document.getElementById('regm-email').innerText = data.email;
+            document.getElementById('regm-phone').innerText = data.phone;
+            document.getElementById('regm-address').value = data.address;
+            let otime = data.opening_time.slice(11, 16);
+            document.getElementById('regm-otime').value = otime;
+            let ctime = data.closing_time.slice(11, 16);
+            document.getElementById('regm-ctime').value = ctime;
+            document.getElementById('image').src = data.image;
+        })
+    }else{
+        document.getElementById("right-dashboard").innerHTML = `
+                 <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
+                                        <div class="dash__pad-2">
+                                            <h1 class="dash__h1 u-s-m-b-14">YOU ARE NOT A MERCHANT, DO YOU WANT TO BE ONE OF US? <a onclick="showMerchantRegister()" style="color: red">GO TO MERCHANT REGISTER</a></h1>
+                                            
+                                    </div>     
+                                  </div>            
+        `
     }
-    let id = currentUser.id;
-    axios.get(`http://localhost:8080/merchant/edit/${id}`,auth).then(respone => {
-        let data = respone.data;
-        document.getElementById('regm-name').value = data.name;
-        document.getElementById('regm-email').innerText = data.email;
-        document.getElementById('regm-phone').innerText = data.phone;
-        document.getElementById('regm-address').value = data.address;
-        let otime = data.opening_time.slice(11,16);
-        document.getElementById('regm-otime').value = otime;
-        let ctime = data.closing_time.slice(11,16);
-        document.getElementById('regm-ctime').value = ctime;
-        document.getElementById('image').src = data.image;
-    })
 }
 function saveMerchant(){
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
