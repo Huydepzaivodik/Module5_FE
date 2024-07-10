@@ -1192,19 +1192,9 @@ function showMain() {
                                     <li>
 
                                         <a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="has-dropdown">
+                                    <li class="has-dropdown" id="mini-cart">
 
-                                        <a class="mini-cart-shop-link"><i class="fas fa-shopping-bag"></i>
-
-                                            <span class="total-item-round">2</span></a>
-
-                                        <!--====== Dropdown ======-->
-
-                                        <span class="js-menu-toggle"></span>
-                                        <div class="mini-cart" id="mini-cart">
-
-                                        </div>
-                                        <!--====== End - Dropdown ======-->
+                                        
                                     </li>
                                 </ul>
                                 <!--====== End - List ======-->

@@ -1,8 +1,32 @@
+function addTocart(id){
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if(currentUser == null) return;
+        let auth = {
+                headers: {
+                        "Authorization": `Bearer ${currentUser.accessToken}`
+                }
+        }
+        axios.get(`http://localhost:8080/foods/${id}`,auth).then((respone)=>{
+                axios.post(`http://localhost:8080/cart/${currentUser.id}`,respone.data,auth).then((response) =>{
+                        alert(response.data);
+                        showMiniCart();
+                })
+        })
+
+}
+
 function showMiniCart(){
         document.getElementById("mini-cart").innerHTML =`
+                                            
+                                        <a class="mini-cart-shop-link"><i class="fas fa-shopping-bag"></i>
 
-                                            <!--====== Mini Product Container ======-->
-                                            <div class="mini-product-container gl-scroll u-s-m-b-15" id="cart-container-mini">
+                                            <span class="total-item-round" id="cart-number"></span></a>
+
+                                        <!--====== Dropdown ======-->
+
+                                        <span class="js-menu-toggle"></span>
+                                        <div class="mini-cart">
+                                             <div class="mini-product-container gl-scroll u-s-m-b-15" id="cart-container-mini">
                                             
                                             </div>
                                             <div class="mini-product-stat">
@@ -17,6 +41,9 @@ function showMiniCart(){
 
                                                     <a class="mini-link btn--e-transparent-secondary-b-2" onclick="showCart()">VIEW CART</a></div>
                                             </div>
+                                        </div>
+                                            <!--====== Mini Product Container ======-->
+                                            
                                             <!--====== End - Mini Product Statistics ======-->                           
 `
         getList();
@@ -121,7 +148,7 @@ function showCart(){
                     </div>
                 </div>
             </div>`
-        // getList()
+        getList()
 }
 
 function plusQuantity(id){
@@ -174,8 +201,59 @@ function getList(){
         console.log("Ok");
         axios.get(`http://localhost:8080/cart/${currentUser.id}`,auth).then((response) =>{
                 let data = response.data;
+                console.log(data.food)
+                document.getElementById("cart-number").innerHTML = data.food.length;
+
+                if(data.food.length == 0){
+                        if(document.getElementById("cart-container") != null){
+                                document.getElementById("cart-container").innerHTML = `
+               <div class="u-s-p-y-60">
+
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 u-s-m-b-30">
+                                <div class="empty">
+                                    <div class="empty__wrap">
+
+                                        <span class="empty__big-text">EMPTY</span>
+
+                                        <span class="empty__text-1">No items found on your cart.</span>
+
+                                        <a class="empty__redirect-link btn--e-brand" href="shop-side-version-2.html">CONTINUE SHOPPING</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
+            </div>
+                `
+                        }
+
+                        document.getElementById("cart-container-mini").innerHTML = `
+                    <div class="u-s-p-y-60">
+                        <div class="section__content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 u-s-m-b-30">
+                                <div class="empty">
+                                    <div class="empty__wrap">
+                                        <span class="empty__big-text">EMPTY</span>
+                                        <span class="empty__text-1">No items found on your cart.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
+            </div>
+                `
+                        return;
+                }
                 let html = "";
-                        for(let i = 0 ; i < data.foods.length; i++){
+                        for(let i = 0 ; i < data.food.length; i++){
                                 html += `                                          <!--====== Card for mini cart ======-->
                                                 <div class="card-mini-product">
                                                     <div class="mini-product">
@@ -203,7 +281,7 @@ function getList(){
                                                 </div>`
                                 document.getElementById("cart-container-mini").innerHTML = html;
                                 html = "";
-                                for(let i = 0 ; i < data.foods.length; i++){
+                                for(let i = 0 ; i < data.food.length; i++){
                                         let a  = data.foods[i];
                                 html += `
                                          <tr>
@@ -247,51 +325,6 @@ function getList(){
                         }
                                 document.getElementById("cart-container").innerHTML = html;
                         }
-        }).catch((error) => {
-                if(document.getElementById("cart-container") != null){
-                        document.getElementById("cart-container").innerHTML = `
-               <div class="u-s-p-y-60">
 
-                <!--====== Section Content ======-->
-                <div class="section__content">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 u-s-m-b-30">
-                                <div class="empty">
-                                    <div class="empty__wrap">
-
-                                        <span class="empty__big-text">EMPTY</span>
-
-                                        <span class="empty__text-1">No items found on your cart.</span>
-
-                                        <a class="empty__redirect-link btn--e-brand" href="shop-side-version-2.html">CONTINUE SHOPPING</a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--====== End - Section Content ======-->
-            </div>
-                `
-                }
-
-                document.getElementById("cart-container-mini").innerHTML = `
-                    <div class="u-s-p-y-60">
-                        <div class="section__content">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 u-s-m-b-30">
-                                <div class="empty">
-                                    <div class="empty__wrap">
-                                        <span class="empty__big-text">EMPTY</span>
-                                        <span class="empty__text-1">No items found on your cart.</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--====== End - Section Content ======-->
-            </div>
-                `
         })
 }
