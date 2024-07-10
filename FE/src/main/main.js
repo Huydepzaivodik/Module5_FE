@@ -1160,7 +1160,7 @@ function showMain() {
                                     </li>
                                     <li>
 
-                                        <a href="shop-side-version-2.html">VALUE OF THE DAY</a></li>
+                                        <a onClick="showOrder()">SHOW ORDER</a></li>
                                     <li>
 
                                         <a onClick="showFood()">SHOW FOOD</a></li>
