@@ -344,6 +344,7 @@ function registerMerchant(){
          let phone = document.getElementById("regm-phone-number").value;
          let image = localStorage.getItem("regm-image");
          let otime = document.getElementById("regm-otime").valueAsDate;
+         console.log(otime)
          let ctime = document.getElementById("regm-ctime").valueAsDate;
          let user = JSON.parse(localStorage.getItem('currentUser'));
          let shop = {
@@ -360,8 +361,8 @@ function registerMerchant(){
          }
     axios.post("http://localhost:8080/merchant/register", shop).then(() => {
         alert("Đăng ký thành công!")
-    }).catch(({response}) => {
         showMain();
+    }).catch((error) => {
     })
 
 }

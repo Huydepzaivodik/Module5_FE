@@ -1,19 +1,4 @@
-function addTocart(id){
-        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        if(currentUser == null) return;
-        let auth = {
-                headers: {
-                        "Authorization": `Bearer ${currentUser.accessToken}`
-                }
-        }
-        axios.get(`http://localhost:8080/foods/${id}`,auth).then((respone)=>{
-                axios.post(`http://localhost:8080/cart/${currentUser.id}`,respone.data,auth).then((response) =>{
-                        alert(response.data);
-                        showMiniCart();
-                })
-        })
 
-}
 
 function showMiniCart(){
         document.getElementById("mini-cart").innerHTML =`
@@ -170,11 +155,19 @@ function deleteCart(id){
                         "Authorization": `Bearer ${currentUser.accessToken}`
                 }
         }
-        let food = {
-                id: id
-        }
-         axios.post('http://localhost:8080/cart/delete',currentUser.id,food,auth).then((response) =>{
-                 alert(response.data);
+        axios.get(`http://localhost:8080/user/foods/${id}`,auth).then((respone)=>{
+                console.log(respone.data)
+                let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+                let auth = {
+                        headers: {
+                                "Authorization": `Bearer ${currentUser.accessToken}`
+                        }
+                }
+                axios.post(`http://localhost:8080/cart/delete/${currentUser.id}`,respone.data,auth).then((response) =>{
+                        alert(response.data);
+                        showCart();
+                        showMiniCart();
+                })
         })
 }
 function deleteAll(){
@@ -254,6 +247,7 @@ function getList(){
                 }
                 let html = "";
                         for(let i = 0 ; i < data.food.length; i++){
+                                let a = data.food[i];
                                 html += `                                          <!--====== Card for mini cart ======-->
                                                 <div class="card-mini-product">
                                                     <div class="mini-product">
@@ -261,29 +255,32 @@ function getList(){
 
                                                             <a class="mini-product__link" href="product-detail.html">
 
-                                                                <img class="u-img-fluid" src="images/product/women/product8.jpg" alt=""></a></div>
+                                                                <img class="u-img-fluid" src="${a.image}" alt=""></a></div>
                                                         <div class="mini-product__info-wrapper">
 
                                                             <span class="mini-product__category">
 
-                                                                <a href="shop-side-version-2.html">Women Clothing</a></span>
+                                                                <a href="shop-side-version-2.html">${a.description}</a></span>
 
                                                             <span class="mini-product__name">
 
-                                                                <a href="product-detail.html">New Dress D Nice Elegant</a></span>
+                                                                <a href="product-detail.html" onclick="showFoodDetail(${a.id})">${a.name}</a></span>
 
-                                                            <span class="mini-product__quantity">1 x</span>
+                                                            <span class="mini-product__quantity">${a.quantity} x</span>
 
-                                                            <span class="mini-product__price">$8</span></div>
+                                                            <span class="mini-product__price">$${a.price}</span></div>
                                                     </div>
 
-                                                    <a class="mini-product__delete-link far fa-trash-alt"></a>
+                                                    <a class="mini-product__delete-link far fa-trash-alt" onclick="deleteCart(${a.id})"></a>
                                                 </div>`
-                                document.getElementById("cart-container-mini").innerHTML = html;
-                                html = "";
-                                for(let i = 0 ; i < data.food.length; i++){
-                                        let a  = data.foods[i];
-                                html += `
+
+                        }
+                document.getElementById("cart-container-mini").innerHTML = html;
+                html = "";
+                for(let i = 0 ; i < data.food.length; i++){
+                        let a  = data.food[i];
+                        console.log("ok " + i)
+                        html += `
                                          <tr>
                         <td>
                                 <div class="table-p__box">
@@ -322,9 +319,9 @@ function getList(){
                 </tr>
                                  `
 
-                        }
-                                document.getElementById("cart-container").innerHTML = html;
-                        }
+                }
+                document.getElementById("cart-container").innerHTML = html;
+
 
         })
 }

@@ -1,3 +1,25 @@
+function addTocart(id){
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if(currentUser == null) return;
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    }
+    axios.get(`http://localhost:8080/user/foods/${id}`,auth).then((respone)=>{
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        let auth = {
+            headers: {
+                "Authorization": `Bearer ${currentUser.accessToken}`
+            }
+        }
+        axios.post(`http://localhost:8080/cart/${currentUser.id}`,respone.data,auth).then((response) =>{
+            alert(response.data);
+            showMiniCart();
+        })
+    })
+
+}
 function showFood() {
     showMain();
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -215,7 +237,7 @@ function showFood() {
                                             <div class="product-m__wishlist">
 
                                                 <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
-                                        <button class="button-5" role="button" onclick="#">Add To Cart</button>
+                                        <button class="button-5" role="button" onclick="addTocart(${list[i].id})">Add To Cart</button>
 
                                         </div>
                                     </div>
