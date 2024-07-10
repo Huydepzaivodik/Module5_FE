@@ -1192,7 +1192,7 @@ function showMain() {
                                     <li>
 
                                         <a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="has-dropdown">
+                                    <li class="has-dropdown" id="mini-cart" >
 
                                         <a class="mini-cart-shop-link"><i class="fas fa-shopping-bag"></i>
 
@@ -1201,7 +1201,7 @@ function showMain() {
                                         <!--====== Dropdown ======-->
 
                                         <span class="js-menu-toggle"></span>
-                                        <div class="mini-cart">
+                                        <div class="mini-cart" >
 
                                             <!--====== Mini Product Container ======-->
                                             <div class="mini-product-container gl-scroll u-s-m-b-15">
@@ -2820,6 +2820,11 @@ function showMain() {
         </footer>
         <!--====== End - Main App ======-->
 `
+
+    showMiniCart();
+
 }
+
+
 
 

@@ -1,5 +1,5 @@
 function showEdit(id) {
-    showFood();
+    // showFood();
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let auth = {
         headers: {
@@ -10,6 +10,7 @@ function showEdit(id) {
         let food = response.data;
         console.log(food)
         document.getElementById("shop-p__collection").innerHTML = `<div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
+                <input type="hidden" name="" id="shop-id" value="${food.shop.id}">
                                         <div class="dash__pad-2">
                                             <h1 class="dash__h1 u-s-m-b-14">Edit Food </h1>
                                             <div class="dash__link dash__link--secondary u-s-m-b-30">
@@ -90,13 +91,16 @@ function edit(id) {
 
     if (check === true) {
 
-
+        let shop_id = document.getElementById("shop-id").value;
         let updatedFood = {
             name: name,
             image: image,
             quantity: quantity,
             price: price,
-            description: description
+            description: description,
+            shop: {
+                id: shop_id
+            }
         };
 
         console.log(updatedFood);

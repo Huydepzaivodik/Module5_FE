@@ -1,3 +1,4 @@
+
 function addTocart(id){
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     if(currentUser == null) return;
@@ -244,6 +245,9 @@ function showFood() {
                                 </div>
                             </div>`
             }
+
+            html+=`</div>
+                        </div>`
             document.getElementById("app-content").innerHTML = html;
         });
     }
@@ -310,19 +314,7 @@ function AddFoodForm() {
 
 
 function addFood() {
-    let name = document.getElementById('food-name').value;
-    let description = document.getElementById('food-description').value;
-    let price = document.getElementById('food-price').value;
-    let quantity = document.getElementById('food-quantity').value;
-    let image = localStorage.getItem("regm-image");
 
-    let food = {
-        name: name,
-        description: description,
-        price: price,
-        quantity: quantity,
-        image: image
-    };
 
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let auth = {
@@ -330,13 +322,31 @@ function addFood() {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
     }
+    axios.get(`http://localhost:8080/merchant/shop/${currentUser.id}`,auth).then((response) => {
+        let name = document.getElementById('food-name').value;
+        let description = document.getElementById('food-description').value;
+        let price = document.getElementById('food-price').value;
+        let quantity = document.getElementById('food-quantity').value;
+        let image = localStorage.getItem("regm-image");
 
-    axios.post("http://localhost:8080/foods", food, auth).then((response) => {
-        alert("Thêm món ăn thành công!");
-        searchFood();
-    }).catch((error) => {
-        alert("Thêm món ăn thất bại.");
-    });
+        let food = {
+            name: name,
+            description: description,
+            price: price,
+            quantity: quantity,
+            image: image,
+            shop: {
+                id: response.data.id
+            }
+        };
+        axios.post("http://localhost:8080/foods", food, auth).then((response) => {
+            alert("Thêm món ăn thành công!");
+            searchFood();
+        }).catch((error) => {
+            alert("Thêm món ăn thất bại.");
+        });
+    })
+
 }
 
 function deleteFood(foodId) {
@@ -576,7 +586,7 @@ function searchFood() {
                                             <span>${list[i].description}</span></div>
                                         <div class="product-m__wishlist">
                                             <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
-                                        <button class="button-5" role="button" onclick="#">Add To Cart</button>
+                                        <button class="button-5" role="button" onclick="addTocart(${list[i].id})">Add To Cart</button>
 
                                     </div>
                                 </div>
@@ -716,7 +726,7 @@ function showFoodDetail(id){
                                     </ul>
                                 </div>
                                 <div class="u-s-m-b-15">
-                                    <form class="pd-detail__form">
+                                    <div class="pd-detail__form">
                                         <div class="pd-detail-inline-2">
                                        <div class="u-s-m-b-15">
                                            <div> 
@@ -726,9 +736,9 @@ function showFoodDetail(id){
                                         
                                             <div class="u-s-m-b-15">
 
-                                                <button class="btn btn--e-brand-b-2" onclick="#" >Add to Cart</button></div>
+                                                <button class="btn btn--e-brand-b-2" onclick="addTocart(${food.id})" >Add to Cart</button></div>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                                 <div class="u-s-m-b-15">
 
