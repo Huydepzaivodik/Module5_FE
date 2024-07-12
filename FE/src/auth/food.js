@@ -1,26 +1,48 @@
 
-function addTocart(id){
+function addTocart(id) {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if(currentUser == null) return;
+    if (currentUser == null) return;
     let auth = {
         headers: {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
     }
-    axios.get(`http://localhost:8080/user/foods/${id}`,auth).then((respone)=>{
+    axios.get(`http://localhost:8080/user/foods/${id}`, auth).then((respone) => {
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
         let auth = {
             headers: {
                 "Authorization": `Bearer ${currentUser.accessToken}`
             }
         }
-        axios.post(`http://localhost:8080/cart/${currentUser.id}`,respone.data,auth).then((response) =>{
+        axios.post(`http://localhost:8080/cart/${currentUser.id}`, respone.data, auth).then((response) => {
             alert(response.data);
-            showMiniCart();
+            showMiniCart()
         })
     })
-
 }
+function addToWishlist(id) {
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser == null) return;
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    }
+    axios.get(`http://localhost:8080/user/foods/${id}`, auth).then((response) => {
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        let auth = {
+            headers: {
+                "Authorization": `Bearer ${currentUser.accessToken}`
+            }
+        }
+        axios.post(`http://localhost:8080/wishlist/${currentUser.id}`, response.data, auth).then((response) => {
+            alert(response.data);
+            showWishlist();
+        })
+    })
+}
+
+
 function showFood() {
     showMain();
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -57,16 +79,16 @@ function showFood() {
                                 <a class="gl-tag btn--e-brand-shadow" href="#">books & audible</a>
                             </div>
                         </div>
-                        <!--====== Search Form ======-->
-                      <div style="display: flex">
-
-    <div class="main-form" style="margin-bottom: 20px">
-        <label for="main-search-food"></label>
-        <input class="input-text input-text--border-radius input-text--style-1" type="text" style="width: 90%;" id="main-search-food" placeholder="Search" name="foodName">
-        <button class="btn btn--icon fas fa-search main-search-button-food" onclick="searchFood()"></button>
+                       <!--====== Search Form ======-->
+    <div style="display: flex">
+        <div class="main-form" style="margin-bottom: 20px">
+            <label for="main-search-food"></label>
+            <input class="input-text input-text--border-radius input-text--style-1" type="text" style="width: 90%;" id="main-search-food" placeholder="Search" name="foodName">
+            <button class="btn btn--icon fas fa-search main-search-button-food" onclick="searchFood()"></button>
+        </div>
+        <button class="btn btn--e-brand btn--s-m-l" style="margin-left: 10px;" onclick="showWishlist()">Go to Wishlist</button>
     </div>
     <!--====== End - Search Form ======-->
-
     <div class="shop-p__tool-style">
         <button  onclick="AddFoodForm()" style="font-family: sans-serif;
                         margin-left: 500px;
@@ -77,8 +99,7 @@ function showFood() {
                         color: white;
                         padding: 10px 20px;
                         border-radius: 5px;
-                        transition: background-color 0.3s ease; ;">Add Product
-        </button>
+                        transition: background-color 0.3s ease; ;">Add Product</button>
     </div>
 
 </div>
@@ -237,7 +258,7 @@ function showFood() {
                                                 <span>${list[i].description}</span></div>
                                             <div class="product-m__wishlist">
 
-                                                <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
+                                                <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${list[i].id})"></a></div>
                                         <button class="button-5" role="button" onclick="addTocart(${list[i].id})">Add To Cart</button>
 
                                         </div>
