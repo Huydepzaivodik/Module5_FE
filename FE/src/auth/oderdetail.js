@@ -9,7 +9,7 @@ function showOrderDetails(id){
     axios.get(`http://localhost:8080/orders/${id}`, auth).then((response) => {
         let order = response.data;
         console.log(order)
-        document.getElementById("app-content").innerHTML =`   <div  class="u-s-p-y-60">
+        html =`   <div  class="u-s-p-y-60">
 
                 <!--====== Section Content ======-->
                 <div class="section__content">
@@ -50,7 +50,7 @@ function showOrderDetails(id){
                                             <ul class="dash__f-list">
                                                 <li>
 
-                                                    <a href="dash-my-order.html">My Orders</a></li>
+                                                    <a onclick="showOrder()">My Orders</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -114,7 +114,7 @@ function showOrderDetails(id){
                                                 <div class="manage-o__header u-s-m-b-30">
                                                     <div class="manage-o__icon"><i class="fas fa-box u-s-m-r-5"></i>
 
-                                                        <span class="manage-o__text">Package 1</span></div>
+                                                        <span class="manage-o__text">Thông tin giao hàng</span></div>
                                                 </div>
                                                 <div class="dash-l-r">
                                                     <div class="manage-o__text u-c-secondary">Delivered on 26 Oct 2016</div>
@@ -153,6 +153,24 @@ function showOrderDetails(id){
                                                         </div>
                                                     </div>
                                                 </div>
+                                          
+                                            </div>
+                                        </div>
+                                    </div>`;
+
+
+        for (let i = 0; i < order.foods.length; i++) {
+            html += `     
+                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+                                        <div class="dash__pad-2">
+                                            <div class="manage-o">
+                                                <div class="manage-o__header u-s-m-b-30">
+                                                    <div class="manage-o__icon"><i class="fas fa-box u-s-m-r-5"></i>
+
+                                                        <span class="manage-o__text">Package ${i+1}</span></div>
+                                                </div>
+                                              
+                                               
                                                 <div class="manage-o__description">
 
                                                     <div class="description__container">
@@ -160,37 +178,43 @@ function showOrderDetails(id){
 
 
 
-                                                            <img class="u-img-fluid" src="images/product/electronic/product3.jpg" alt=""></div>
-                                                        <div class="description-title">Sản phẩm</div>
+                                                            <img class="u-img-fluid" src="${order.foods[i].image}" alt=""></div>
+                                                        <div class="description-title">${order.foods[i].name}</div>
                                                     </div>
                                                     <div class="description__info-wrap">
                                                         <div>
 
                                                             <span class="manage-o__text-2 u-c-silver">Quantity:
 
-                                                                <span class="manage-o__text-2 u-c-secondary">số lượng</span></span></div>
+                                                                <span class="manage-o__text-2 u-c-secondary">${order.foods[i].quantity}</span></span>
+                                                                </div>
+                                                                
                                                         <div>
 
                                                             <span class="manage-o__text-2 u-c-silver">Total:
 
-                                                                <span class="manage-o__text-2 u-c-secondary">tong tien</span></span></div>
+                                                                <span class="manage-o__text-2 u-c-secondary">${order.foods[i].price}</span></span></div>
                                                     </div>
+                                                    
 
 
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>`;
+}
+    html += `
+                                    
+                                    
+                                    
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
                                                 <div class="dash__pad-3">
-                                                    <h2 class="dash__h2 u-s-m-b-8">Shipping Address</h2>
-                                                    <h2 class="dash__h2 u-s-m-b-8">Name khách</h2>
+                                                    <h2 class="dash__h2 u-s-m-b-8">ShippingAdderss: ${order.shippingAddress}</h2>
+                                                    <h2 class="dash__h2 u-s-m-b-8">Name: ${order.user.name}</h2>
 
-                                                    <span class="dash__text-2">Địa chỉ </span>
-
-                                                    <span class="dash__text-2">SĐT</span>
+                                                    <span class="dash__text-2">Phone: ${order.user.phoneNumber}</span>
                                                 </div>
                                             </div>
 
@@ -201,19 +225,19 @@ function showOrderDetails(id){
                                                     <h2 class="dash__h2 u-s-m-b-8">Total Summary</h2>
                                                     <div class="dash-l-r u-s-m-b-8">
                                                         <div class="manage-o__text-2 u-c-secondary">Subtotal</div>
-                                                        <div class="manage-o__text-2 u-c-secondary">$16.00</div>
+                                                        <div class="manage-o__text-2 u-c-secondary">${getTotalPrice(order)}</div>
                                                     </div>
                                                     <div class="dash-l-r u-s-m-b-8">
                                                         <div class="manage-o__text-2 u-c-secondary">Shipping Fee</div>
-                                                        <div class="manage-o__text-2 u-c-secondary">$16.00</div>
+                                                        <div class="manage-o__text-2 u-c-secondary">${order.delivery.discount_percentage}</div>
                                                     </div>
                                                     <div class="dash-l-r u-s-m-b-8">
-                                                        <div class="manage-o__text-2 u-c-secondary">Coupon</div>
-                                                        <div class="manage-o__text-2 u-c-secondary">$10.00</div>
+                                                        <div class="manage-o__text-2 u-c-secondary">Coupon discount</div>
+                                                        <div class="manage-o__text-2 u-c-secondary">${order.coupon.discount}%</div>
                                                     </div>
                                                     <div class="dash-l-r u-s-m-b-8">
                                                         <div class="manage-o__text-2 u-c-secondary">Total</div>
-                                                        <div class="manage-o__text-2 u-c-secondary">$?</div>
+                                                        <div class="manage-o__text-2 u-c-secondary">${getTotalPriceAfterCoupon(order)}</div>
                                                     </div>
 
                                                     <span class="dash__text-2">Paid by Cash on Delivery</span>
@@ -228,6 +252,20 @@ function showOrderDetails(id){
                 </div>
                 <!--====== End - Section Content ======-->
             </div>`;
+        document.getElementById("app-content").innerHTML=html;
+
 
     });
+}
+function getTotalPrice(order) {
+    let total = 0;
+    order.foods.forEach(food => {
+        total += food.price;
+    });
+    return total;
+}
+function getTotalPriceAfterCoupon(order) {
+    let totalPrice = getTotalPrice(order);
+    let totalPriceAfterCoupon = totalPrice - totalPrice * (order.coupon.discount/100) ;
+    return totalPriceAfterCoupon;
 }
