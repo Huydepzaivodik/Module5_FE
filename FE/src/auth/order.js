@@ -11,16 +11,16 @@ function showOrder() {
         .then((response) => {
             axios.get("http://localhost:8080/foods", auth)
                 .then((foodResponse) => {
-                    let food = foodResponse.data;
+                    let foods = foodResponse.data;
                     let list = response.data;
-                    let html = OrderList(list, food);
+                    let html = OrderList(list, foods);
                     document.getElementById("app-content").innerHTML = html;
                     addOrderEventListeners(list);
                 });
         });
 }
 
-function OrderList(list, food) {
+function OrderList(list, foods) {
     let html = `
         <div class="u-s-p-y-60">
             <!--====== Section Content ======-->
@@ -147,12 +147,12 @@ function OrderList(list, food) {
                             </div>
                             <div>
                                 <span class="manage-o__text-2 u-c-silver">Số lượng:
-                                    <span class="manage-o__text-2 u-c-secondary">${food[i].quantity}</span>
+                                    <span class="manage-o__text-2 u-c-secondary">${getFoodQuantity(order)}</span>
                                 </span>
                             </div>
                             <div>
                                 <span class="manage-o__text-2 u-c-silver">Tổng tiền:
-                                    <span class="manage-o__text-2 u-c-secondary">${order.total}</span>
+                                    <span class="manage-o__text-2 u-c-secondary">${getTotalPrice(order)}</span>
                                 </span>
                             </div>
                         </div>
@@ -178,26 +178,7 @@ function OrderList(list, food) {
 }
 <!--======Hidden button ======-->
 
-function addOrderEventListeners(list,auth) {
-    list.forEach(order => {
-        let receiveOrderBtn = document.querySelector(`.receiveOrder[data-id="${order.id}"]`);
-        let cancelOrderBtn = document.querySelector(`.cancelOrder[data-id="${order.id}"]`);
-        let deleteOrderBtn = document.querySelector(`.deleteOrder[data-id="${order.id}"]`);
 
-        if (receiveOrderBtn && cancelOrderBtn && deleteOrderBtn) {
-            receiveOrderBtn.addEventListener('click', function() {
-                updateOrderStatus(order.id);
-
-                cancelOrderBtn.style.display = 'none';
-                showOrder();
-
-            });
-
-
-
-        }
-    });
-}
 <!--====== Txt true or false ======-->
 
 function getStatusText(status) {
@@ -244,4 +225,35 @@ function updateOrderStatus(orderId) {
             console.error("Error updating order status:", error);
         });
 }
+function addOrderEventListeners(list,auth) {
+    list.forEach(order => {
+        let receiveOrderBtn = document.querySelector(`.receiveOrder[data-id="${order.id}"]`);
+        let cancelOrderBtn = document.querySelector(`.cancelOrder[data-id="${order.id}"]`);
+        let deleteOrderBtn = document.querySelector(`.deleteOrder[data-id="${order.id}"]`);
 
+        if (receiveOrderBtn && cancelOrderBtn && deleteOrderBtn) {
+            receiveOrderBtn.addEventListener('click', function() {
+                updateOrderStatus(order.id);
+
+                cancelOrderBtn.style.display = 'none';
+                showOrder();
+
+            });
+
+
+
+        }
+    });
+}
+
+function getFoodQuantity(order) {
+    return `<span class="manage-o__text-2 u-c-secondary">${order.foods.length}</span>`;
+}
+
+function getTotalPrice(order) {
+    let total = 0;
+    order.foods.forEach(food => {
+        total += food.price;
+    });
+    return total;
+}
