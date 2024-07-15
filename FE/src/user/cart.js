@@ -115,7 +115,7 @@ function showCart(){
                                 <div class="route-box">
                                     <div class="route-box__g1">
 
-                                        <a class="route-box__link" href="shop-side-version-2.html"><i class="fas fa-long-arrow-alt-left"></i>
+                                        <a class="route-box__link" href="#" onclick="showFood()"><i class="fas fa-long-arrow-alt-left"></i>
 
                                             <span>CONTINUE SHOPPING</span></a></div>
                                     <div class="route-box__g2">
@@ -214,7 +214,7 @@ function getList(){
 
                                         <span class="empty__text-1">No items found on your cart.</span>
 
-                                        <a class="empty__redirect-link btn--e-brand" href="shop-side-version-2.html">CONTINUE SHOPPING</a></div>
+                                        <a class="empty__redirect-link btn--e-brand" href="#" onclick="showFood()">CONTINUE SHOPPING</a></div>
                                 </div>
                             </div>
                         </div>
@@ -253,22 +253,19 @@ function getList(){
                                                     <div class="mini-product">
                                                         <div class="mini-product__image-wrapper">
 
-                                                            <a class="mini-product__link" href="product-detail.html">
+                                                            <a class="mini-product__link" href="#" onclick="showFoodDetail(${a.id})">
 
                                                                 <img class="u-img-fluid" src="${a.image}" alt=""></a></div>
                                                         <div class="mini-product__info-wrapper">
 
-                                                            <span class="mini-product__category">
-
-                                                                <a href="shop-side-version-2.html">${a.description}</a></span>
+                                                           
 
                                                             <span class="mini-product__name">
 
-                                                                <a href="product-detail.html" onclick="showFoodDetail(${a.id})">${a.name}</a></span>
+                                                                <a href="#" onclick="showFoodDetail(${a.id})">${a.name}</a></span>
 
-                                                            <span class="mini-product__quantity">${a.quantity} x</span>
-
-                                                            <span class="mini-product__price">$${a.price}</span></div>
+                                                        
+                                                            <span class="mini-product__price">${a.price} VND</span></div>
                                                     </div>
 
                                                     <a class="mini-product__delete-link far fa-trash-alt" onclick="deleteCart(${a.id})"></a>
