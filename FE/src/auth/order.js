@@ -1,3 +1,4 @@
+
 function showOrder() {
     showMain();
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -11,8 +12,10 @@ function showOrder() {
         .then((response) => {
             axios.get("http://localhost:8080/foods", auth)
                 .then((foodResponse) => {
+
                     let foods = foodResponse.data;
                     let list = response.data;
+
                     let html = OrderList(list, foods);
                     document.getElementById("app-content").innerHTML = html;
                     addOrderEventListeners(list);
@@ -20,7 +23,13 @@ function showOrder() {
         });
 }
 
-function OrderList(list, foods) {
+function OrderList(list, foods ) {
+    let canceledOrdersCount = getCanceledOrdersCount(list);
+    let ordersCount = getOrdersCount(list);
+    let doneCount = getDoneCount(list);
+    let foodTakenCount = getFoodTakeCount(list);
+    let foodShipCount = getFoodShipCount(list);
+
     let html = `
         <div class="u-s-p-y-60">
             <!--====== Section Content ======-->
@@ -67,22 +76,36 @@ function OrderList(list, foods) {
                                                 <li>
                                                     <div class="dash__w-wrap">
                                                         <span class="dash__w-icon dash__w-icon-style-1"><i class="fas fa-cart-arrow-down"></i></span>
-                                                        <span class="dash__w-text">4</span>
+                                                        <span class="dash__w-text">${ordersCount}</span>
                                                         <span class="dash__w-name">Orders Placed</span>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="dash__w-wrap">
                                                         <span class="dash__w-icon dash__w-icon-style-2"><i class="fas fa-times"></i></span>
-                                                        <span class="dash__w-text">0</span>
+                                                        <span class="dash__w-text">${canceledOrdersCount}</span>
                                                         <span class="dash__w-name">Cancel Orders</span>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="dash__w-wrap">
                                                         <span class="dash__w-icon dash__w-icon-style-3"><i class="far fa-heart"></i></span>
-                                                        <span class="dash__w-text">0</span>
-                                                        <span class="dash__w-name">Wishlist</span>
+                                                        <span class="dash__w-text">${doneCount}</span>
+                                                        <span class="dash__w-name">DONE</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="dash__w-wrap">
+                                                        <span class="dash__w-icon dash__w-icon-style-3"><i class="far fa-heart"></i></span>
+                                                        <span class="dash__w-text">${foodTakenCount}</span>
+                                                        <span class="dash__w-name">RECEIVE</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="dash__w-wrap">
+                                                        <span class="dash__w-icon dash__w-icon-style-3"><i class="far fa-heart"></i></span>
+                                                        <span class="dash__w-text">${foodShipCount}</span>
+                                                        <span class="dash__w-name">SHIPPED</span>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -112,8 +135,9 @@ function OrderList(list, foods) {
 
     for (let i = 0; i < list.length; i++) {
         let order = list[i];
-        let orderStatus = getStatusText(order.status);
+        let orderStatus = getStatusText(order.status, order.cancelStatus, order.doneDeliveryMoneyStatus);
         let displayButtons = order.status ? 'style="display: none;"' : '';
+        let displayButtons1 = order.cancelStatus ? 'style="display: none;"' : '';
 
         html += `
                 <div class="m-order__get">
@@ -125,11 +149,10 @@ function OrderList(list, foods) {
                             </div>
                             <div>
                                 <div class="dash__link dash__link--brand">
-                                    <a class="receiveOrder" data-id="${order.id}" ${displayButtons}>NHẬN ĐƠN |</a>
-                                    <a class="cancelOrder" data-id="${order.id}" ${displayButtons}>HỦY ĐƠN |</a>
-                                    <a class="deleteOrder" onClick="deleteOrder(${order.id})" data-id="${order.id}" ${displayButtons}>XOA |</a>
-
-                                    <a onclick="showOrderDetails(${order.id})">CHI TIẾT</a>
+                                    <a class="receiveOrder" data-id="${order.id}" ${displayButtons} ${displayButtons1}>NHẬN ĐƠN |</a>
+                                    <a class="cancelOrder" onclick="cancelStatus(${order.id})" data-id="${order.id}" ${displayButtons} ${displayButtons1}>HỦY ĐƠN |</a>
+                                    <a class="deleteOrder" onClick="deleteOrder(${order.id})" data-id="${order.id}" ${displayButtons} ${displayButtons1}>XÓA |</a>
+                                    <a onclick="showOrderDetails(${order.id})" ${displayButtons1}>CHI TIẾT</a>
                                 </div>
                             </div>
                         </div>
@@ -176,16 +199,18 @@ function OrderList(list, foods) {
 
     return html;
 }
-<!--======Hidden button ======-->
 
-
-<!--====== Txt true or false ======-->
-
-function getStatusText(status) {
-    return status ? 'Nhận hàng' : 'Chờ nhận';
+function getStatusText(status, cancelStatus, doneStatus) {
+    if (cancelStatus) {
+        return 'Hủy hàng';
+    } else if (doneStatus) {
+        return 'Hoàn thành';
+    } else if (status) {
+        return 'Nhận hàng';
+    } else {
+        return 'Chờ nhận';
+    }
 }
-
-<!--====== Huy ======-->
 
 function deleteOrder(orderId) {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -206,6 +231,30 @@ function deleteOrder(orderId) {
     }
 }
 
+function cancelStatus(orderId) {
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    };
+
+    axios.get(`http://localhost:8080/orders/${orderId}`, auth)
+        .then((response) => {
+            let order = response.data;
+            order.cancelStatus = true;
+
+            return axios.put(`http://localhost:8080/orders/${orderId}`, order, auth);
+        })
+        .then(() => {
+            alert("Đã cancel đơn hàng thành công!");
+            showOrder();
+        })
+        .catch((error) => {
+            alert("Lỗi khi cập nhật trạng thái đơn hàng.");
+            console.error("Error updating order status:", error);
+        });
+}
 
 function updateOrderStatus(orderId) {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -215,17 +264,24 @@ function updateOrderStatus(orderId) {
         }
     };
 
-    axios.put(`http://localhost:8080/orders/${orderId}`, { status: true }, auth)
+    axios.get(`http://localhost:8080/orders/${orderId}`, auth)
         .then((response) => {
+            let order = response.data;
+            order.status = true;
+
+            return axios.put(`http://localhost:8080/orders/${orderId}`, order, auth);
+        })
+        .then(() => {
             alert("Đã nhận đơn hàng thành công!");
-            showOrder(); // Sau khi cập nhật thành công, hiển thị lại danh sách đơn hàng
+            showOrder();
         })
         .catch((error) => {
             alert("Lỗi khi cập nhật trạng thái đơn hàng.");
             console.error("Error updating order status:", error);
         });
 }
-function addOrderEventListeners(list,auth) {
+
+function addOrderEventListeners(list) {
     list.forEach(order => {
         let receiveOrderBtn = document.querySelector(`.receiveOrder[data-id="${order.id}"]`);
         let cancelOrderBtn = document.querySelector(`.cancelOrder[data-id="${order.id}"]`);
@@ -234,14 +290,9 @@ function addOrderEventListeners(list,auth) {
         if (receiveOrderBtn && cancelOrderBtn && deleteOrderBtn) {
             receiveOrderBtn.addEventListener('click', function() {
                 updateOrderStatus(order.id);
-
                 cancelOrderBtn.style.display = 'none';
                 showOrder();
-
             });
-
-
-
         }
     });
 }
@@ -256,4 +307,19 @@ function getTotalPrice(order) {
         total += food.price;
     });
     return total;
+}
+function getCanceledOrdersCount(orders) {
+    return orders.filter(order => order.cancelStatus === true).length;
+}
+function getOrdersCount(orders) {
+    return orders.filter(order => order.status === true).length;
+}
+function getDoneCount(orders) {
+    return orders.filter(order => order.doneDeliveryMoneyStatus === true).length;
+}
+function getFoodTakeCount(orders) {
+    return orders.filter(order => order.foodTakeStatus === true).length;
+}
+function getFoodShipCount(orders) {
+    return orders.filter(order => order.deliveryFoodStatus === true).length;
 }
