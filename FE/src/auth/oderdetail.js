@@ -8,6 +8,10 @@ function showOrderDetails(id){
     }
     axios.get(`http://localhost:8080/orders/${id}`, auth).then((response) => {
         let order = response.data;
+        let foodTakeStatus = getFoodTakeStatus(order.status,order.foodTakeStatus);
+        let deliveryFoodStatus = getDeliveryFoodStatus(order.status,order.foodTakeStatus,order.deliveryFoodStatus);
+        let doneDeliveryMoneyStatus = getDoneDeliveryMoneyStatus(order.status,order.foodTakeStatus,order.deliveryFoodStatus,order.doneDeliveryMoneyStatus);
+
         console.log(order)
         html =`   <div  class="u-s-p-y-60">
 
@@ -54,39 +58,8 @@ function showOrderDetails(id){
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="dash__box dash__box--bg-white dash__box--shadow dash__box--w">
-                                        <div class="dash__pad-1">
-                                            <ul class="dash__w-list">
-                                                <li>
-                                                    <div class="dash__w-wrap">
-
-                                                        <span class="dash__w-icon dash__w-icon-style-1"><i class="fas fa-cart-arrow-down"></i></span>
-
-                                                        <span class="dash__w-text">4</span>
-
-                                                        <span class="dash__w-name">Orders Placed</span></div>
-                                                </li>
-                                                <li>
-                                                    <div class="dash__w-wrap">
-
-                                                        <span class="dash__w-icon dash__w-icon-style-2"><i class="fas fa-times"></i></span>
-
-                                                        <span class="dash__w-text">0</span>
-
-                                                        <span class="dash__w-name">Cancel Orders</span></div>
-                                                </li>
-                                                <li>
-                                                    <div class="dash__w-wrap">
-
-                                                        <span class="dash__w-icon dash__w-icon-style-3"><i class="far fa-heart"></i></span>
-
-                                                        <span class="dash__w-text">0</span>
-
-                                                        <span class="dash__w-name">Wishlist</span></div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    
+                                   
                                     <!--====== End - Dashboard Features ======-->
                                 </div>
                                 <div class="col-lg-9 col-md-12">
@@ -103,7 +76,7 @@ function showOrderDetails(id){
                                                 <div>
                                                     <div class="manage-o__text-2 u-c-silver">Total:
 
-                                                        <span class="manage-o__text-2 u-c-secondary">$16.00</span></div>
+                                                        <span class="manage-o__text-2 u-c-secondary">${getTotalPriceAfterCoupon(order)}</span></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -124,7 +97,7 @@ function showOrderDetails(id){
                                                 </div>
                                                 <div class="manage-o__timeline">
                                                     <div class="timeline-row">
-                                                        <div class="col-lg-4 u-s-m-b-30">
+                                                        <div class="col-lg-3 u-s-m-b-30">
                                                             <div class="timeline-step">
                                                                 <div class="timeline-l-i timeline-l-i--finish">
 
@@ -133,20 +106,29 @@ function showOrderDetails(id){
                                                                 <span class="timeline-text">Processing</span>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-4 u-s-m-b-30">
+                                                          <div class="col-lg-3 u-s-m-b-30">
                                                             <div class="timeline-step">
-                                                                <div class="timeline-l-i timeline-l-i--finish">
+                                                                <div class="timeline-l-i  ${foodTakeStatus} ${deliveryFoodStatus} ${doneDeliveryMoneyStatus}">
+
+                                                                    <span class="timeline-circle"></span></div>
+
+                                                                <span class="timeline-text">FOOD DONE</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 u-s-m-b-30">
+                                                            <div class="timeline-step">
+                                                                <div class="timeline-l-i ${deliveryFoodStatus} ${doneDeliveryMoneyStatus}  ">
 
                                                                     <span class="timeline-circle"></span></div>
 
                                                                 <span class="timeline-text">Shipped</span>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-4 u-s-m-b-30">
+                                                        <div class="col-lg-3 u-s-m-b-30">
                                                             <div class="timeline-step">
-                                                                <div class="timeline-l-i">
+                                                                <div class="timeline-l-i ${doneDeliveryMoneyStatus}">
 
-                                                                    <span class="timeline-circle"></span></div>
+                                                                    <span class="timeline-circle" ></span></div>
 
                                                                 <span class="timeline-text">Delivered</span>
                                                             </div>
@@ -219,6 +201,27 @@ function showOrderDetails(id){
                                             </div>
 
                                         </div>
+                                          <div class="col-lg-6">
+                                            <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
+                                                <div class="dash__pad-3">
+                                                 <label class="u-s-m-r-8" for="my-order-sort">Coupon:</label>
+                                                    <select class="select-box select-box--primary-style" id="my-order-sort">
+                                                        <option selected>NONE</option>`;
+
+        for (let i = 0; i < order.coupon.length; i++) {
+            html += `
+                                                        
+             <option>${order.coupon[i].discount}</option>
+ 
+                           `;
+        }
+            html += `
+                                                        
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                         <div class="col-lg-6">
                                             <div class="dash__box dash__box--bg-white dash__box--shadow u-h-100">
                                                 <div class="dash__pad-3">
@@ -269,3 +272,29 @@ function getTotalPriceAfterCoupon(order) {
     let totalPriceAfterCoupon = totalPrice - totalPrice * (order.coupon.discount/100) ;
     return totalPriceAfterCoupon;
 }
+function getFoodTakeStatus(status,foodTakeStatus) {
+    return status && foodTakeStatus ? 'timeline-l-i--finish' : '';
+}
+function getDeliveryFoodStatus(status,foodTakeStatus,deliveryFoodStatus) {
+    return status && !foodTakeStatus && deliveryFoodStatus ? 'timeline-l-i--finish' : '';
+}
+function getDoneDeliveryMoneyStatus(status,foodTakeStatus,deliveryFoodStatus,doneDeliveryMoneyStatus) {
+    return status && !foodTakeStatus && !deliveryFoodStatus && doneDeliveryMoneyStatus ? 'timeline-l-i--finish' : '';
+}
+function getCanceledOrdersCount(orders) {
+    return orders.filter(order => order.cancelStatus === true).length;
+}
+function getOrdersCount(orders) {
+    return orders.filter(order => order.status === true).length;
+}
+function getDoneCount(orders) {
+    return orders.filter(order => order.doneDeliveryMoneyStatus === true).length;
+}
+function getFoodTakeCount(orders) {
+    return orders.filter(order => order.foodTakeStatus === true).length;
+}
+function getFoodShipCount(orders) {
+    return orders.filter(order => order.deliveryFoodStatus === true).length;
+}
+
+
