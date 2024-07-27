@@ -1,5 +1,4 @@
 showMain();
-
 function showMain() {
 
     let currentUser = localStorage.getItem('currentUser');
@@ -1109,7 +1108,6 @@ function showMain() {
                                                 <!--====== End - Dropdown ======-->
                                             </li>
                                             <li>
-
                                                 <a href="cart.html">Cart</a></li>
                                             <li>
 
@@ -1191,7 +1189,7 @@ function showMain() {
                                         <a onclick="showMain()"><i class="fas fa-home u-c-brand"></i></a></li>
                                     <li>
 
-                                        <a href="wishlist.html"><i class="far fa-heart"></i></a></li>
+                                      <a href="#" onclick="showWishlist()"><i class="far fa-heart"></i></a>
                                     <li class="has-dropdown" id="mini-cart" >
 
                                         <a class="mini-cart-shop-link"><i class="fas fa-shopping-bag"></i>
@@ -2821,7 +2819,8 @@ function showMain() {
         <!--====== End - Main App ======-->
 `
 
-    showMiniCart();
+    showMiniCart()
+
 
 }
 

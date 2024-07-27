@@ -1,41 +1,95 @@
-
-    function showWishlist() {
+function showWishlist(){
     document.getElementById('app-content').innerHTML = `
-                <div class="u-s-p-b-60">
-                    <div class="section__intro u-s-m-b-60">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="section__text-wrap">
-                                        <h1 class="section__heading u-c-secondary">WISHLIST</h1>
-                                    </div>
+        <!--====== App Content ======-->
+        <div class="app-content">
+
+            <!--====== Section 1 ======-->
+            <div class="u-s-p-y-60">
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="breadcrumb">
+                            <div class="breadcrumb__wrap">
+                                <ul class="breadcrumb__list">
+                                    <li class="has-separator"><a onclick="showMain()">Home</a></li>
+                                    <li class="is-marked"><a onclick="showWishlist()">Wishlist</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--====== End - Section 1 ======-->
+
+            <!--====== Section 2 ======-->
+            <div class="u-s-p-b-60">
+                <!--====== Section Intro ======-->
+                <div class="section__intro u-s-m-b-60">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="section__text-wrap">
+                                    <h1 class="section__heading u-c-secondary">Wishlist</h1>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <!--====== End - Section Intro ======-->
+
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="row" id="wishlist-container">
+                            <!-- Wishlist items will be dynamically added here -->
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="route-box">
+                                <div class="route-box__g">
+                                    <a class="route-box__link" href="shop-side-version-2.html">
+                                        <i class="fas fa-long-arrow-alt-left"></i><span>CONTINUE SHOPPING</span>
+                                    </a>
+                                </div>
+                                <div class="route-box__g">
+                                    <a class="route-box__link" href="#" onclick="clearWishlist()">
+                                        <i class="fas fa-trash"></i><span>CLEAR WISHLIST</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
+            </div>
+            <!--====== End - Section 2 ======-->
+        </div>
+        <!--====== End - App Content ======-->
+    `;
+    getWishlist();
+}
+
+function getWishlist(){
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if(currentUser == null) return;
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    };
+    axios.get(`http://localhost:8080/wishlist/${currentUser.id}`, auth).then((response) =>{
+        let data = response.data;
+
+        if(data.food.length === 0){
+            document.getElementById("wishlist-container").innerHTML = `
+                <div class="u-s-p-y-60">
                     <div class="section__content">
                         <div class="container">
                             <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 u-s-m-b-30">
-                                    <div class="table-responsive">
-                                        <table class="table-p">
-                                            <tbody id="wishlist-container"></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="route-box">
-                                        <div class="route-box__g1">
-                                            <a class="route-box__link" href="shop-side-version-2.html">
-                                                <i class="fas fa-long-arrow-alt-left"></i>
-                                                <span>CONTINUE SHOPPING</span>
-                                            </a>
-                                        </div>
-                                        <div class="route-box__g2">
-                                            <a class="route-box__link" onclick="clearWishlist()">
-                                                <i class="fas fa-trash"></i>
-                                                <span>CLEAR WISHLIST</span>
-                                            </a>
+                                <div class="col-lg-12 col-md-12 u-s-m-b-30">
+                                    <div class="empty">
+                                        <div class="empty__wrap">
+                                            <span class="empty__big-text">EMPTY</span>
+                                            <span class="empty__text-1">No items found in your wishlist.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -44,156 +98,73 @@
                     </div>
                 </div>
             `;
-    getWishlist();
-}
+            return;
+        }
 
-    function deleteFromWishlist(id) {
-    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (currentUser == null) return;
-    let auth = {
-    headers: {
-    "Authorization": `Bearer ${currentUser.accessToken}`
-}
-};
-    axios.get(`http://localhost:8080/user/foods/${id}`, auth).then((response) => {
-    console.log(response.data);
-    axios.post(`http://localhost:8080/wishlist/delete/${currentUser.id}`, response.data, auth).then((response) => {
-    alert(response.data);
-    showWishlist();
-    showMiniWishlist();
-});
-});
-}
-
-    function clearWishlist() {
-    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (currentUser == null) return;
-    let auth = {
-    headers: {
-    "Authorization": `Bearer ${currentUser.accessToken}`
-}
-};
-    axios.post('http://localhost:8080/wishlist/deleteAll', currentUser.id, auth).then((response) => {
-    alert(response.data);
-    showWishlist();
-    showMiniWishlist();
-});
-}
-
-    function getWishlist() {
-    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (currentUser == null) return;
-    let auth = {
-    headers: {
-    "Authorization": `Bearer ${currentUser.accessToken}`
-}
-};
-    axios.get(`http://localhost:8080/wishlist/${currentUser.id}`, auth).then((response) => {
-    let data = response.data;
-    console.log(data.food);
-    document.getElementById("wishlist-number").innerHTML = data.food.length;
-
-    if (data.food.length == 0) {
-    if (document.getElementById("wishlist-container") != null) {
-    document.getElementById("wishlist-container").innerHTML = `
-                            <div class="u-s-p-y-60">
-                                <div class="section__content">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-lg-12 col-md-12 u-s-m-b-30">
-                                                <div class="empty">
-                                                    <div class="empty__wrap">
-                                                        <span class="empty__big-text">EMPTY</span>
-                                                        <span class="empty__text-1">No items found in your wishlist.</span>
-                                                        <a class="empty__redirect-link btn--e-brand" href="shop-side-version-2.html">CONTINUE SHOPPING</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+        let html = "";
+        for(let i = 0 ; i < data.food.length; i++){
+            let item = data.food[i];
+            html += `
+                <!--====== Wishlist Product ======-->
+                <div class="w-r u-s-m-b-30">
+                    <div class="w-r__container">
+                        <div class="w-r__wrap-1">
+                            <div class="w-r__img-wrap">
+                                <img class="u-img-fluid" src="${item.image}" alt="">
                             </div>
-                        `;
-}
-
-    document.getElementById("wishlist-container-mini").innerHTML = `
-                        <div class="u-s-p-y-60">
-                            <div class="section__content">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-lg-12 col-md-12 u-s-m-b-30">
-                                            <div class="empty">
-                                                <div class="empty__wrap">
-                                                    <span class="empty__big-text">EMPTY</span>
-                                                    <span class="empty__text-1">No items found in your wishlist.</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="w-r__info">
+                                <span class="w-r__name">
+                                    <a href="product-detail.html" onclick="showFoodDetail(${item.id})">${item.name}</a>
+                                </span>
+                                <span class="w-r__category">
+                                    <a href="shop-side-version-2.html">${item.description}</a>
+                                </span>
+                                <span class="w-r__price">$${item.price}</span>
                             </div>
                         </div>
-                    `;
-    return;
-}
-
-    let miniHtml = "";
-    for (let i = 0; i < data.food.length; i++) {
-    let food = data.food[i];
-    miniHtml += `
-                        <div class="card-mini-product">
-                            <div class="mini-product">
-                                <div class="mini-product__image-wrapper">
-                                    <a class="mini-product__link" href="product-detail.html">
-                                        <img class="u-img-fluid" src="${food.image}" alt="">
-                                    </a>
-                                </div>
-                                <div class="mini-product__info-wrapper">
-                                    <span class="mini-product__category">
-                                        <a href="shop-side-version-2.html">${food.description}</a>
-                                    </span>
-                                    <span class="mini-product__name">
-                                        <a href="product-detail.html" onclick="showFoodDetail(${food.id})">${food.name}</a>
-                                    </span>
-                                    <span class="mini-product__quantity">1 x</span>
-                                    <span class="mini-product__price">$${food.price}</span>
-                                </div>
-                            </div>
-                            <a class="mini-product__delete-link far fa-trash-alt" onclick="deleteFromWishlist(${food.id})"></a>
+                        <div class="w-r__wrap-2">
+                            <a class="w-r__link btn--e-brand-b-2" data-modal="modal" data-modal-id="#add-to-cart">ADD TO CART</a>
+                            <a class="w-r__link btn--e-transparent-platinum-b-2" href="product-detail.html" onclick="showFoodDetail(${item.id})">VIEW</a>
+                            <a class="w-r__link btn--e-transparent-platinum-b-2" href="#" onclick="deleteFromWishlist(${item.id})">REMOVE</a>
                         </div>
-                    `;
-}
-    document.getElementById("wishlist-container-mini").innerHTML = miniHtml;
-
-    let fullHtml = "";
-    for (let i = 0; i < data.food.length; i++) {
-    let food = data.food[i];
-    fullHtml += `
-                        <tr>
-                            <td>
-                                <div class="table-p__box">
-                                    <div class="table-p__img-wrap">
-                                        <img class="u-img-fluid" src="${food.image}" alt="">
-                                    </div>
-                                    <div class="table-p__info">
-                                        <span class="table-p__name">
-                                            <a href="product-detail.html">${food.name}</a>
-                                        </span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="table-p__price">$${food.price}</span>
-                            </td>
-                            <td>
-                                <div class="table-p__del-wrap">
-                                    <a class="far fa-trash-alt table-p__delete-link" onclick="deleteFromWishlist(${food.id})"></a>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-}
-    document.getElementById("wishlist-container").innerHTML = fullHtml;
-});
+                    </div>
+                </div>
+            `;
+        }
+        document.getElementById("wishlist-container").innerHTML = html;
+    }).catch(error => {
+        console.error('Error fetching wishlist:', error);
+    });
 }
 
+function deleteFromWishlist(id){
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if(currentUser == null) return;
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    };
+    axios.post(`http://localhost:8080/wishlist/delete/${currentUser.id}`, { foodId: id }, auth).then((response) => {
+        alert(response.data);
+        showWishlist();
+    }).catch(error => {
+        console.error('Error deleting item from wishlist:', error);
+    });
+}
+
+function clearWishlist(){
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if(currentUser == null) return;
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    };
+    axios.post(`http://localhost:8080/wishlist/clear/${currentUser.id}`, {}, auth).then((response) => {
+        alert(response.data);
+        showWishlist();
+    }).catch(error => {
+        console.error('Error clearing wishlist:', error);
+    });
+}

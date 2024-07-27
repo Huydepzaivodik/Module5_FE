@@ -27,19 +27,16 @@ function addToWishlist(id) {
         headers: {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
-    }
+    };
     axios.get(`http://localhost:8080/user/foods/${id}`, auth).then((response) => {
-        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        let auth = {
-            headers: {
-                "Authorization": `Bearer ${currentUser.accessToken}`
-            }
-        }
         axios.post(`http://localhost:8080/wishlist/${currentUser.id}`, response.data, auth).then((response) => {
             alert(response.data);
-            showWishlist();
-        })
-    })
+        }).catch(error => {
+            console.error('Error adding to wishlist:', error);
+        });
+    }).catch(error => {
+        console.error('Error fetching food details:', error);
+    });
 }
 
 
@@ -86,7 +83,6 @@ function showFood() {
             <input class="input-text input-text--border-radius input-text--style-1" type="text" style="width: 90%;" id="main-search-food" placeholder="Search" name="foodName">
             <button class="btn btn--icon fas fa-search main-search-button-food" onclick="searchFood()"></button>
         </div>
-        <button class="btn btn--e-brand btn--s-m-l" style="margin-left: 10px;" onclick="showWishlist()">Go to Wishlist</button>
     </div>
     <!--====== End - Search Form ======-->
     <div class="shop-p__tool-style">
@@ -606,7 +602,7 @@ function searchFood() {
 <div class="product-m__preview-description">
                                             <span>${list[i].description}</span></div>
                                         <div class="product-m__wishlist">
-                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
+                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${list[i].id})"></a></div>
                                         <button class="button-5" role="button" onclick="addTocart(${list[i].id})">Add To Cart</button>
 
                                     </div>
@@ -680,104 +676,80 @@ function showFoodDetail(id){
                         </div>
                         <div class="col-lg-7">
 
-                            <!--====== Product Right Side Details ======-->
-                            <div class="pd-detail">
-                                <div>
-
-                                    <span class="pd-detail__name">${food.name}</span></div>
-                                <div>
-                                    <div class="pd-detail__inline">
-
-                                        <span class="pd-detail__price">${food.price} VNĐ</span>
-
-<!--                                        <span class="pd-detail__discount">(76% OFF)</span><del class="pd-detail__del">$28.97</del></div>-->
-                                </div>
-                                <div class="u-s-m-b-15">
-                                    <div class="pd-detail__rating gl-rating-style"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-
-                                        <span class="pd-detail__review u-s-m-l-4">
-
-                                            <a data-click-scroll="#view-review">23 Reviews</a></span></div>
-                                </div>
-                                <div class="u-s-m-b-15">
-                                    <div class="pd-detail__inline">
-
-                                        <span class="pd-detail__stock">${food.quantity} in stock</span>
-
-                                    
-                                </div>
-                                <div class="u-s-m-b-15">
-
-                                    <span class="pd-detail__preview-desc">${food.description}</span></div>
-                                <div class="u-s-m-b-15">
-                                    <div class="pd-detail__inline">
-
-                                        <span class="pd-detail__click-wrap"><i class="far fa-heart u-s-m-r-6"></i>
-
-                                            <a href="#">Add to Wishlist</a>
-
-                                            <span class="pd-detail__click-count">(222)</span></span></div>
-                                </div>
-                                <div class="u-s-m-b-15">
-                                    <div class="pd-detail__inline">
-
-                                        <span class="pd-detail__click-wrap"><i class="far fa-envelope u-s-m-r-6"></i>
-
-                                            <a href="signin.html">Email me when the price drops</a>
-
-                                           </div>
-                                </div>
-                                <div class="u-s-m-b-15">
-                                    <ul class="pd-social-list">
-                                        <li>
-
-                                            <a class="s-fb--color-hover" href="#"><i class="fab fa-facebook-f"></i></a></li>
-                                        <li>
-
-                                            <a class="s-tw--color-hover" href="#"><i class="fab fa-twitter"></i></a></li>
-                                        <li>
-
-                                            <a class="s-insta--color-hover" href="#"><i class="fab fa-instagram"></i></a></li>
-                                        <li>
-
-                                            <a class="s-wa--color-hover" href="#"><i class="fab fa-whatsapp"></i></a></li>
-                                        <li>
-
-                                            <a class="s-gplus--color-hover" href="#"><i class="fab fa-google-plus-g"></i></a></li>
-                                    </ul>
-                                </div>
-                                <div class="u-s-m-b-15">
-                                    <div class="pd-detail__form">
-                                        <div class="pd-detail-inline-2">
-                                       <div class="u-s-m-b-15">
-                                           <div> 
-                                           <button class="btn " onclick="#" ><i class="fas fa-shopping-bag"></i> Shop</button> 
-                                           </div>
-                                       </div>
-                                        
-                                            <div class="u-s-m-b-15">
-
-                                                <button class="btn btn--e-brand-b-2" onclick="addTocart(${food.id})" >Add to Cart</button></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="u-s-m-b-15">
-
-                                    <span class="pd-detail__label u-s-m-b-8">Product Policy:</span>
-                                    <ul class="pd-detail__policy-list">
-                                        <li><i class="fas fa-check-circle u-s-m-r-8"></i>
-
-                                            <span>Buyer Protection.</span></li>
-                                        <li><i class="fas fa-check-circle u-s-m-r-8"></i>
-
-                                            <span>Full Refund if you don't receive your order.</span></li>
-                                        <li><i class="fas fa-check-circle u-s-m-r-8"></i>
-
-                                            <span>Returns accepted if product not as described.</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!--====== End - Product Right Side Details ======-->
+                       <!--====== Product Right Side Details ======-->
+<div class="pd-detail">
+    <div>
+        <span class="pd-detail__name">${food.name}</span>
+    </div>
+    <div>
+        <div class="pd-detail__inline">
+            <span class="pd-detail__price">${food.price} VNĐ</span>
+        </div>
+    </div>
+    <div class="u-s-m-b-15">
+        <div class="pd-detail__rating gl-rating-style">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+            <span class="pd-detail__review u-s-m-l-4">
+                <a data-click-scroll="#view-review">23 Reviews</a>
+            </span>
+        </div>
+    </div>
+    <div class="u-s-m-b-15">
+        <div class="pd-detail__inline">
+            <span class="pd-detail__stock">${food.quantity} in stock</span>
+        </div>
+    </div>
+    <div class="u-s-m-b-15">
+        <div class="pd-detail__inline">
+            <!-- Sử dụng onclick để gọi hàm addToWishlist(id) khi nhấp vào -->
+            <span class="pd-detail__click-wrap">
+                <i class="far fa-heart u-s-m-r-6"></i>
+                <a href="#" onclick="addToWishlist(${food.id})">Add to Wishlist</a>
+                <span class="pd-detail__click-count">(222)</span>
+            </span>
+        </div>
+    </div>
+    <div class="u-s-m-b-15">
+        <div class="pd-detail__inline">
+            <span class="pd-detail__click-wrap">
+                <i class="far fa-envelope u-s-m-r-6"></i>
+                <a href="signin.html">Email me when the price drops</a>
+            </span>
+        </div>
+    </div>
+    <div class="u-s-m-b-15">
+        <ul class="pd-social-list">
+            <li><a class="s-fb--color-hover" href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a class="s-tw--color-hover" href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a class="s-insta--color-hover" href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a class="s-wa--color-hover" href="#"><i class="fab fa-whatsapp"></i></a></li>
+            <li><a class="s-gplus--color-hover" href="#"><i class="fab fa-google-plus-g"></i></a></li>
+        </ul>
+    </div>
+    <div class="u-s-m-b-15">
+        <div class="pd-detail__form">
+            <div class="pd-detail-inline-2">
+                <div class="u-s-m-b-15">
+                    <div>
+                        <button class="btn" onclick="#"><i class="fas fa-shopping-bag"></i> Shop</button>
+                    </div>
+                </div>
+                <div class="u-s-m-b-15">
+                    <button class="btn btn--e-brand-b-2" onclick="addTocart(${food.id})">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="u-s-m-b-15">
+        <span class="pd-detail__label u-s-m-b-8">Product Policy:</span>
+        <ul class="pd-detail__policy-list">
+            <li><i class="fas fa-check-circle u-s-m-r-8"></i><span>Buyer Protection.</span></li>
+            <li><i class="fas fa-check-circle u-s-m-r-8"></i><span>Full Refund if you don't receive your order.</span></li>
+            <li><i class="fas fa-check-circle u-s-m-r-8"></i><span>Returns accepted if product not as described.</span></li>
+        </ul>
+    </div>
+</div>
+<!--====== End - Product Right Side Details ======-->
                         </div>
                     </div>
                 </div>
