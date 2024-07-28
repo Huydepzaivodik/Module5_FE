@@ -1,29 +1,23 @@
 
 function showOrder() {
-    showMain();
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let auth = {
         headers: {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
     };
+    axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response) =>{
+        axios.get(`http://localhost:8080/orders/shop/${response.data.id}`, getAuth()).then((response1) => {
+                let list = response1.data;
+                let html = OrderList(list);
+                document.getElementById("app-content").innerHTML = html;
+                addOrderEventListeners(list);
+            });
+    })
 
-    axios.get("http://localhost:8080/orders", auth)
-        .then((response) => {
-            axios.get("http://localhost:8080/foods", auth)
-                .then((foodResponse) => {
-
-                    let foods = foodResponse.data;
-                    let list = response.data;
-
-                    let html = OrderList(list, foods);
-                    document.getElementById("app-content").innerHTML = html;
-                    addOrderEventListeners(list);
-                });
-        });
 }
 
-function OrderList(list, foods ) {
+function OrderList(list) {
     let canceledOrdersCount = getCanceledOrdersCount(list);
     let ordersCount = getOrdersCount(list);
     let doneCount = getDoneCount(list);
@@ -298,13 +292,19 @@ function addOrderEventListeners(list) {
 }
 
 function getFoodQuantity(order) {
-    return `<span class="manage-o__text-2 u-c-secondary">${order.foods.length}</span>`;
+    let sum = 0;
+    for(let i = 0; i < order.foods.length; i++) {
+            let food = order.foods[i];
+            sum += food.quantity;
+    }
+    return `<span class="manage-o__text-2 u-c-secondary">${sum}</span>`;
 }
 
 function getTotalPrice(order) {
     let total = 0;
     order.foods.forEach(food => {
-        total += food.price;
+        let price =  food.orderProductPK.food.price * food.quantity;
+        total += price;
     });
     return total;
 }
@@ -323,3 +323,5 @@ function getFoodTakeCount(orders) {
 function getFoodShipCount(orders) {
     return orders.filter(order => order.deliveryFoodStatus === true).length;
 }
+
+

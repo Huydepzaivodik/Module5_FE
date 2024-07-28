@@ -22,12 +22,9 @@ function addTocart(id){
 
 }
 function showFood() {
-    showMain();
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
     //duyệt qua từng đối tượng trong mảng roles và tạo ra một mảng mới (userRoles) chỉ chứa các giá trị authority
     let userRoles = currentUser.roles.map(role => role.authority);
-
     console.log(userRoles);
 
     if (userRoles.includes("ROLE_MERCHANT")) {
@@ -42,22 +39,12 @@ function showFood() {
             axios.get(`http://localhost:8080/foods/shop/${shop_id}`, auth).then((response) => {
                 let list = response.data;
                 let html = `
-<div class="u-s-p-y-90">
     <div class="container">
         <div class="row">
            
-            <div class="col-lg-9 col-md-12">
+            <div class="col-lg-12 col-md-12">
                 <div class="shop-p">
-                    <div class="shop-p__toolbar u-s-m-b-30">
-                        <div class="shop-p__meta-wrap u-s-m-b-60">
-                            <span class="shop-p__meta-text-1">FOUND ${list.length} RESULTS</span>
-                            <div class="shop-p__meta-text-2">
-                                <span>Related Searches:</span>
-                                <a class="gl-tag btn--e-brand-shadow" href="#">men's clothing</a>
-                                <a class="gl-tag btn--e-brand-shadow" href="#">mobiles & tablets</a>
-                                <a class="gl-tag btn--e-brand-shadow" href="#">books & audible</a>
-                            </div>
-                        </div>
+                    <div class="shop-p__toolbar u-s-m-b-30">                       
                         <!--====== Search Form ======-->
                       <div style="display: flex">
 
@@ -153,7 +140,7 @@ function showFood() {
                 document.getElementById("app-content").innerHTML = html;
             });
         })
-
+    document.getElementsByClassName("shop-p__meta-wrap u-s-m-b-60").display = "none";
     } else if (userRoles.includes("ROLE_USER")) {
         let auth = {
             headers: {

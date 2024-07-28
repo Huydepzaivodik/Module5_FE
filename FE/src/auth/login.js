@@ -144,7 +144,12 @@ function login() {
         console.log(user)
         axios.post("http://localhost:8080/login", user).then(({data}) => {
             localStorage.setItem("currentUser", JSON.stringify(data));
+            let role = getRole();
+            console.log(role)
+            if(role == "USER")
             showMain();
+            else if(role == "MERCHANT")
+            showMerchantUI();
         }).catch(({response}) => {
             document.getElementById("error-sign-up").innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + '<b>Login failed !</b>';
         })

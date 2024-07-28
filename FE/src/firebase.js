@@ -27,4 +27,33 @@ function uploadImage(e) {
             document.getElementById('imagePreview').style.display = 'block';
         });
 }
+function getUser(){
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    return currentUser;
+}
+function getAuth(){
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    }
+    return auth;
+}
+function getRole(){
+    let user = JSON.parse(localStorage.getItem('currentUser'));
+    if (user == null) return null;
+    if(user.roles[0].authority == "ROLE_USER") {
+        return "USER";
+    }else if(user.roles[0].authority == "ROLE_ADMIN") {
+        return "ADMIN";
+    }else if(user.roles[0].authority == "ROLE_MERCHANT") {
+        return "MERCHANT";
+    }
+}
 
+let role = getRole();
+console.log(role)
+if(role == null || role == "USER") showMain();
+else if(role == "MERCHANT") showMerchantUI();
+else if(role == "ADMIN") console.log("admin");

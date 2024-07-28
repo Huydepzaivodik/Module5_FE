@@ -1,4 +1,4 @@
-showMain();
+
 
 function showMain() {
 
@@ -154,8 +154,8 @@ function showMain() {
 
 
             <!--====== Nav 2 ======-->
-            <nav class="secondary-nav-wrapper">
-                <div class="container">
+            <nav class="secondary-nav-wrapper" >
+                <div class="container" id="nav-bar">
 
                     <!--====== Secondary Nav ======-->
                     <div class="secondary-nav">

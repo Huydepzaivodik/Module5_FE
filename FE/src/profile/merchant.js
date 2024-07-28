@@ -114,3 +114,226 @@ function saveMerchant(){
         alert("Sửa thành công")
     })
 }
+function addCoupon(){
+         let amount  = +document.getElementById('discount-amount').value;
+         let type = document.getElementById('coupon-type').value;
+         console.log(amount )
+         if(type == "percent" && (amount > 100 || amount < 1)){
+            document.getElementById("discount-amount").style = "border: 1px solid red; width: 100%";
+            document.getElementById("coupon-type").style = "border: 1px solid red; width: 100%";
+            return;
+         }
+         let start = document.getElementById("start-date").valueAsDate;
+         let end = document.getElementById("end-date").valueAsDate;
+         if(end < start){
+             document.getElementById("start-date").style = "border: 1px solid red; width: 100%";
+             document.getElementById("end-date").style = "border: 1px solid red; width: 100%";
+             return;
+         }
+         let quantity = document.getElementById("quantity-coupon").value
+         if(quantity < 0){
+             document.getElementById("quantity-coupon").style = "border: 1px solid red; width: 100%";
+             return;
+         }
+         axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response)=>{
+             let coupon = {
+                        type: type,
+                        status: true,
+                        startDate: start,
+                        endDate: end,
+                        quantity: quantity,
+                        discount: amount,
+                        shop: response.data
+             }
+             axios.post("http://localhost:8080/coupons",coupon,getAuth()).then((response)=>{
+                   alert("ADDING SUCCESS");
+                   showCouponUI();
+             })
+         })
+
+
+}
+function showCouponAddForm(){
+         document.getElementById("quick-look-body").innerHTML = `
+                      <div class="row"><div class="col-lg-2"></div>
+                                 <div class="col-lg-8">
+                                      <button class="btn dismiss-button fas fa-times" type="button" data-dismiss="modal" style="color: black" id="close-coupon-modal"></button>   
+                                 <h1 class="checkout-f__h1">CREATE COUPON</h1>                            
+                                 <div class="checkout-f__delivery">
+                                        <div class="u-s-m-b-30">
+                                            
+                                                  <div class="u-s-m-b-15">
+
+                                                <label class="gl-label" for="billing-email">DISCOUNT AMOUNT *</label>
+
+                                                <input class="input-text input-text--primary-style" type="text" id="discount-amount" data-bill="" style="width: 100%"></div>
+                                           <div class="u-s-m-b-15">
+                                            
+                                                <label class="gl-label" for="coupon-type">TYPE *</label><select class="select-box select-box--primary-style" id="coupon-type" data-bill="" style="width: 100%">
+                                                    <option selected value="">Choose Coupon Type</option>
+                                                    <option value="percent">PERCENT</option>
+                                                    <option value="minus">MINUS</option>
+                                                </select>
+                                                <!--====== End - Select Box ======-->
+                                            </div>
+                                                                                  
+                                            <!--====== First Name, Last Name ======-->
+                                          
+                                                <div class="u-s-m-b-15">
+
+                                                    <label class="gl-label" for="start-date">START DATE *</label>
+
+                                                    <input class="input-text input-text--primary-style" type="date" id="start-date" data-bill="" style="width: 100%"></div>
+                                                <div class="u-s-m-b-15">
+
+                                                    <label class="gl-label" for="end-date">END DATE *</label>
+
+                                                    <input class="input-text input-text--primary-style" type="date" id="end-date" data-bill="" style="width: 100%"></div>
+                                          
+                                            
+                                            <div class="u-s-m-b-15">
+
+                                                <label class="gl-label" for="billing-phone">QUANTITY *</label>
+
+                                                <input class="input-text input-text--primary-style" type="text" id="quantity-coupon" data-bill="" style="width: 100%"></div>                                                              
+                                            <div class="u-s-m-b-15">
+                                                <button class="btn btn--e-transparent-brand-b-2" type="submit" style="width: 100%; height: 50px;" onclick="addCoupon()">SAVE</button></div>                                      
+                                         </div>
+                                 </div>             
+                                 </div>
+                                 <div class="col-lg-2"></div>
+                                 </div>                                                                
+         `
+    document.getElementById("close-coupon-modal").onclick = function () {
+             showCouponUI();
+    }
+}
+let choosenCoupons ;
+function chooseCoupon(row){
+         choosenCoupons = row.cells[0].textContent;
+         let table = document.getElementById("coupon-list");
+         let rows = table.rows;
+         for (let i = 0; i < rows.length; i++) {
+              rows[i].style.backgroundColor = "transparent";
+              rows[i].style.color = "#7f7f7f";
+         }
+         row.style.backgroundColor = "#ff4500";
+         row.style.color = "black"
+}
+function getCouponList(){
+    axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response)=>{
+
+        axios.get(`http://localhost:8080/coupons/shop/${response.data.id}`,getAuth()).then((response)=>{
+            let data = response.data;
+            let html = ``;
+            for (let i=0; i<data.length; i++){
+                 let coupon = data[i];
+                 let start = new Date(coupon.startDate)
+                 let end  = new Date(coupon.endDate)
+                 html += `<tr style="height: 70px;" onclick="chooseCoupon(this)">
+                                            <td>${coupon.id}</td>
+                                            <td>${coupon.discount}</td>
+                                            <td>${coupon.type}</td>
+                                            <td>${start.getUTCDate()}</td>
+                                            <td>${end.getUTCDate()}</td>
+                                            <td>${coupon.status}</td>
+                          </tr>`
+            }
+            document.getElementById("coupon-list").innerHTML += html;
+        })
+    })
+}
+function showCouponUI(){
+        let html =  `
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content modal--shadow">
+                    <div class="modal-body" id="quick-look-body">
+                        <div class="row">
+                            <button class="btn dismiss-button fas fa-times" type="button" data-dismiss="modal" style="color: black" id="close-coupon-modal"></button>
+                            <div class="col-lg-3" style="border-right: 1px solid black">
+                                 <h4 style="text-align: center; padding: 20px">COUPON MANAGE</h4>
+                                 <div class="u-s-m-b-8">
+                                      <button class="btn btn--e-white-brand" onclick="showCouponAddForm()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa">CREATE NEW COUPON</button>
+                                 </div>
+                                 <div class="u-s-m-b-8">
+                                      <button class="btn btn--e-white-brand" onclick="showCouponAddForm()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa">EDIT COUPON</button>
+                                 </div>
+                                 <div class="u-s-m-b-8">
+                                      <button class="btn btn--e-white-brand" onclick="showCouponAddForm()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa">DELETE COUPON</button>
+                                 </div>
+                                
+                            </div>   
+                            <div class="col-lg-9">
+                                <div class="gl-inline">
+                                      <div class="u-s-m-b-8" style="display: flex; align-content: center">
+                                                     <label for="type">TYPE:</label>
+                                                     <select class="select-box select-box--transparent-b-2" id="type">
+                                                        <option selected>SELECT TYPE</option>
+                                                        <option>PERCENT</option>
+                                                        <option>MINUS</option>                                                     
+                                 </select></div>
+                                      <div class="u-s-m-b-8" style="display: flex; align-content: center">
+                                                     <label for="status">STATUS:</label>
+                                                     <select class="select-box select-box--transparent-b-2" id="status">
+                                                        <option selected>SELECT STATUS</option>
+                                                        <option>DISABLE</option>
+                                                        <option>ABLE</option>                                                     
+                                 </select></div>
+                                </div>
+                                <div style="overflow: auto; height: 400px">
+                                    <table style="width: 100%; border-collapse: collapse;" id="coupon-list"> 
+                                    <thead> <tr>
+                                            <td>ID</td>
+                                            <td>DISCOUNT</td>
+                                            <td>TYPE</td>
+                                            <td>START DATE</td>
+                                            <td>END DATE</td>
+                                            <td>STATUS</td>
+                                           </tr></thead>                                                                                                                                                                                           
+                                    </table>
+                                </div>
+                                <!--====== End - Product Detail ======-->
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>      
+         `
+        getCouponList()
+        if(document.getElementById("quick-look") == null){
+                   document.getElementById("app-content").innerHTML +=`<div class="modal fade" id="quick-look">` + html + "</div>"
+        }else{
+            document.getElementById("quick-look").innerHTML = html;
+        }
+         document.getElementById("quick-look").style = "display: block; opacity: 1";
+         document.getElementById("close-coupon-modal").onclick = function () {
+             document.getElementById("quick-look").style = "display: none; opacity: 0";
+         }
+}
+function showMerchantUI(){
+         showMain()
+         document.getElementById("nav-bar").innerHTML = `
+
+                            <!--====== Menu ======-->
+                            <div class="ah-lg-mode">
+                                <span class="ah-close">✕ Close</span>
+                                <!--====== List ======-->
+                                <ul class="ah-list ah-list--design2 ah-list--link-color-secondary">
+
+                                    <li>
+
+                                        <a onClick="showOrder()"> ORDER MANAGER</a></li>
+                                    <li>
+
+                                        <a onClick="showFood()"> FOOD MANAGER</a></li>
+                                    <li>
+                                        <a onclick="showCouponUI()">COUPON MANAGER</a></li>    
+                                </ul>
+                            
+                                <!--====== End - List ======-->
+                            </div>
+                            <!--====== End - Menu ======-->
+         `
+        showFood();
+}
