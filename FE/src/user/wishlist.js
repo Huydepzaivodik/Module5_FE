@@ -1,18 +1,16 @@
-function showWishlist(){
+function showWishlist() {
     document.getElementById('app-content').innerHTML = `
         <!--====== App Content ======-->
         <div class="app-content">
-
             <!--====== Section 1 ======-->
             <div class="u-s-p-y-60">
-                <!--====== Section Content ======-->
                 <div class="section__content">
                     <div class="container">
                         <div class="breadcrumb">
                             <div class="breadcrumb__wrap">
                                 <ul class="breadcrumb__list">
-                                    <li class="has-separator"><a onclick="showMain()">Home</a></li>
-                                    <li class="is-marked"><a onclick="showWishlist()">Wishlist</a></li>
+                                    <li class="has-separator"><a href="#" onclick="showMain()">Home</a></li>
+                                    <li class="is-marked"><a href="#" onclick="showWishlist()">Wishlist</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -23,7 +21,6 @@ function showWishlist(){
 
             <!--====== Section 2 ======-->
             <div class="u-s-p-b-60">
-                <!--====== Section Intro ======-->
                 <div class="section__intro u-s-m-b-60">
                     <div class="container">
                         <div class="row">
@@ -68,18 +65,20 @@ function showWishlist(){
     getWishlist();
 }
 
-function getWishlist(){
+function getWishlist() {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if(currentUser == null) return;
+    if (currentUser == null) return;
+
     let auth = {
         headers: {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
     };
-    axios.get(`http://localhost:8080/wishlist/${currentUser.id}`, auth).then((response) =>{
+
+    axios.get(`http://localhost:8080/wishlist/${currentUser.id}`, auth).then((response) => {
         let data = response.data;
 
-        if(data.food.length === 0){
+        if (data.food.length === 0) {
             document.getElementById("wishlist-container").innerHTML = `
                 <div class="u-s-p-y-60">
                     <div class="section__content">
@@ -102,7 +101,7 @@ function getWishlist(){
         }
 
         let html = "";
-        for(let i = 0 ; i < data.food.length; i++){
+        for (let i = 0; i < data.food.length; i++) {
             let item = data.food[i];
             html += `
                 <!--====== Wishlist Product ======-->
@@ -114,7 +113,7 @@ function getWishlist(){
                             </div>
                             <div class="w-r__info">
                                 <span class="w-r__name">
-                                    <a href="product-detail.html" onclick="showFoodDetail(${item.id})">${item.name}</a>
+                                    <a href="product-detail.html?id=${item.id}">${item.name}</a>
                                 </span>
                                 <span class="w-r__category">
                                     <a href="shop-side-version-2.html">${item.description}</a>
@@ -123,8 +122,8 @@ function getWishlist(){
                             </div>
                         </div>
                         <div class="w-r__wrap-2">
-                            <a class="w-r__link btn--e-brand-b-2" data-modal="modal" data-modal-id="#add-to-cart">ADD TO CART</a>
-                            <a class="w-r__link btn--e-transparent-platinum-b-2" href="product-detail.html" onclick="showFoodDetail(${item.id})">VIEW</a>
+                            <a class="w-r__link btn--e-brand-b-2" href="#" onclick="addToCart(${item.id})">ADD TO CART</a>
+                            <a class="w-r__link btn--e-transparent-platinum-b-2" href="pd-detail" onclick="showFoodDetail(${item.id})">VIEW</a>
                             <a class="w-r__link btn--e-transparent-platinum-b-2" href="#" onclick="deleteFromWishlist(${item.id})">REMOVE</a>
                         </div>
                     </div>
@@ -133,38 +132,46 @@ function getWishlist(){
         }
         document.getElementById("wishlist-container").innerHTML = html;
     }).catch(error => {
-        console.error('Error fetching wishlist:', error);
+        console.error('Error fetching wishlist:', error.response ? error.response.data : error.message);
     });
 }
 
-function deleteFromWishlist(id){
+function deleteFromWishlist(id) {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if(currentUser == null) return;
+    if (currentUser == null) return;
+
     let auth = {
         headers: {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
     };
-    axios.post(`http://localhost:8080/wishlist/delete/${currentUser.id}`, { foodId: id }, auth).then((response) => {
-        alert(response.data);
-        showWishlist();
-    }).catch(error => {
-        console.error('Error deleting item from wishlist:', error);
-    });
+
+    axios.post(`http://localhost:8080/wishlist/delete/${currentUser.id}`, { foodId: id }, auth)
+        .then((response) => {
+            alert(response.data);
+            showWishlist();
+        })
+        .catch(error => {
+            console.error('Error deleting item from wishlist:', error.response ? error.response.data : error.message);
+        });
 }
 
-function clearWishlist(){
+function clearWishlist() {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if(currentUser == null) return;
+    if (currentUser == null) return;
+
     let auth = {
         headers: {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
     };
-    axios.post(`http://localhost:8080/wishlist/clear/${currentUser.id}`, {}, auth).then((response) => {
-        alert(response.data);
-        showWishlist();
-    }).catch(error => {
-        console.error('Error clearing wishlist:', error);
-    });
+
+    axios.post(`http://localhost:8080/wishlist/clear/${currentUser.id}`, {}, auth)
+        .then((response) => {
+            alert(response.data);
+            showWishlist();
+        })
+        .catch(error => {
+            console.error('Error clearing wishlist:', error.response ? error.response.data : error.message);
+        });
 }

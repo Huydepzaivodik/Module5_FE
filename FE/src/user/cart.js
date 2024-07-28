@@ -137,8 +137,8 @@ function showCart(){
 }
 
 function plusQuantity(id){
-         let quantity  = +document.getElementById(id).value;
-         quantity++;
+        let quantity  = +document.getElementById(id).value;
+        quantity++;
         document.getElementById(id).value = quantity;
 }
 function minusQuantity(id){
@@ -246,9 +246,9 @@ function getList(){
                         return;
                 }
                 let html = "";
-                        for(let i = 0 ; i < data.food.length; i++){
-                                let a = data.food[i];
-                                html += `                                          <!--====== Card for mini cart ======-->
+                for(let i = 0 ; i < data.food.length; i++){
+                        let a = data.food[i];
+                        html += `                                          <!--====== Card for mini cart ======-->
                                                 <div class="card-mini-product">
                                                     <div class="mini-product">
                                                         <div class="mini-product__image-wrapper">
@@ -274,7 +274,7 @@ function getList(){
                                                     <a class="mini-product__delete-link far fa-trash-alt" onclick="deleteCart(${a.id})"></a>
                                                 </div>`
 
-                        }
+                }
                 document.getElementById("cart-container-mini").innerHTML = html;
                 html = "";
                 for(let i = 0 ; i < data.food.length; i++){
@@ -320,7 +320,7 @@ function getList(){
                                  `
 
                 }
-                document.getElementById("-container").innerHTML = html;
+                document.getElementById("cart-container").innerHTML = html;
 
 
         })
