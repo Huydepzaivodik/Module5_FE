@@ -1,0 +1,35 @@
+/* Đảm bảo hình ảnh sản phẩm không vượt quá kích thước phần tử chứa */
+.w-r__img-wrap img {
+    width: 100%;
+    height: auto;
+}
+
+/* Căn lề và khoảng cách giữa các sản phẩm */
+.w-r {
+    margin-bottom: 30px;
+}
+
+/* Các nút trong sản phẩm */
+.w-r__link {
+    display: inline-block;
+    margin-right: 10px;
+    text-align: center;
+    text-decoration: none; /* Thêm để xóa gạch chân mặc định của liên kết */
+}
+
+/* Nút "ADD TO CART" */
+.w-r__link.btn--e-brand-b-2 {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px; /* Thêm khoảng đệm để cải thiện giao diện nút */
+    border-radius: 4px; /* Thêm bo tròn các góc nút */
+}
+
+/* Nút "VIEW" và "REMOVE" */
+.w-r__link.btn--e-transparent-platinum-b-2 {
+    background-color: transparent;
+    border: 1px solid #dcdcdc;
+    color: #007bff;
+    padding: 10px 20px; /* Thêm khoảng đệm để cải thiện giao diện nút */
+    border-radius: 4px; /* Thêm bo tròn các góc nút */
+}
