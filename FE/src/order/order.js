@@ -16,7 +16,105 @@ function showOrder() {
     })
 
 }
+function searchOrder() {
+         let target = document.getElementById("target-search").value;
+         let type = document.getElementById("order-search-type").value;
 
+    axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response)=>{
+        axios.get(`http://localhost:8080/orders/search`,{
+            params: {
+                shop_id: response.data.id,
+                type: type,
+                target: target
+            }
+        },getAuth()).then((response1) => {
+            let html = "";
+            if(response1.data.length > 0){
+                 html = OrderList(response1.data);
+            }else{
+                 html = ` <div class="u-s-p-y-60">
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 u-s-m-b-30">
+                                <div class="empty">
+                                    <div class="empty__wrap">
+                                        <span class="empty__big-text">HAVE NO RESULT</span>
+
+                                        <span class="empty__text-1">No orders found on your order's shop.</span>
+
+                                        <a class="empty__redirect-link btn--e-brand" href="#" onclick="showOrder()">Back To Orders</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
+            </div>`
+            }
+            document.getElementById("app-content").innerHTML = html;
+            addOrderEventListeners(response1.data);
+            document.getElementById("order-search-type").value = type;
+            chooseSearchType();
+            document.getElementById("target-search").value = target;
+        })
+    })
+}
+function chooseSearchType(){
+      let type =  document.getElementById("order-search-type").value;
+      let html = "";
+      switch (type.toLowerCase()) {
+          case "status":{
+                html = `<select class="select-box select-box--primary-style" id="target-search">
+                                                        <option selected>Choose Status</option>
+                                                        <option value="PENDING">PENDING</option>
+                                                        <option value="DOING">DOING</option>
+                                                        <option value="SHIPPING">SHIPPING</option>
+                                                        <option value="DONE">DONE</option>
+                         </select>
+                         <button class="btn btn--icon fas fa-search main-search-button" onclick="searchOrder()"></button>`
+              break;
+          }
+          case "id":{
+               html = `<label for="main-search"></label>
+
+                            <input class="input-text input-text--border-radius input-text--style-1" type="text" id="target-search" placeholder="Search">
+
+                            <button class="btn btn--icon fas fa-search main-search-button" onclick="searchOrder()"></button>`
+              break;
+          }
+          case "coupon":{
+              axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response)=>{
+                  console.log()
+                  axios.get(`http://localhost:8080/coupons/shop/${response.data.id}`,getAuth()).then((response1) =>{
+                      let data = response1.data;
+                      console.log(data)
+                      let html = `<select class="select-box select-box--primary-style" id="target-search">
+                      </select>
+                      <button class="btn btn--icon fas fa-search main-search-button" onclick="searchOrder()"></button>`;
+                      let list = ""
+                      for (let i = 0; i < data.length; i++){
+                          list  += `<option value="${data[i].id}">${String(data[i].type).toUpperCase()} ${String(data[i].discount).toUpperCase()}</option>`
+                      }
+                      document.getElementById("search-form").innerHTML = html;
+                      document.getElementById("target-search").innerHTML = list;
+                      return;
+                  })
+              })
+              break;
+          }
+           default: {
+               html = `<label for="main-search"></label>
+
+                            <input class="input-text input-text--border-radius input-text--style-1" type="text" id="target-search" placeholder="Search">
+
+                            <button class="btn btn--icon fas fa-search main-search-button" onclick="searchOrder()"></button>`
+               break;
+          }
+      }
+      document.getElementById("search-form").innerHTML = html;
+}
 function OrderList(list) {
     let canceledOrdersCount = getCanceledOrdersCount(list);
     let ordersCount = getOrdersCount(list);
@@ -26,93 +124,21 @@ function OrderList(list) {
 
     let html = `
         <div class="u-s-p-y-60">
-            <!--====== Section Content ======-->
-            <div class="section__content">
-                <div class="container">
-                    <div class="breadcrumb">
-                        <div class="breadcrumb__wrap">
-                            <ul class="breadcrumb__list">
-                                <li class="has-separator">
-                                    <a href="index.html">Home</a>
-                                </li>
-                                <li class="is-marked">
-                                    <a href="dash-my-order.html">My Account</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--====== End - Section 1 ======-->
 
-            <!--====== Section 2 ======-->
             <div class="u-s-p-b-60">
                 <!--====== Section Content ======-->
                 <div class="section__content">
                     <div class="dash">
                         <div class="container">
                             <div class="row">
-                                <div class="col-lg-3 col-md-12">
-                                    <!--====== Dashboard Features ======-->
-                                    <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
-                                        <div class="dash__pad-1">
-                                            <span class="dash__text u-s-m-b-16">Hello, Shop abcxyz</span>
-                                            <ul class="dash__f-list">
-                                                <li>
-                                                    <a class="dash-active" href="dash-my-order.html">My Orders</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="dash__box dash__box--bg-white dash__box--shadow dash__box--w">
-                                        <div class="dash__pad-1">
-                                            <ul class="dash__w-list">
-                                                <li>
-                                                    <div class="dash__w-wrap">
-                                                        <span class="dash__w-icon dash__w-icon-style-1"><i class="fas fa-cart-arrow-down"></i></span>
-                                                        <span class="dash__w-text">${ordersCount}</span>
-                                                        <span class="dash__w-name">Orders Placed</span>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="dash__w-wrap">
-                                                        <span class="dash__w-icon dash__w-icon-style-2"><i class="fas fa-times"></i></span>
-                                                        <span class="dash__w-text">${canceledOrdersCount}</span>
-                                                        <span class="dash__w-name">Cancel Orders</span>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="dash__w-wrap">
-                                                        <span class="dash__w-icon dash__w-icon-style-3"><i class="far fa-heart"></i></span>
-                                                        <span class="dash__w-text">${doneCount}</span>
-                                                        <span class="dash__w-name">DONE</span>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="dash__w-wrap">
-                                                        <span class="dash__w-icon dash__w-icon-style-3"><i class="far fa-heart"></i></span>
-                                                        <span class="dash__w-text">${foodTakenCount}</span>
-                                                        <span class="dash__w-name">RECEIVE</span>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="dash__w-wrap">
-                                                        <span class="dash__w-icon dash__w-icon-style-3"><i class="far fa-heart"></i></span>
-                                                        <span class="dash__w-text">${foodShipCount}</span>
-                                                        <span class="dash__w-name">SHIPPED</span>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <!--====== End - Dashboard Features ======-->
-                                </div>
-                                <div class="col-lg-9 col-md-12">
+                                
+                                <div class="col-lg-12 col-md-12">
                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                         <div class="dash__pad-2">
                                             <h1 class="dash__h1 u-s-m-b-14">My Orders</h1>
-                                            <form class="m-order u-s-m-b-30">
-                                                <div class="m-order__select-wrapper">
+                                            <div class="m-order u-s-m-b-30">
+                                             <div class="row">
+                                                <div class="m-order__select-wrapper col-lg-6">
                                                     <label class="u-s-m-r-8" for="my-order-sort">Show:</label>
                                                     <select class="select-box select-box--primary-style" id="my-order-sort">
                                                         <option selected>Last 5 orders</option>
@@ -123,7 +149,25 @@ function OrderList(list) {
                                                         <option>All Orders</option>
                                                     </select>
                                                 </div>
-                                            </form>
+                                                
+                                                <div class="m-order__select-wrapper col-lg-6">
+                                                    <label class="u-s-m-r-8" for="order-search-type">Type Of Search:</label>
+                                                    <select class="select-box select-box--primary-style" id="order-search-type" onclick="chooseSearchType()">
+                                                        <option selected>Choose Type</option>
+                                                        <option value="status">Status</option>
+                                                        <option value="id">Order Id</option>
+                                                        <option value="coupon">Coupon</option>
+                                                    </select>
+                                                    <span id="search-form">
+                                                          <label for="target-search"></label>
+
+                            <input class="input-text input-text--border-radius input-text--style-1" type="text" id="target-search" placeholder="Search">
+
+                            <button class="btn btn--icon fas fa-search main-search-button" onclick="searchOrder()"></button>
+                                                    </span>
+                                                </div>
+                                               </div>
+                                            </div>
                                             <div class="m-order__list">
     `;
 
@@ -156,11 +200,11 @@ function OrderList(list) {
                             <div class="description__img-wrap">
                                 <img class="u-img-fluid" src="images/product/electronic/product3.jpg" alt="">
                             </div>
-                            <div class="description-title">HAHHAA</div>
+                            <div class="description-title">${order.note}</div>
                         </div>
                         <div class="description__info-wrap">
                             <div>
-                                <span class="manage-o__badge badge--processing">${orderStatus}</span>
+                                <span class="manage-o__badge badge--processing">${order.status}</span>
                             </div>
                             <div>
                                 <span class="manage-o__text-2 u-c-silver">Số lượng:
@@ -169,7 +213,7 @@ function OrderList(list) {
                             </div>
                             <div>
                                 <span class="manage-o__text-2 u-c-silver">Tổng tiền:
-                                    <span class="manage-o__text-2 u-c-secondary">${getTotalPrice(order)}</span>
+                                    <span class="manage-o__text-2 u-c-secondary">${order.total}</span>
                                 </span>
                             </div>
                         </div>

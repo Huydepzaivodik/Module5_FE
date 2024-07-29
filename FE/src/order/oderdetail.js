@@ -23,9 +23,10 @@ function showOrderDetails(id){
                 <div class="section__content">
                     <div class="container">
                         <div class="breadcrumb">
-                            <div class="breadcrumb__wrap">
-                                 
-                            </div>
+                           
+                                 <div>
+                                        <a class="route-box__link" href="#" onclick="showOrder()"><i class="fas fa-long-arrow-alt-left"></i>
+                                            <span>BACK TO ORDERS</span></a></div>
                         </div>
                     </div>
                 </div>
@@ -63,58 +64,13 @@ function showOrderDetails(id){
                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                         <div class="dash__pad-2">
                                             <div class="manage-o">
-                                                <div class="manage-o__header u-s-m-b-30">
-                                                    <div class="manage-o__icon"><i class="fas fa-box u-s-m-r-5"></i>
-
-                                                        <span class="manage-o__text"></span></div>
-                                                </div>
+                                                
                                                 <div class="dash-l-r">
                                                     <div class="manage-o__text u-c-secondary">Delivered on ${new Date(order.date).toTimeString()}</div>
                                                     <div class="manage-o__icon"><i class="fas fa-truck u-s-m-r-5"></i>
-
                                                         <span class="manage-o__text">Standard</span></div>
                                                 </div>
-                                                <div class="manage-o__timeline">
-                                                    <div class="timeline-row">
-                                                        <div class="col-lg-3 u-s-m-b-30">
-                                                            <div class="timeline-step">
-                                                                <div class="timeline-l-i timeline-l-i--finish">
-
-                                                                    <span class="timeline-circle"></span></div>
-
-                                                                <span class="timeline-text">Processing</span>
-                                                            </div>
-                                                        </div>
-                                                          <div class="col-lg-3 u-s-m-b-30">
-                                                            <div class="timeline-step">
-                                                                <div class="timeline-l-i  ${foodTakeStatus} ${deliveryFoodStatus} ${doneDeliveryMoneyStatus}">
-
-                                                                    <span class="timeline-circle"></span></div>
-
-                                                                <span class="timeline-text">FOOD DONE</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3 u-s-m-b-30">
-                                                            <div class="timeline-step">
-                                                                <div class="timeline-l-i ${deliveryFoodStatus} ${doneDeliveryMoneyStatus}  ">
-
-                                                                    <span class="timeline-circle"></span></div>
-
-                                                                <span class="timeline-text">Shipped</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3 u-s-m-b-30">
-                                                            <div class="timeline-step">
-                                                                <div class="timeline-l-i ${doneDeliveryMoneyStatus}">
-
-                                                                    <span class="timeline-circle" ></span></div>
-
-                                                                <span class="timeline-text">Delivered</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                          
+                                             
                                             </div>
                                         </div>
                                     </div>`;

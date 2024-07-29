@@ -335,5 +335,5 @@ function showMerchantUI(){
                             </div>
                             <!--====== End - Menu ======-->
          `
-        showFood();
+        showOrder()
 }

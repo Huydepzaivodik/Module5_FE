@@ -27,6 +27,11 @@ function uploadImage(e) {
             document.getElementById('imagePreview').style.display = 'block';
         });
 }
+function getShop(){
+         axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response)=>{
+                  return response.data.id;
+         })
+}
 function getUser(){
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     return currentUser;

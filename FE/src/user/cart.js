@@ -386,6 +386,13 @@ function getFoodsSameShop(food){
                                  `
         }
 }
+function chooseShop(id){
+        let shops = document.getElementsByClassName("choose-shop");
+        for (let i = 0; i < shops.length;i++){
+                if(shops[i].getAttribute("data-shop") != id)
+                 shops[i].checked = false;
+        }
+}
 function getList(){
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
         if(currentUser == null) return;
@@ -399,7 +406,6 @@ function getList(){
                 let data = response.data;
                 console.log(data.food)
                 document.getElementById("cart-number").innerHTML = data.food.length;
-
                 if(data.food.length == 0){
                         if(document.getElementById("cart-container") != null){
                                 document.getElementById("cart-container").innerHTML = `
@@ -477,10 +483,13 @@ function getList(){
                 html = "";
                 let index=  0;
                 for (index = 0; index < data.food.length;index++){
-                        console.log(data.food[index])
                         let item = [];
                         let first = index;
+                        if(data.food.length == 1){
+                                item.push(data.food[0]);
+                        }else
                         for (let j = index; j < data.food.length;j++){
+                                console.log(j)
                                 if(j < data.food.length-1){
                                         if(data.food[j].shop.id == data.food[j+1].shop.id){
                                                 item.push(data.food[j]);
@@ -491,21 +500,19 @@ function getList(){
                                                 index++;
                                         }
                                 }else if(j + 1 > data.food.length){
-                                        if(data.food[j].shop.id == data.food[j-1].shop.id){
+                                        if(data.food[j].shop.id == data.food[j+1].shop.id){
                                                item.push(data.food[j]);
                                                index++;
                                         }
                                 }
-
                         }
-
                         let a  = data.food[first];
                                 html += `
                         <tr style="height: 30px !important; width: 20px; border-bottom: 1px solid black">
                         <td>
                                 <div class="table-p__box">
                                         <div class="table-p__img-wrap">
-
+                                                <input type="checkbox"  class="select-box select-box--primary-style choose-shop" data-shop="${a.shop.id}" onclick="chooseShop(${a.shop.id})">
                                                 <img class="u-img-fluid" src="${a.shop.image}" alt="" style="border-radius: 999px; height: 50px; width: 50px"></div>
                                         <div class="table-p__info">
 
@@ -566,7 +573,6 @@ function getList(){
                         }
 
                 }
-
                 document.getElementById("cart-container").innerHTML = html;
 
         })
@@ -574,29 +580,43 @@ function getList(){
 function createOrder(){
         let foods = []
         let orderProduct = []
+        let shop_index = -1;
+        let shop = document.getElementsByClassName("choose-shop");
+        let address = document.getElementById("f-cart-note-1").value;
+        let delivery = document.getElementById("delivery-select").value;
+        let note = document.getElementById("f-cart-note").value;
+        for (let i = 0; i < shop.length; i++){
+                if(shop[i].checked)
+                        shop_index = shop[i].getAttribute("data-shop");
+        }
+        if(shop_index == -1 || address == "" || delivery == "" || note == ""){
+                alert("Please done fill all the information")
+                return;
+        }
         axios.get(`http://localhost:8080/cart/${getUser().id}`,getAuth()).then((response) =>{
                 foods = response.data.food;
                 let coupons = [];
                 for (let i = 0; i < foods.length; i++){
-                        let quantity = parseInt(document.getElementById(foods[i].id).value);
-                        foods[i].quantity = quantity;
-                        let coupon;
-                        if(document.getElementById("coupon-"+foods[i].id) != null){
-                                coupon = document.getElementById("coupon-"+foods[i].id).value;
-                                console.log(quantity)
-                                coupons.push({
-                                        id: coupon
-                                });
+                        if(foods[i].shop.id == shop_index) {
+                                let quantity = parseInt(document.getElementById(foods[i].id).value);
+                                foods[i].quantity = quantity;
+                                let coupon;
+                                if (document.getElementById("coupon-" + foods[i].id) != null) {
+                                        coupon = document.getElementById("coupon-" + foods[i].id).value;
+                                        console.log(quantity)
+                                        coupons.push({
+                                                id: coupon
+                                        });
+                                }
+                                orderProduct.push({
+                                        quantity: quantity,
+                                        orderProductPK: {
+                                                food: foods[i]
+                                        }
+                                })
                         }
-                        orderProduct.push({
-                                     quantity: quantity,
-                                     orderProductPK: {
-                                             food: foods[i]
-                                     }
-                        })
                 }
-                let address = document.getElementById("f-cart-note-1").value;
-                let delivery = document.getElementById("delivery-select").value;
+
                 let order = {
                         user: getUser(),
                         shippingAddress: address,
@@ -605,6 +625,7 @@ function createOrder(){
                                 id: delivery
                         },
                         coupons: coupons,
+                        note: note,
                         status: "PENDING"
                 }
                 axios.post("http://localhost:8080/orders",order,getAuth()).then((response) => {
