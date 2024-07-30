@@ -89,132 +89,69 @@ function showMyOrder(){
                                                         <option>All Orders</option>
                                                     </select></div>
                                             </div>
-                                            <div class="m-order__list">
-                                                <div class="m-order__get">
-                                                    <div class="manage-o__header u-s-m-b-30">
-                                                        <div class="dash-l-r">
-                                                            <div>
-                                                                <div class="manage-o__text-2 u-c-secondary">Order #305423126</div>
-                                                                <div class="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
-                                                            </div>
-                                                            <div>
-                                                                <div class="dash__link dash__link--brand">
-
-                                                                    <a href="dash-manage-order.html">MANAGE</a></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="manage-o__description">
-                                                        <div class="description__container">
-                                                            <div class="description__img-wrap">
-
-                                                                <img class="u-img-fluid" src="../../images/product/electronic/hamburger-shrimp.jpg" alt=""></div>
-                                                            <div class="description-title">Yellow Wireless Headphone</div>
-                                                        </div>
-                                                        <div class="description__info-wrap">
-                                                            <div>
-
-                                                                <span class="manage-o__badge badge--processing">Processing</span></div>
-                                                            <div>
-
-                                                                <span class="manage-o__text-2 u-c-silver">Quantity:
-
-                                                                    <span class="manage-o__text-2 u-c-secondary">1</span></span></div>
-                                                            <div>
-
-                                                                <span class="manage-o__text-2 u-c-silver">Total:
-
-                                                                    <span class="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="m-order__get">
-                                                    <div class="manage-o__header u-s-m-b-30">
-                                                        <div class="dash-l-r">
-                                                            <div>
-                                                                <div class="manage-o__text-2 u-c-secondary">Order #305423126</div>
-                                                                <div class="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
-                                                            </div>
-                                                            <div>
-                                                                <div class="dash__link dash__link--brand">
-
-                                                                    <a href="dash-manage-order.html">MANAGE</a></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="manage-o__description">
-                                                        <div class="description__container">
-                                                            <div class="description__img-wrap">
-
-                                                                <img class="u-img-fluid" src="../../images/product/women/product8.jpg" alt=""></div>
-                                                            <div class="description-title">New Dress D Nice Elegant</div>
-                                                        </div>
-                                                        <div class="description__info-wrap">
-                                                            <div>
-
-                                                                <span class="manage-o__badge badge--shipped">Shipped</span></div>
-                                                            <div>
-
-                                                                <span class="manage-o__text-2 u-c-silver">Quantity:
-
-                                                                    <span class="manage-o__text-2 u-c-secondary">1</span></span></div>
-                                                            <div>
-
-                                                                <span class="manage-o__text-2 u-c-silver">Total:
-
-                                                                    <span class="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="m-order__get">
-                                                    <div class="manage-o__header u-s-m-b-30">
-                                                        <div class="dash-l-r">
-                                                            <div>
-                                                                <div class="manage-o__text-2 u-c-secondary">Order #305423126</div>
-                                                                <div class="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
-                                                            </div>
-                                                            <div>
-                                                                <div class="dash__link dash__link--brand">
-
-                                                                    <a href="dash-manage-order.html">MANAGE</a></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="manage-o__description">
-                                                        <div class="description__container">
-                                                            <div class="description__img-wrap">
-
-                                                                <img class="u-img-fluid" src="../../images/product/men/product8.jpg" alt=""></div>
-                                                            <div class="description-title">New Fashion D Nice Elegant</div>
-                                                        </div>
-                                                        <div class="description__info-wrap">
-                                                            <div>
-
-                                                                <span class="manage-o__badge badge--delivered">Delivered</span></div>
-                                                            <div>
-
-                                                                <span class="manage-o__text-2 u-c-silver">Quantity:
-
-                                                                    <span class="manage-o__text-2 u-c-secondary">1</span></span></div>
-                                                            <div>
-
-                                                                <span class="manage-o__text-2 u-c-silver">Total:
-
-                                                                    <span class="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div class="m-order__list" id="order-list" style="overflow: auto; height: 800px">
+                                                                                          
                                             </div>
                                         </div>
                                     </div>
                                     `;
+    getOrderList()
+}
+function getOrderList(){
+         axios.get(`http://localhost:8080/orders/user/${getUser().id}`,getAuth()).then(function(response){
+               let data = response.data;
+               let html = ""
+             getOrderStatusDashBox(data)
+
+             for (let i = 0; i < data.length; i++){
+                    let order = data[i];
+                   html += `<div class="m-order__get">
+                                                    <div class="manage-o__header u-s-m-b-30">
+                                                        <div class="dash-l-r">
+                                                            <div>
+                                                                <div class="manage-o__text-2 u-c-secondary">Order #${order.id}</div>
+                                                                <div class="manage-o__text u-c-silver">Placed on ${new Date(order.date).toDateString()}</div>
+                                                            </div>
+                                                            <div>
+                                                                <div class="dash__link dash__link--brand">
+                                                                    <a  onclick="showUserOrderDetails(${order.id})">MANAGE</a></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="manage-o__description">
+                                                        <div class="description__container">
+                                                            <div class="description__img-wrap">
+
+                                                                <img class="u-img-fluid" src="${order.foods[0].orderProductPK.food.image}" alt=""></div>
+                                                            <div class="description-title">${order.foods[0].orderProductPK.food.name}</div>
+                                                        </div>
+                                                        <div class="description__info-wrap">
+                                                            <div>
+
+                                                                <span class="manage-o__badge badge--processing">${order.status}</span></div>
+                                                            <div>
+
+                                                                <span class="manage-o__text-2 u-c-silver">Number Of Dishes:
+
+                                                                    <span class="manage-o__text-2 u-c-secondary">${order.foods.length}</span></span></div>
+                                                            <div>
+
+                                                                <span class="manage-o__text-2 u-c-silver">Total:
+
+                                                                    <span class="manage-o__text-2 u-c-secondary">${order.total}</span></span></div>
+                                                        </div>
+                                                    </div>
+                                                </div> `
+                   document.getElementById('order-list').innerHTML = html;
+               }
+         })
 }
 function showEditProfile(){
-    document.getElementById('right-dashboard').innerHTML = `                                    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
+    document.getElementById('right-dashboard').innerHTML = `<div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
                                         <div class="dash__pad-2">
                                             <h1 class="dash__h1 u-s-m-b-14">Edit Profile</h1>
 
-                                            <span class="dash__text u-s-m-b-30">Looks like you haven't update your profile</span>
+                                            <span class="dash__text u-s-m-b-30">Looks like you haven't updated your profile</span>
                                             <div class="dash__link dash__link--secondary u-s-m-b-30">
 
                                                 <a data-modal="modal" data-modal-id="#dash-newsletter">Subscribe Newsletter</a></div>
@@ -285,19 +222,24 @@ function showEditProfile(){
         document.getElementById("u-gender").innerText = data.gender;
     })
 }
-function showOrderDetails(index){
-    document.getElementById('right-dashboard').innerHTML = `<h1 class="dash__h1 u-s-m-b-30">Order Details</h1>
+function showUserOrderDetails(index){
+    axios.get(`http://localhost:8080/orders/${index}`,getAuth()).then(function(response){
+        let order = response.data;
+        let subtotal = getTotalPrice(order);
+        let coupon_discount = getCouponDiscountAmount(order.coupons[0],subtotal);
+        let total = getTotalPriceAfterCoupon(order);
+        document.getElementById('right-dashboard').innerHTML = `<h1 class="dash__h1 u-s-m-b-30">Order Details</h1>
                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                         <div class="dash__pad-2">
                                             <div class="dash-l-r">
                                                 <div>
-                                                    <div class="manage-o__text-2 u-c-secondary">Order #305423126</div>
-                                                    <div class="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
+                                                    <div class="manage-o__text-2 u-c-secondary">Order #${order.id}</div>
+                                                    <div class="manage-o__text u-c-silver">Placed on ${new Date(order.date).toDateString()}</div>
                                                 </div>
                                                 <div>
                                                     <div class="manage-o__text-2 u-c-silver">Total:
 
-                                                        <span class="manage-o__text-2 u-c-secondary">$16.00</span></div>
+                                                        <span class="manage-o__text-2 u-c-secondary">${order.total}</span></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -311,29 +253,29 @@ function showOrderDetails(index){
                                                         <span class="manage-o__text">Package 1</span></div>
                                                 </div>
                                                 <div class="dash-l-r">
-                                                    <div class="manage-o__text u-c-secondary">Delivered on 26 Oct 2016</div>
+                                                    <div class="manage-o__text u-c-secondary">Delivered on ${new Date(order.date).toDateString()}</div>
                                                     <div class="manage-o__icon"><i class="fas fa-truck u-s-m-r-5"></i>
 
                                                         <span class="manage-o__text">Standard</span></div>
                                                 </div>
-                                                <div class="manage-o__timeline">
+                                                 <div class="manage-o__timeline">
                                                     <div class="timeline-row">
                                                         <div class="col-lg-4 u-s-m-b-30">
                                                             <div class="timeline-step">
-                                                                <div class="timeline-l-i timeline-l-i--finish">
+                                                                <div class="timeline-l-i">
 
                                                                     <span class="timeline-circle"></span></div>
 
-                                                                <span class="timeline-text">Processing</span>
+                                                                <span class="timeline-text">Pending</span>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-4 u-s-m-b-30">
                                                             <div class="timeline-step">
-                                                                <div class="timeline-l-i timeline-l-i--finish">
+                                                                <div class="timeline-l-i">
 
                                                                     <span class="timeline-circle"></span></div>
 
-                                                                <span class="timeline-text">Shipped</span>
+                                                                <span class="timeline-text">Processing</span>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-4 u-s-m-b-30">
@@ -345,28 +287,19 @@ function showOrderDetails(index){
                                                                 <span class="timeline-text">Delivered</span>
                                                             </div>
                                                         </div>
+                                                        <div class="col-lg-4 u-s-m-b-30">
+                                                            <div class="timeline-step">
+                                                                <div class="timeline-l-i">
+
+                                                                    <span class="timeline-circle"></span></div>
+
+                                                                <span class="timeline-text">DONE</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="manage-o__description">
-                                                    <div class="description__container">
-                                                        <div class="description__img-wrap">
-
-                                                            <img class="u-img-fluid" src="../../images/product/electronic/hamburger-shrimp.jpg" alt=""></div>
-                                                        <div class="description-title">Yellow Wireless Headphone</div>
-                                                    </div>
-                                                    <div class="description__info-wrap">
-                                                        <div>
-
-                                                            <span class="manage-o__text-2 u-c-silver">Quantity:
-
-                                                                <span class="manage-o__text-2 u-c-secondary">1</span></span></div>
-                                                        <div>
-
-                                                            <span class="manage-o__text-2 u-c-silver">Total:
-
-                                                                <span class="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
-                                                    </div>
-                                                </div>
+                                                
+                                                <span id="foods-list"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -375,44 +308,119 @@ function showOrderDetails(index){
                                             <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
                                                 <div class="dash__pad-3">
                                                     <h2 class="dash__h2 u-s-m-b-8">Shipping Address</h2>
-                                                    <h2 class="dash__h2 u-s-m-b-8">John Doe</h2>
+                                                    <h2 class="dash__h2 u-s-m-b-8">${order.user.name}</h2>
 
-                                                    <span class="dash__text-2">4247 Ashford Drive Virginia - VA-20006 - USA</span>
+                                                    <span class="dash__text-2">${order.shippingAddress}</span>
 
-                                                    <span class="dash__text-2">(+0) 900901904</span>
+                                                    <span class="dash__text-2">${order.user.phoneNumber}</span>
                                                 </div>
-                                            </div>
-                                            <div class="dash__box dash__box--bg-white dash__box--shadow dash__box--w">
-                                                <div class="dash__pad-3">
-                                                    <h2 class="dash__h2 u-s-m-b-8">Billing Address</h2>
-                                                    <h2 class="dash__h2 u-s-m-b-8">John Doe</h2>
-
-                                                    <span class="dash__text-2">4247 Ashford Drive Virginia - VA-20006 - USA</span>
-
-                                                    <span class="dash__text-2">(+0) 900901904</span>
-                                                </div>
+                                               
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
-                                            <div class="dash__box dash__box--bg-white dash__box--shadow u-h-100">
+                                            <div class="dash__box dash__box--bg-white dash__box--shadow u-h-100" id="dashbox-info">
                                                 <div class="dash__pad-3">
                                                     <h2 class="dash__h2 u-s-m-b-8">Total Summary</h2>
                                                     <div class="dash-l-r u-s-m-b-8">
                                                         <div class="manage-o__text-2 u-c-secondary">Subtotal</div>
-                                                        <div class="manage-o__text-2 u-c-secondary">$16.00</div>
+                                                        <div class="manage-o__text-2 u-c-secondary">${subtotal}</div>
                                                     </div>
                                                     <div class="dash-l-r u-s-m-b-8">
                                                         <div class="manage-o__text-2 u-c-secondary">Shipping Fee</div>
-                                                        <div class="manage-o__text-2 u-c-secondary">$16.00</div>
+                                                        <div class="manage-o__text-2 u-c-secondary">${order.delivery.cost} VND</div>
+                                                    </div>
+                                                    <div class="dash-l-r u-s-m-b-8">
+                                                        <div class="manage-o__text-2 u-c-secondary">Coupon Discount</div>
+                                                        <div class="manage-o__text-2 u-c-secondary">${coupon_discount} VND</div>
                                                     </div>
                                                     <div class="dash-l-r u-s-m-b-8">
                                                         <div class="manage-o__text-2 u-c-secondary">Total</div>
-                                                        <div class="manage-o__text-2 u-c-secondary">$30.00</div>
-                                                    </div>
-
+                                                        <div class="manage-o__text-2 u-c-secondary">${total}</div>
+                                                    </div>                                                
                                                     <span class="dash__text-2">Paid by Cash on Delivery</span>
+                                                   
                                                 </div>
                                             </div>
                                         </div>
                                     </div>`
+                                    let html = ``;
+                                    for (let i = 0; i < order.foods.length;i++){
+                                        let food = order.foods[i];
+                                        html += `<div class="manage-o__description">
+                                                    <div class="description__container">
+                                                        <div class="description__img-wrap">
+
+                                                            <img class="u-img-fluid" src="${food.orderProductPK.food.image}" alt=""></div>
+                                                        <div class="description-title">${food.orderProductPK.food.name}</div>
+                                                    </div>
+                                                    <div class="description__info-wrap">
+                                                        <div>
+
+                                                            <span class="manage-o__text-2 u-c-silver">Quantity:
+
+                                                                <span class="manage-o__text-2 u-c-secondary">${food.quantity}</span></span></div>
+                                                        <div>
+
+                                                            <span class="manage-o__text-2 u-c-silver">Total:
+
+                                                                <span class="manage-o__text-2 u-c-secondary">${food.quantity * food.orderProductPK.food.price}</span></span></div>
+                                                    </div>
+                                                </div>`
+                                    }
+                                    document.getElementById("foods-list").innerHTML = html;
+                                    if(order.status == "SHIPPING")
+                                             document.getElementById("dashbox-info").innerHTML += `<div class="dash-l-r u-s-m-b-8">
+                                                        <button class="btn btn--e-brand-b-2" style="padding: 15px 30px; font-size: 25px; border-radius: 10px" onclick="updateOrderStatus(${order.id})">Received</button>
+                                                    </div>`;
+                                    console.log(order.status)
+                                    getStatusTimeLine(order.status)
+    })
+}
+
+function getStatusTimeLine(status){
+         if(status == "CANCEL") return
+         let sts = ["PENDING","DOING","SHIPPING","DONE"];
+         let index = sts.indexOf(status);
+         let timeline = document.getElementsByClassName("timeline-l-i");
+         for (let i = 0; i < index+1; i++){
+              timeline[i].classList.add("timeline-l-i--finish");
+         }
+}
+
+function getOrderStatusDashBox(orders){
+         let orderPlaced = 0;
+         let orderCancel = 0;
+         for (let i = 0; i < orders.length; i++){
+             console.log("i:"+orders[i].status)
+             if(orders[i].status == "DONE")
+                    orderPlaced++;
+             if(orders[i].status == "CANCEL"){
+                 console.log("VAODAY")
+                 orderCancel++;
+             }
+             console.log(i)
+         }
+         html = `<div class="dash__pad-1">
+                                            <ul class="dash__w-list">
+                                                <li>
+                                                    <div class="dash__w-wrap">
+
+                                                        <span class="dash__w-icon dash__w-icon-style-1"><i class="fas fa-cart-arrow-down"></i></span>
+
+                                                        <span class="dash__w-text">${orderPlaced}</span>
+
+                                                        <span class="dash__w-name">Orders Placed</span></div>
+                                                </li>
+                                                <li>
+                                                    <div class="dash__w-wrap">
+
+                                                        <span class="dash__w-icon dash__w-icon-style-2"><i class="fas fa-times"></i></span>
+
+                                                        <span class="dash__w-text">${orderCancel}</span>
+
+                                                        <span class="dash__w-name">Cancel Orders</span></div>
+                                                </li>                                              
+                                            </ul>
+                                        </div>`
+        document.getElementById("order-status").innerHTML = html;
 }

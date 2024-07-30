@@ -50,8 +50,6 @@ function showOrderDetails(id){
                                                 <div>
                                                     <div class="manage-o__text-2 u-c-secondary">Order #${order.id}</div>
                                                     <div class="manage-o__text u-c-silver">Ngày đặt hàng ${new Date(order.date).toDateString()}</div>
-
-
                                                 </div>
                                                 <div>
                                                     <div class="manage-o__text-2 u-c-silver">Total:
@@ -68,9 +66,8 @@ function showOrderDetails(id){
                                                 <div class="dash-l-r">
                                                     <div class="manage-o__text u-c-secondary">Delivered on ${new Date(order.date).toTimeString()}</div>
                                                     <div class="manage-o__icon"><i class="fas fa-truck u-s-m-r-5"></i>
-                                                        <span class="manage-o__text">Standard</span></div>
+                                                    <span class="manage-o__text">Standard</span></div>
                                                 </div>
-                                             
                                             </div>
                                         </div>
                                     </div>`;
@@ -84,17 +81,14 @@ function showOrderDetails(id){
                                                 <div class="manage-o__header u-s-m-b-30">
                                                     <div class="manage-o__icon"><i class="fas fa-box u-s-m-r-5"></i>
 
-                                                        <span class="manage-o__text">Package ${i + 1}</span></div>
+                                                        <span class="manage-o__text">Dish ${i + 1}</span></div>
                                                 </div>
                                               
-                                               
+                                            
                                                 <div class="manage-o__description">
 
                                                     <div class="description__container">
                                                         <div class="description__img-wrap">
-
-
-
                                                             <img class="u-img-fluid" src="${order.foods[i].orderProductPK.food.image}" alt=""></div>
                                                         <div class="description-title">${order.foods[i].orderProductPK.food.name}</div>
                                                     </div>
@@ -112,9 +106,7 @@ function showOrderDetails(id){
 
                                                                 <span class="manage-o__text-2 u-c-secondary">${order.foods[i].orderProductPK.food.price * order.foods[i].quantity} VND</span></span></div>
                                                     </div>
-                                                    
-
-
+                                                   
                                                 </div>
                                             </div>
                                         </div>
@@ -206,7 +198,7 @@ function getCouponDiscountAmount(coupon, subtotal) {
 function getTotalPrice(order) {
     let total = 0;
     order.foods.forEach(food => {
-        total += food.orderProductPK.food.price * food.quantity;
+            total += food.orderProductPK.food.price * food.quantity;
     });
     return total;
 }

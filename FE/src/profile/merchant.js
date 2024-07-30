@@ -222,7 +222,6 @@ function chooseCoupon(row){
 }
 function getCouponList(){
     axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response)=>{
-
         axios.get(`http://localhost:8080/coupons/shop/${response.data.id}`,getAuth()).then((response)=>{
             let data = response.data;
             let html = ``;
@@ -230,12 +229,22 @@ function getCouponList(){
                  let coupon = data[i];
                  let start = new Date(coupon.startDate)
                  let end  = new Date(coupon.endDate)
-                 html += `<tr style="height: 70px;" onclick="chooseCoupon(this)">
+                 if(coupon.status == true)
+                  html += `<tr style="height: 70px;" onclick="chooseCoupon(this)" >
                                             <td>${coupon.id}</td>
                                             <td>${coupon.discount}</td>
                                             <td>${coupon.type}</td>
-                                            <td>${start.getUTCDate()}</td>
-                                            <td>${end.getUTCDate()}</td>
+                                            <td>${start.toDateString()}</td>
+                                            <td>${end.toDateString()}</td>
+                                            <td>${coupon.status}</td>
+                          </tr>`
+                  else
+                      html += `<tr style="height: 70px; display:none ;" onclick="chooseCoupon(this)" >
+                                            <td>${coupon.id}</td>
+                                            <td>${coupon.discount}</td>
+                                            <td>${coupon.type}</td>
+                                            <td>${start.toDateString()}</td>
+                                            <td>${end.toDateString()}</td>
                                             <td>${coupon.status}</td>
                           </tr>`
             }
@@ -243,7 +252,95 @@ function getCouponList(){
         })
     })
 }
+function deleteCoupon(){
+         axios.delete(`http://localhost:8080/coupons/${choosenCoupons}`,getAuth()).then(function(response){
+              showCouponUI();
+         })
+}
+function showEditForm(){
+    axios.get(`http://localhost:8080/coupons/${choosenCoupons}`,getAuth()).then(function(response){
+        let coupon = response.data;
+        document.getElementById("quick-look-body").innerHTML = `
+                      <div class="row"><div class="col-lg-2"></div>
+                                 <div class="col-lg-8">
+                                      <button class="btn dismiss-button fas fa-times" type="button" data-dismiss="modal" style="color: black" id="close-coupon-modal"></button>   
+                                 <h1 class="checkout-f__h1">CREATE COUPON</h1>                            
+                                 <div class="checkout-f__delivery">
+                                        <div class="u-s-m-b-30">
+                                            
+                                                  <div class="u-s-m-b-15">
+
+                                                <label class="gl-label" for="billing-email">DISCOUNT AMOUNT *</label>
+
+                                                <input class="input-text input-text--primary-style" type="text" id="discount-amount" data-bill="" style="width: 100%" value="${coupon.discount}"></div>
+                                           <div class="u-s-m-b-15">
+                                            
+                                                <label class="gl-label" for="coupon-type">TYPE *</label>
+                                                <select class="select-box select-box--primary-style" id="coupon-type" data-bill="" style="width: 100%">
+                                                    <option selected value="">Choose Coupon Type</option>
+                                                    <option value="percent">PERCENT</option>
+                                                    <option value="minus">MINUS</option>
+                                                </select>
+                                                <!--====== End - Select Box ======-->
+                                            </div>
+                                                                                  
+                                            <!--====== First Name, Last Name ======-->
+                                          
+                                                <div class="u-s-m-b-15">
+
+                                                    <label class="gl-label" for="start-date">START DATE *</label>
+
+                                                    <input class="input-text input-text--primary-style" type="date" id="start-date" data-bill="" style="width: 100%" value="${coupon.startDate}"></div>
+                                                <div class="u-s-m-b-15">
+
+                                                    <label class="gl-label" for="end-date">END DATE *</label>
+
+                                                    <input class="input-text input-text--primary-style" type="date" id="end-date" data-bill="" style="width: 100%" value="${coupon.endDate}"></div>
+                                          
+                                            
+                                            <div class="u-s-m-b-15">
+
+                                                <label class="gl-label" for="billing-phone">QUANTITY *</label>
+
+                                                <input class="input-text input-text--primary-style" type="text" id="quantity-coupon" data-bill="" style="width: 100%" value="${coupon.quantity}"></div>                                                              
+                                            <div class="u-s-m-b-15">
+                                                <button class="btn btn--e-transparent-brand-b-2" type="submit" style="width: 100%; height: 50px;" onclick="saveCoupon()">SAVE</button></div>                                      
+                                         </div>
+                                 </div>             
+                                 </div>
+                                 <div class="col-lg-2"></div>
+                                 </div>                                                                
+         `
+        document.getElementById('start-date').value = new Date(coupon.startDate).getMilliseconds();
+        document.getElementById('end-date').value = new Date(coupon.endDate).getMilliseconds();
+        document.getElementById('coupon-type').value = coupon.type.toLowerCase();
+        document.getElementById("close-coupon-modal").onclick = function () {
+            showCouponUI();
+        }
+    })
+}
+function sortCoupon(){
+    let table = document.getElementById("coupon-list")
+    const rows = table.getElementsByTagName('tr');
+    let typeS = document.getElementById("type").value;
+    if(typeS == "default") showCouponUI()
+    let statusS = document.getElementById("status").value;
+    for (let i = 1; i < rows.length; i++) {
+        const typeCell = rows[i].getElementsByTagName('td')[2];
+        const type = typeCell.textContent;
+        const statusCell = rows[i].getElementsByTagName('td')[5];
+        const status = statusCell.textContent;
+        console.log("type: " + type + " status: " + status +" types +" + typeS + " statusS" + statusS)
+        if (type.toUpperCase() == typeS.toUpperCase() && status.toUpperCase() == statusS.toUpperCase()) {
+            rows[i].style.display = '';
+        } else {
+            rows[i].style.display = 'none';
+        }
+    }
+}
 function showCouponUI(){
+        let type = "type"
+        let status = "status"
         let html =  `
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content modal--shadow">
@@ -256,10 +353,10 @@ function showCouponUI(){
                                       <button class="btn btn--e-white-brand" onclick="showCouponAddForm()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa">CREATE NEW COUPON</button>
                                  </div>
                                  <div class="u-s-m-b-8">
-                                      <button class="btn btn--e-white-brand" onclick="showCouponAddForm()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa">EDIT COUPON</button>
+                                      <button class="btn btn--e-white-brand" onclick="showEditForm()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa">EDIT COUPON</button>
                                  </div>
                                  <div class="u-s-m-b-8">
-                                      <button class="btn btn--e-white-brand" onclick="showCouponAddForm()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa">DELETE COUPON</button>
+                                      <button class="btn btn--e-white-brand" onclick="deleteCoupon()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa">DELETE COUPON</button>
                                  </div>
                                 
                             </div>   
@@ -267,17 +364,17 @@ function showCouponUI(){
                                 <div class="gl-inline">
                                       <div class="u-s-m-b-8" style="display: flex; align-content: center">
                                                      <label for="type">TYPE:</label>
-                                                     <select class="select-box select-box--transparent-b-2" id="type">
-                                                        <option selected>SELECT TYPE</option>
-                                                        <option>PERCENT</option>
-                                                        <option>MINUS</option>                                                     
+                                                     <select class="select-box select-box--transparent-b-2" id="type" onchange="sortCoupon()">
+                                                        <option selected value="default">SELECT TYPE</option>
+                                                        <option value="percent">PERCENT</option>
+                                                        <option value="minus">MINUS</option>                                                     
                                  </select></div>
                                       <div class="u-s-m-b-8" style="display: flex; align-content: center">
                                                      <label for="status">STATUS:</label>
-                                                     <select class="select-box select-box--transparent-b-2" id="status">
-                                                        <option selected>SELECT STATUS</option>
-                                                        <option>DISABLE</option>
-                                                        <option>ABLE</option>                                                     
+                                                     <select class="select-box select-box--transparent-b-2" id="status" onchange="sortCoupon()">
+                                                        <option selected value="true">SELECT STATUS</option>
+                                                        <option value="false">DISABLE</option>
+                                                        <option value="true">ENABLE</option>                                                     
                                  </select></div>
                                 </div>
                                 <div style="overflow: auto; height: 400px">
@@ -288,7 +385,6 @@ function showCouponUI(){
                                             <td>TYPE</td>
                                             <td>START DATE</td>
                                             <td>END DATE</td>
-                                            <td>STATUS</td>
                                            </tr></thead>                                                                                                                                                                                           
                                     </table>
                                 </div>
