@@ -206,21 +206,95 @@ function showEditProfile(){
                                         </div>
                                     </div>
 `;
+
+    document.getElementById('right-dashboard').innerHTML = `
+    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
+        <div class="dash__pad-2">
+            <h1 class="dash__h1 u-s-m-b-14">Edit Profile</h1>
+            <span class="dash__text u-s-m-b-30">Looks like you haven't update your profile</span>
+            <div class="dash__link dash__link--secondary u-s-m-b-30">
+                <a data-modal="modal" data-modal-id="#dash-newsletter">Subscribe Newsletter</a>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="dash-edit-p">
+                        <div class="gl-inline">
+                            <div class="u-s-m-b-30">
+                                <label class="gl-label" for="u-name">NAME *</label>
+                                <input class="input-text input-text--primary-style" type="text" id="u-name" placeholder="">
+                            </div>
+                        </div>
+                        <div class="gl-inline">
+                            <div class="u-s-m-b-30">
+                                <label class="gl-label" for="u-gender">GENDER</label>
+                                <select class="select-box select-box--primary-style u-w-100" id="u-gender">
+                                    <option selected id="selected"></option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="u-s-m-b-30">
+                                <label class="gl-label" for="u-address">ADDRESS *</label>
+                                <input class="input-text input-text--primary-style" type="text" id="u-address" placeholder="">
+                            </div>
+                        </div>
+                        <div class="gl-inline">
+                            <div class="u-s-m-b-30">
+                                <h2 class="dash__h2 u-s-m-b-8">E-mail</h2>
+                                <span class="dash__text" id="u-email"></span>
+                                <div class="dash__link dash__link--secondary">
+                                    <a href="#">Change</a>
+                                </div>
+                            </div>
+                            <div class="u-s-m-b-30">
+                                <h2 class="dash__h2 u-s-m-b-8" id="u-phone">Phone</h2>
+                                <span class="dash__text">Please enter your mobile</span>
+                                <div class="dash__link dash__link--secondary">
+                                    <a href="#">Add</a>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn--e-brand-b-2" id="save-profile-btn" type="button">SAVE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+
+
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let auth = {
         headers: {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
-    }
+    };
     let userId = currentUser.id;
-    axios.get(`http://localhost:8080/users/${userId}`,auth).then((response) => {
+
+    axios.get(`http://localhost:8080/users/${userId}`, auth).then((response) => {
         let data = response.data;
-        document.getElementById("u-name").innerText = data.name;
-        document.getElementById("u-address").innerText = data.address;
+        document.getElementById("u-name").value = data.name;
+        document.getElementById("u-address").value = data.address;
         document.getElementById("u-email").innerText = data.email;
         document.getElementById("u-phone").innerText = data.phoneNumber;
-        document.getElementById("u-gender").innerText = data.gender;
-    })
+        document.getElementById("u-gender").value = data.gender.toLowerCase();
+    });
+
+    document.getElementById('save-profile-btn').addEventListener('click', () => {
+        let updatedUser = {
+            name: document.getElementById("u-name").value,
+            address: document.getElementById("u-address").value,
+            gender: document.getElementById("u-gender").value,
+        };
+
+        axios.put(`http://localhost:8080/users/${userId}`, updatedUser, auth).then((response) => {
+            alert("Profile updated successfully!");
+            showMyProfile();
+        }).catch((error) => {
+            console.error(error);
+            alert("An error occurred while updating the profile.");
+        });
+    });
 }
 function showUserOrderDetails(index){
     axios.get(`http://localhost:8080/orders/${index}`,getAuth()).then(function(response){
@@ -370,9 +444,12 @@ function showUserOrderDetails(index){
                                     document.getElementById("foods-list").innerHTML = html;
                                     if(order.status == "SHIPPING")
                                              document.getElementById("dashbox-info").innerHTML += `<div class="dash-l-r u-s-m-b-8">
-                                                        <button class="btn btn--e-brand-b-2" style="padding: 15px 30px; font-size: 25px; border-radius: 10px" onclick="updateOrderStatus(${order.id})">Received</button>
+                                                        <button class="btn btn--e-brand-b-2" style="padding: 15px 30px; font-size: 25px; border-radius: 10px" onclick="updateOrderStatus(${order.id})">RERCEIVED</button>
                                                     </div>`;
-                                    console.log(order.status)
+                                    else if(order.status == "PENDING" || order.status == "DOING")
+                                        document.getElementById("dashbox-info").innerHTML += `<div class="dash-l-r u-s-m-b-8">
+                                                        <button class="btn btn--e-brand-b-2" style="padding: 15px 30px; font-size: 25px; border-radius: 10px" onclick="cancelStatus(${order.id})">CANCEL</button>
+                                                    </div>`;
                                     getStatusTimeLine(order.status)
     })
 }

@@ -1146,7 +1146,7 @@ function showFood() {
                                                 <span>${list[i].description}</span></div>
                                             <div class="product-m__wishlist">
 
-                                                <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
+                                                <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${list[i].id})"></a></div>
                                         <button class="button-5" role="button" onclick="addTocart(${list[i].id})">Add To Cart</button>
 
                                         </div>
@@ -2412,10 +2412,10 @@ function searchFood() {
                                         <span class="product-m__review"> </span></div>
                                     <div class="product-m__price"><b>Price</b>: ${list[i].price}</div>
                                     <div class="product-m__hover">
-<div class="product-m__preview-description">
+                                    <div class="product-m__preview-description">
                                             <span>${list[i].description}</span></div>
                                         <div class="product-m__wishlist">
-                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
+                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${list[i].id})"></a></div>
                                         <button class="button-5" role="button" onclick="addTocart(${list[i].id})">Add To Cart</button>
 
                                     </div>
@@ -2446,7 +2446,24 @@ function searchFood() {
     }
 
 }
-
+function addToWishlist(id) {
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser == null) return;
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    };
+    axios.get(`http://localhost:8080/user/foods/${id}`, auth).then((response) => {
+        axios.post(`http://localhost:8080/wishlist/${currentUser.id}`, response.data, auth).then((response) => {
+            alert(response.data);
+        }).catch(error => {
+            console.error('Error adding to wishlist:', error);
+        });
+    }).catch(error => {
+        console.error('Error fetching food details:', error);
+    });
+}
 function showFoodDetail(id){
     showMain();
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));

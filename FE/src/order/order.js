@@ -229,8 +229,7 @@ function getFunctionButton(list){
                   html = `<a onclick="showOrderDetails(${order.id})" >DETAILS</a>`
              else
                  html = `<a class="receiveOrder" data-id="${order.id}" onclick="updateOrderStatus(${order.id})">UPDATE STATUS |</a>
-                                    <a class="cancelOrder" onclick="cancelStatus(${order.id})" >HỦY ĐƠN |</a>
-                                    <a class="deleteOrder" onClick="deleteOrder(${order.id})" >XÓA |</a>
+                                    <a class="cancelOrder" onclick="cancelStatus(${order.id})" >CANCEL |</a>
                                     <a onclick="showOrderDetails(${order.id})" >DETAILS</a>`
              document.getElementById("function-bar-"+order.id).innerHTML = html;
     }
