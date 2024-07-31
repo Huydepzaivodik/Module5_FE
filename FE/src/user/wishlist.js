@@ -98,7 +98,7 @@
                                                     <div class="empty__wrap">
                                                         <span class="empty__big-text">EMPTY</span>
                                                         <span class="empty__text-1">No items found in your wishlist.</span>
-                                                        <a class="empty__redirect-link btn--e-brand" href="shop-side-version-2.html">CONTINUE SHOPPING</a>
+                                                        <a class="empty__redirect-link btn--e-brand" onclick="showFood()">CONTINUE SHOPPING</a>
                                                     </div>
                                                 </div>
                                             </div>
