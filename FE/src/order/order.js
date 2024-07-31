@@ -231,7 +231,7 @@ function getFunctionButton(list){
                  html = `<a class="receiveOrder" data-id="${order.id}" onclick="updateOrderStatus(${order.id})">UPDATE STATUS |</a>
                                     <a class="cancelOrder" onclick="cancelStatus(${order.id})" >CANCEL |</a>
                                     <a onclick="showOrderDetails(${order.id})" >DETAILS</a>`
-             document.getElementById("function-bar-"+order.id).innerHTML = html;
+             document.getElementById("function-bar-"+order.id).innerHTML = html;66666666666666666666666666666666666666666666666666666666666666
     }
 }
 function OrderList(list) {
