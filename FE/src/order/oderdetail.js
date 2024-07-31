@@ -6,12 +6,7 @@ function showOrderDetails(id){
         }
     }
     axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response) => {
-        axios.get(`http://localhost:8080/orders/order`,{
-            params: {
-                order_id: id,
-                shop_id: response.data.id
-            }
-        }, getAuth()).then((response1) => {
+        axios.get(`http://localhost:8080/orders/order?order_id=${id}&shop_id=${response.data.id}`, getAuth()).then((response1) => {
             let order = response1.data;
             console.log(order)
             let foodTakeStatus = getFoodTakeStatus(order.status, order.foodTakeStatus);

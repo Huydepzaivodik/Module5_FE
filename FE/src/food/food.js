@@ -2606,20 +2606,15 @@ function showFoodDetail(id) {
             </div>
       `
         getCouponDetailsByShop(food)
+        checkWishList(food)
     });
 
 //Test in food
 }
-
-function checkWishList(food) {
-    axios.get(`http://localhost:8080/wishlist/check`, {
-        params: {
-            foodId: food.id,
-            userId: getUser().id
-        }
-    }, getAuth()).then((response) => {
-        document.getElementById("wishlist-check").innerText = `<span class="pd-detail__stock" style="border-radius: 5px; background: red; color: black">Wishlist <i class="far fa-heart"></i> </span>`
-    })
+function checkWishList(food){
+         axios.get(`http://localhost:8080/wishlist/dup?food=${food.id}&user=${getUser().id}`,getAuth()).then((response) =>{
+             document.getElementById("wishlist-check").innerHTML = `<span class="pd-detail__stock" style="border-radius: 5px; background: red; color: black">Wishlist <i class="far fa-heart"></i> </span>`
+         })
 }
 
 function getCouponDetailsByShop(food) {

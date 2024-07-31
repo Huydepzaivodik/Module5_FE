@@ -150,8 +150,6 @@ function addCoupon(){
                    showCouponUI();
              })
          })
-
-
 }
 function showCouponAddForm(){
          document.getElementById("quick-look-body").innerHTML = `
@@ -213,12 +211,14 @@ function chooseCoupon(row){
          choosenCoupons = row.cells[0].textContent;
          let table = document.getElementById("coupon-list");
          let rows = table.rows;
-         for (let i = 0; i < rows.length; i++) {
+         for (let i = 1; i < rows.length; i++) {
               rows[i].style.backgroundColor = "transparent";
-              rows[i].style.color = "#7f7f7f";
+              rows[i].style.color = "#235ac5";
+              rows[i].style.fontWeight = "normal";
          }
          row.style.backgroundColor = "#ff4500";
          row.style.color = "black"
+         row.style.fontWeight = "700";
 }
 function getCouponList(){
     axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response)=>{
@@ -230,22 +230,22 @@ function getCouponList(){
                  let start = new Date(coupon.startDate)
                  let end  = new Date(coupon.endDate)
                  if(coupon.status == true)
-                  html += `<tr style="height: 70px;" onclick="chooseCoupon(this)" >
+                  html += `<tr style="height: 70px; color: #235ac5;" onclick="chooseCoupon(this)" >
                                             <td>${coupon.id}</td>
                                             <td>${coupon.discount}</td>
                                             <td>${coupon.type}</td>
                                             <td>${start.toDateString()}</td>
                                             <td>${end.toDateString()}</td>
-                                            <td>${coupon.status}</td>
+                                            <td style="display: none">${coupon.status}</td>
                           </tr>`
                   else
-                      html += `<tr style="height: 70px; display:none ;" onclick="chooseCoupon(this)" >
+                      html += `<tr style="height: 70px; display:none ; color: #235ac5;" onclick="chooseCoupon(this)" >
                                             <td>${coupon.id}</td>
                                             <td>${coupon.discount}</td>
                                             <td>${coupon.type}</td>
                                             <td>${start.toDateString()}</td>
                                             <td>${end.toDateString()}</td>
-                                            <td>${coupon.status}</td>
+                                            <td style="display: none">${coupon.status}</td>
                           </tr>`
             }
             document.getElementById("coupon-list").innerHTML += html;
@@ -256,6 +256,44 @@ function deleteCoupon(){
          axios.delete(`http://localhost:8080/coupons/${choosenCoupons}`,getAuth()).then(function(response){
               showCouponUI();
          })
+}
+function editCoupon(id){
+    let amount  = +document.getElementById('discount-amount').value;
+    let type = document.getElementById('coupon-type').value;
+    console.log(amount )
+    if(type == "percent" && (amount > 100 || amount < 1)){
+        document.getElementById("discount-amount").style = "border: 1px solid red; width: 100%";
+        document.getElementById("coupon-type").style = "border: 1px solid red; width: 100%";
+        return;
+    }
+    let start = document.getElementById("start-date").valueAsDate;
+    let end = document.getElementById("end-date").valueAsDate;
+    if(end < start){
+        document.getElementById("start-date").style = "border: 1px solid red; width: 100%";
+        document.getElementById("end-date").style = "border: 1px solid red; width: 100%";
+        return;
+    }
+    let quantity = document.getElementById("quantity-coupon").value
+    if(quantity < 0){
+        document.getElementById("quantity-coupon").style = "border: 1px solid red; width: 100%";
+        return;
+    }
+    axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response)=>{
+        let coupon = {
+            id: id,
+            type: type,
+            status: true,
+            startDate: start,
+            endDate: end,
+            quantity: quantity,
+            discount: amount,
+            shop: response.data
+        }
+        axios.post("http://localhost:8080/coupons",coupon,getAuth()).then((response)=>{
+            alert("ADDING SUCCESS");
+            showCouponUI();
+        })
+    })
 }
 function showEditForm(){
     axios.get(`http://localhost:8080/coupons/${choosenCoupons}`,getAuth()).then(function(response){
@@ -304,7 +342,7 @@ function showEditForm(){
 
                                                 <input class="input-text input-text--primary-style" type="text" id="quantity-coupon" data-bill="" style="width: 100%" value="${coupon.quantity}"></div>                                                              
                                             <div class="u-s-m-b-15">
-                                                <button class="btn btn--e-transparent-brand-b-2" type="submit" style="width: 100%; height: 50px;" onclick="saveCoupon()">SAVE</button></div>                                      
+                                                <button class="btn btn--e-transparent-brand-b-2" type="submit" style="width: 100%; height: 50px;" onclick="editCoupon()">SAVE EDIT</button></div>                                      
                                          </div>
                                  </div>             
                                  </div>
@@ -347,31 +385,31 @@ function showCouponUI(){
                     <div class="modal-body" id="quick-look-body">
                         <div class="row">
                             <button class="btn dismiss-button fas fa-times" type="button" data-dismiss="modal" style="color: black" id="close-coupon-modal"></button>
-                            <div class="col-lg-3" style="border-right: 1px solid black">
-                                 <h4 style="text-align: center; padding: 20px">COUPON MANAGE</h4>
+                            <div class="col-lg-3" >
+                                 <h4 style="text-align: center; padding: 20px; color: orangered" >COUPON MANAGE</h4>
                                  <div class="u-s-m-b-8">
-                                      <button class="btn btn--e-white-brand" onclick="showCouponAddForm()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa">CREATE NEW COUPON</button>
+                                      <button class="btn btn--e-white-brand" onclick="showCouponAddForm()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa; background: tomato">CREATE NEW COUPON</button>
                                  </div>
                                  <div class="u-s-m-b-8">
-                                      <button class="btn btn--e-white-brand" onclick="showEditForm()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa">EDIT COUPON</button>
+                                      <button class="btn btn--e-white-brand" onclick="showEditForm()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa; background: tomato">EDIT COUPON</button>
                                  </div>
                                  <div class="u-s-m-b-8">
-                                      <button class="btn btn--e-white-brand" onclick="deleteCoupon()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa">DELETE COUPON</button>
+                                      <button class="btn btn--e-white-brand" onclick="deleteCoupon()" style="height: 40px; width: 100%; border: 1px solid #aaaaaa; background: tomato" >DELETE COUPON</button>
                                  </div>
                                 
                             </div>   
                             <div class="col-lg-9">
                                 <div class="gl-inline">
                                       <div class="u-s-m-b-8" style="display: flex; align-content: center">
-                                                     <label for="type">TYPE:</label>
-                                                     <select class="select-box select-box--transparent-b-2" id="type" onchange="sortCoupon()">
+                                                     <label for="type" style="color: black">TYPE:</label>
+                                                     <select class="select-box select-box--transparent-b-2" id="type" onchange="sortCoupon()" >
                                                         <option selected value="default">SELECT TYPE</option>
                                                         <option value="percent">PERCENT</option>
                                                         <option value="minus">MINUS</option>                                                     
                                  </select></div>
                                       <div class="u-s-m-b-8" style="display: flex; align-content: center">
-                                                     <label for="status">STATUS:</label>
-                                                     <select class="select-box select-box--transparent-b-2" id="status" onchange="sortCoupon()">
+                                                     <label for="status" style="color: black">STATUS:</label>
+                                                     <select class="select-box select-box--transparent-b-2" id="status" onchange="sortCoupon()" >
                                                         <option selected value="true">SELECT STATUS</option>
                                                         <option value="false">DISABLE</option>
                                                         <option value="true">ENABLE</option>                                                     
@@ -379,7 +417,7 @@ function showCouponUI(){
                                 </div>
                                 <div style="overflow: auto; height: 400px">
                                     <table style="width: 100%; border-collapse: collapse;" id="coupon-list"> 
-                                    <thead> <tr>
+                                    <thead> <tr style="color: black; font-weight: bold;">
                                             <td>ID</td>
                                             <td>DISCOUNT</td>
                                             <td>TYPE</td>

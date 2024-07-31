@@ -63,8 +63,8 @@ function searchOrder() {
             addOrderEventListeners(response1.data);
             document.getElementById("order-search-type").value = type;
             chooseSearchType();
-            getAllOrderStatus(orders)
             getBorderColorByStatus()
+            getAllOrderStatus(orders)
         })
     })
 }
@@ -84,7 +84,7 @@ function getBorderColorByStatus(){
             color = "greenyellow"
         else if(status_type=="CANCEL")
             color = "red"
-        document.getElementById(orders[i].id).style ="border: 1px solid " + color;
+        document.getElementById(orders[i].id).style ="background: #C8C8C8 ;border-radius: 15px;border: 5px solid " + color;
     }
 }
 function chooseSearchType(){
@@ -231,7 +231,7 @@ function getFunctionButton(list){
                  html = `<a class="receiveOrder" data-id="${order.id}" onclick="updateOrderStatus(${order.id})">UPDATE STATUS |</a>
                                     <a class="cancelOrder" onclick="cancelStatus(${order.id})" >CANCEL |</a>
                                     <a onclick="showOrderDetails(${order.id})" >DETAILS</a>`
-             document.getElementById("function-bar-"+order.id).innerHTML = html;66666666666666666666666666666666666666666666666666666666666666
+             document.getElementById("function-bar-"+order.id).innerHTML = html;
     }
 }
 function OrderList(list) {
@@ -252,8 +252,8 @@ function OrderList(list) {
                             <div class="row">
                                 <div class="col-lg-3" id="order-status">
                                 </div>
-                                <div class="col-lg-9 col-md-12">
-                                    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+                                <div class="col-lg-9 col-md-12" >
+                                    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30" style="background: lightgrey">
                                         <div class="dash__pad-2">
                                             <h1 class="dash__h1 u-s-m-b-14">My Orders</h1>
                                             <div class="m-order u-s-m-b-30">
@@ -287,7 +287,7 @@ function OrderList(list) {
                                                 </div>
                                                </div>
                                             </div>
-                                            <div class="m-order__list">
+                                            <div class="m-order__list" style="background: lightgrey">
     `;
 
     for (let i = 0; i < list.length; i++) {
@@ -296,12 +296,12 @@ function OrderList(list) {
         let displayButtons = order.status ? 'style="display: none;"' : '';
         let displayButtons1 = order.cancelStatus ? 'style="display: none;"' : '';
         html += `
-                <div class="m-order__get" status-type="${order.status}" id="${order.id}">
+                <div class="m-order__get" status-type="${order.status}" id="${order.id}" >
                     <div class="manage-o__header u-s-m-b-30">
                         <div class="dash-l-r">
                             <div>
                                 <div class="manage-o__text-2 u-c-secondary">Order #${order.id}</div>
-                                <div class="manage-o__text u-c-silver">${order.date}</div>
+                                <div class="manage-o__text u-c-silver" style="color: black !important;">${new Date(order.date).toDateString()}</div>
                             </div>
                             <div>
                                 <div class="dash__link dash__link--brand" id="function-bar-${order.id}">
@@ -312,9 +312,7 @@ function OrderList(list) {
                     </div>
                     <div class="manage-o__description">
                         <div class="description__container">
-                            <div class="description__img-wrap">
-                                <img class="u-img-fluid" src="images/product/electronic/product3.jpg" alt="">
-                            </div>
+                           
                             <div class="description-title">Coupon: ${order.coupons[0].type.toUpperCase()} ${order.coupons[0].discount}</div>
                         </div>
                         <div class="description__info-wrap">
