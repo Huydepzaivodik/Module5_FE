@@ -1,0 +1,17 @@
+0000000000000000000000000000000000000000 fa6b8be4bab857415b9ea0567584a78157d0f1cd NguyenMinhHoi <hoin1999999@gmail.com> 1721801982 +0700	clone: from https://github.com/Huydepzaivodik/Module5_FE
+fa6b8be4bab857415b9ea0567584a78157d0f1cd 6aeee913e721261140bf3cab8d5adfe1cd9ce980 NguyenMinhHoi <hoin1999999@gmail.com> 1721801998 +0700	merge origin/Long: Merge made by the 'ort' strategy.
+6aeee913e721261140bf3cab8d5adfe1cd9ce980 d2dadcb337945e0b559aa4ccf18f2b83e9876b5d NguyenMinhHoi <hoin1999999@gmail.com> 1722153174 +0700	commit: update coupon manage, create order
+d2dadcb337945e0b559aa4ccf18f2b83e9876b5d 35d07fedee0095ce1eff258403c35b7ed0add3ec NguyenMinhHoi <hoin1999999@gmail.com> 1722153197 +0700	checkout: moving from main to hoi
+35d07fedee0095ce1eff258403c35b7ed0add3ec ec11b18ca19ada05d2b4bfea0d3c128a191d951a NguyenMinhHoi <hoin1999999@gmail.com> 1722153214 +0700	checkout: moving from hoi to Long
+ec11b18ca19ada05d2b4bfea0d3c128a191d951a d2dadcb337945e0b559aa4ccf18f2b83e9876b5d NguyenMinhHoi <hoin1999999@gmail.com> 1722153224 +0700	checkout: moving from Long to main
+d2dadcb337945e0b559aa4ccf18f2b83e9876b5d ec11b18ca19ada05d2b4bfea0d3c128a191d951a NguyenMinhHoi <hoin1999999@gmail.com> 1722153239 +0700	checkout: moving from main to Long
+ec11b18ca19ada05d2b4bfea0d3c128a191d951a b5a2d256eeda083ffb41c482b68ae9284e24e737 NguyenMinhHoi <hoin1999999@gmail.com> 1722153246 +0700	checkout: moving from Long to Huy
+b5a2d256eeda083ffb41c482b68ae9284e24e737 35d07fedee0095ce1eff258403c35b7ed0add3ec NguyenMinhHoi <hoin1999999@gmail.com> 1722153252 +0700	checkout: moving from Huy to hoi
+35d07fedee0095ce1eff258403c35b7ed0add3ec d2dadcb337945e0b559aa4ccf18f2b83e9876b5d NguyenMinhHoi <hoin1999999@gmail.com> 1722153262 +0700	checkout: moving from hoi to main
+d2dadcb337945e0b559aa4ccf18f2b83e9876b5d d2dadcb337945e0b559aa4ccf18f2b83e9876b5d NguyenMinhHoi <hoin1999999@gmail.com> 1722251573 +0700	reset: moving to HEAD
+d2dadcb337945e0b559aa4ccf18f2b83e9876b5d 35d07fedee0095ce1eff258403c35b7ed0add3ec NguyenMinhHoi <hoin1999999@gmail.com> 1722251862 +0700	checkout: moving from main to hoi
+35d07fedee0095ce1eff258403c35b7ed0add3ec d2dadcb337945e0b559aa4ccf18f2b83e9876b5d NguyenMinhHoi <hoin1999999@gmail.com> 1722251879 +0700	checkout: moving from hoi to main
+d2dadcb337945e0b559aa4ccf18f2b83e9876b5d d2dadcb337945e0b559aa4ccf18f2b83e9876b5d NguyenMinhHoi <hoin1999999@gmail.com> 1722253546 +0700	checkout: moving from main to main
+d2dadcb337945e0b559aa4ccf18f2b83e9876b5d d2dadcb337945e0b559aa4ccf18f2b83e9876b5d NguyenMinhHoi <hoin1999999@gmail.com> 1722253812 +0700	reset: moving to HEAD
+d2dadcb337945e0b559aa4ccf18f2b83e9876b5d cb32c6c84c09507078c5da6c66c67f037308ea94 NguyenMinhHoi <hoin1999999@gmail.com> 1722262560 +0700	commit: update
+cb32c6c84c09507078c5da6c66c67f037308ea94 35d07fedee0095ce1eff258403c35b7ed0add3ec NguyenMinhHoi <hoin1999999@gmail.com> 1722262660 +0700	checkout: moving from main to hoi

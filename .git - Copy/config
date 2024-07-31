@@ -1,0 +1,24 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[submodule]
+	active = .
+[remote "origin"]
+	url = https://github.com/Huydepzaivodik/Module5_FE
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
+[branch "hoi"]
+	remote = origin
+	merge = refs/heads/hoi
+[branch "Long"]
+	remote = origin
+	merge = refs/heads/Long
+[branch "Huy"]
+	remote = origin
+	merge = refs/heads/Huy

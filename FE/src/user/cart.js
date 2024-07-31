@@ -33,6 +33,73 @@ function showMiniCart(){
 `
         getList();
 }
+function turnOffAddressEdit(){
+        document.getElementById("address-edit-modal").style = "display:none; opacity:1"
+}
+function editAddress(){
+        let address = document.getElementById("new-address").value;
+        axios.get(`http://localhost:8080/users/${getUser().id}`,getAuth()).then((response)=>{
+                let data = response.data;
+                data.address = address;
+                axios.put(`http://localhost:8080/users/${getUser().id}`,data,getAuth()).then((response)=>{
+                      turnOffAddressEdit();
+                      document.getElementById("new-address").value = "";
+                })
+                document.getElementById("use-default").onclick = function(){
+                        document.getElementById("f-cart-note-1").toggleAttribute("disabled");
+                        if(document.getElementById("use-default").checked)
+                                axios.get(`http://localhost:8080/users/${getUser().id}`,getAuth()).then((response)=>{
+                                        let data = response.data;
+                                        document.getElementById("f-cart-note-1").value = data.address;
+                                })
+                        else{
+                                document.getElementById("f-cart-note-1").value = "";
+                        }
+                }
+        })
+}
+function showAddressEdit(){
+        if(document.getElementById("address-edit-modal") == null)
+         document.getElementById("app-content").innerHTML += `<!--====== Newsletter Subscribe Modal ======-->
+        <div class="modal fade new-l" id="address-edit-modal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content modal--shadow">
+
+                    <button class="btn new-l__dismiss fas fa-times" type="button" data-dismiss="modal" onclick="turnOffAddressEdit()"></button>
+                    <div class="modal-body">
+                        <div class="row u-s-m-x-0">
+                            <div class="col-lg-12 new-l__col-2">
+                                <div class="new-l__section u-s-m-t-30">
+                                    <div class="u-s-m-b-8 new-l--center">
+                                        <h3 class="new-l__h3">EDIT ADDRESS</h3>
+                                    </div>
+                                    <div class="u-s-m-b-30 new-l--center">
+                                        <p class="new-l__p1">Edit your default address</p>
+                                    </div>
+                                    <div class="new-l__form">
+                                        <div class="u-s-m-b-15">
+                                            <label for="default-address" style="color:black;">DEFAULT ADDRESS</label>
+                                            <input class="news-l__input" type="text" placeholder="E-mail Address" id="default-address" disabled>
+                                            <label for="new-address" style="color: black">NEW ADDRESS</label>
+                                            <input class="news-l__input" type="text" placeholder="E-mail Address" id="new-address"></div>
+                                        <div class="u-s-m-b-15">
+                                            <button class="btn btn--e-brand-b-1" type="submit" onclick="editAddress()">CHANGE</button></div>
+                                            <button class="btn btn--e-brand-b-2" type="submit" onclick="turnOffAddressEdit()">CANCEL</button></div>
+                                    </div>                                 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`
+        console.log(getUser().id)
+        axios.get(`http://localhost:8080/users/${getUser().id}`,getAuth()).then((response)=>{
+                let data = response.data;
+                console.log(data)
+                document.getElementById("default-address").value = data.address;
+        })
+        document.getElementById("address-edit-modal").style = "display: block; opacity: 1"
+}
 function showCart(){
         document.getElementById('app-content').innerHTML = `<div class="u-s-p-b-60">
                 <!--====== Section Intro ======-->
@@ -132,7 +199,93 @@ function showCart(){
                         </div>
                     </div>
                 </div>
-            </div>`
+            </div>
+                            <div class="section__content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 u-s-m-b-30">
+                                <div class="f-cart">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-6 u-s-m-b-30">
+                                            <div class="f-cart__pad-box" style="border: 1px solid #888888; border-radius: 25px;">
+                                                <h2 class="gl-h1">DELIVERY</h2>
+                                                <div class="u-s-m-b-30">
+                                                     <select class="select-box select-box--transparent-b-2" id="delivery-select">
+                                                        <option selected>SELECT DELIVERY</option>
+                                                        <option value="1">GRAB</option>
+                                                        <option value="2">SHOPPE</option>                                                     
+                                                        <option value="3">BE</option>                                                     
+                                                     </select>
+                                                </div>                                               
+                                                <div class="gl-inline">
+                                                        <div><h2 class="gl-h1">ADDRESS</h2></div>                                                                                                               
+                                                </div>
+                                                <span class="gl-text u-s-m-b-30">Enter your destination or choose your one to get a shipping estimate.</span>
+                                                <div class="u-s-m-b-30">
+                                                    <div style="display: flex; justify-content: space-around; align-items: center">
+                                                        <div><input type="checkbox" class="radio-box" id="use-default">
+                                                        <label for="use-default" style="font-size: 10px">USING DEFAULT ADDRESS</label></div>
+                                                        <a class="ship-b__edit btn--e-transparent-platinum-b-2" onclick="showAddressEdit()">Edit</a>
+                                                    </div>
+                                                    <!--====== Select Box ======-->
+                                                    <label for="f-cart-note-1"></label><textarea class="text-area text-area--primary-style" id="f-cart-note-1"></textarea>
+                                                    <!--===== End - Select Box ======-->
+                                                </div>
+                   
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 u-s-m-b-30" >
+                                            <div class="f-cart__pad-box" style="border: 1px solid #888888; border-radius: 25px">
+                                                <h2 class="gl-h1">NOTE</h2>
+
+                                                <span class="gl-text u-s-m-b-30">Add Special Note About Your Product</span>
+                                                <div>
+                                                    <label for="f-cart-note"></label><textarea class="text-area text-area--primary-style" id="f-cart-note"></textarea></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 u-s-m-b-30" >
+                                            <div class="f-cart__pad-box" style="border: 1px solid black; border-radius: 25px">
+                                                <div class="u-s-m-b-30">
+                                                    <table class="f-cart__table">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>SHIPPING</td>
+                                                                <td id="shipping-cost"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>SUBTOTAL</td>
+                                                                <td id="food-cost"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>GRAND TOTAL</td>
+                                                                <td id="total-cost"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div>
+                                                    <button class="btn btn--e-brand-b-2" type="submit" onclick="createOrder()"> ORDER </button></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+`
+        document.getElementById("use-default").onclick = function(){
+                document.getElementById("f-cart-note-1").toggleAttribute("disabled");
+                if(document.getElementById("use-default").checked)
+                axios.get(`http://localhost:8080/users/${getUser().id}`,getAuth()).then((response)=>{
+                        let data = response.data;
+                        console.log(data);
+                        document.getElementById("f-cart-note-1").value = data.address;
+                })
+                else{
+                        document.getElementById("f-cart-note-1").value = "";
+                }
+        }
         getList()
 }
 
@@ -178,11 +331,68 @@ function deleteAll(){
                         "Authorization": `Bearer ${currentUser.accessToken}`
                 }
         }
-        axios.post('http://localhost:8080/cart/deleteAll',currentUser.id,auth).then((response) =>{
-                alert(response.data);
+        axios.delete(`http://localhost:8080/cart/deleteAll/${currentUser.id}`,auth).then((response) =>{
         })
 }
+function getCouponsByFood(food_id,shop_id){
+         axios.get(`http://localhost:8080/coupons/shop/${shop_id}`,getAuth()).then((response) =>{
+                 let data = response.data;
+                 let html = "";
+                 for (let i = 0; i < data.length; i++){
+                         html  += `<option value="${data[i].id}">${String(data[i].type).toUpperCase()} ${String(data[i].discount).toUpperCase()}</option>`
+                 }
+                 document.getElementById("coupon-"+food_id).innerHTML += html;
+         })
+}
+function getFoodsSameShop(food){
+        for(let i = 0 ; i < data.food.length; i++){
+                let a  = data.food[i];
+                html += `
+                        <tr>
+                        <td>
+                                <div class="table-p__box">
+                                        <div class="table-p__img-wrap">
 
+                                                <img class="u-img-fluid" src="${a.image}" alt=""></div>
+                                        <div class="table-p__info">
+
+                                                            <span class="table-p__name">
+
+                                                                <a href="product-detail.html">${a.name}</a></span>
+                                        </div>
+                                </div>
+                        </td>                      
+                                <span class="table-p__price">${a.price} VND</span></td>
+                        <td>
+                                <div class="table-p__input-counter-wrap">
+
+                                        <!--====== Input Counter ======-->
+                                        <div class="input-counter">
+
+                                                <span class="input-counter__minus fas fa-minus" onclick="minusQuantity(${a.id})"></span>
+
+                                                <input class="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000" id="${a.id}">
+
+                                                <span class="input-counter__plus fas fa-plus" onclick="plusQuantity(${a.id})"></span>
+                                        <!--====== End - Input Counter ======-->
+                                </div>
+                        </td>
+                        <td>
+                                <div class="table-p__del-wrap">
+
+                                        <a class="far fa-trash-alt table-p__delete-link" onclick="deleteCart(${a.id})"></a></div>
+                        </td>
+                        </tr>
+                                 `
+        }
+}
+function chooseShop(id){
+        let shops = document.getElementsByClassName("choose-shop");
+        for (let i = 0; i < shops.length;i++){
+                if(shops[i].getAttribute("data-shop") != id)
+                 shops[i].checked = false;
+        }
+}
 function getList(){
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
         if(currentUser == null) return;
@@ -196,7 +406,6 @@ function getList(){
                 let data = response.data;
                 console.log(data.food)
                 document.getElementById("cart-number").innerHTML = data.food.length;
-
                 if(data.food.length == 0){
                         if(document.getElementById("cart-container") != null){
                                 document.getElementById("cart-container").innerHTML = `
@@ -224,7 +433,6 @@ function getList(){
             </div>
                 `
                         }
-
                         document.getElementById("cart-container-mini").innerHTML = `
                     <div class="u-s-p-y-60">
                         <div class="section__content">
@@ -258,8 +466,7 @@ function getList(){
                                                                 <img class="u-img-fluid" src="${a.image}" alt=""></a></div>
                                                         <div class="mini-product__info-wrapper">
 
-                                                           
-
+                                                          
                                                             <span class="mini-product__name">
 
                                                                 <a href="#" onclick="showFoodDetail(${a.id})">${a.name}</a></span>
@@ -274,16 +481,62 @@ function getList(){
                         }
                 document.getElementById("cart-container-mini").innerHTML = html;
                 html = "";
-                for(let i = 0 ; i < data.food.length; i++){
-                        let a  = data.food[i];
-                        console.log("ok " + i)
-                        html += `
-                                         <tr>
+                let index=  0;
+                for (index = 0; index < data.food.length;index++){
+                        let item = [];
+                        let first = index;
+                        if(data.food.length == 1){
+                                item.push(data.food[0]);
+                        }else
+                        for (let j = index; j < data.food.length;j++){
+                                console.log(j)
+                                if(j < data.food.length-1){
+                                        if(data.food[j].shop.id == data.food[j+1].shop.id){
+                                                item.push(data.food[j]);
+                                                item.push(data.food[j+1]);
+                                                index += 2;
+                                        }else{
+                                                item.push(data.food[j]);
+                                                index++;
+                                        }
+                                }else if(j + 1 > data.food.length){
+                                        if(data.food[j].shop.id == data.food[j+1].shop.id){
+                                               item.push(data.food[j]);
+                                               index++;
+                                        }
+                                }
+                        }
+                        let a  = data.food[first];
+                                html += `
+                        <tr style="height: 30px !important; width: 20px; border-bottom: 1px solid black">
+                        <td>
+                                <div class="table-p__box">
+                                        <div class="table-p__img-wrap">
+                                                <input type="checkbox"  class="select-box select-box--primary-style choose-shop" data-shop="${a.shop.id}" onclick="chooseShop(${a.shop.id})">
+                                                <img class="u-img-fluid" src="${a.shop.image}" alt="" style="border-radius: 999px; height: 50px; width: 50px"></div>
+                                        <div class="table-p__info">
+
+                                                            <span class="table-p__name">
+
+                                                                <a href="product-detail.html">${a.shop.name}</a></span>
+                                        </div>
+                                </div>
+                        </td>
+                        <td>
+                                <label class="gl-label" for="shipping-country">COUPON</label><select class="select-box select-box--primary-style" id="coupon-${a.id}">
+                                                        <option selected > SELECT COUPON</option></select></td>
+                        </tr>
+                                 `
+                                getCouponsByFood(a.id,a.shop.id)
+                        for(let j = 0 ; j < item.length; j++){
+                                let a  = item[j];
+                                html += `
+                        <tr>
                         <td>
                                 <div class="table-p__box">
                                         <div class="table-p__img-wrap">
 
-                                                <img class="u-img-fluid" src="${a.image}" alt=""></div>
+                                                <img class="u-img-fluid" src="${a.image}" alt="" style="height: 120px"></div>
                                         <div class="table-p__info">
 
                                                             <span class="table-p__name">
@@ -291,10 +544,12 @@ function getList(){
                                                                 <a href="product-detail.html">${a.name}</a></span>
                                         </div>
                                 </div>
-                        </td>
+                        </td>   
+                        <td>                   
+                                <span class="table-p__price">${a.price} VND</span></td>
+                                
                         <td>
-                                <span class="table-p__price">${a.price}</span></td>
-                        <td>
+                       
                                 <div class="table-p__input-counter-wrap">
 
                                         <!--====== Input Counter ======-->
@@ -313,12 +568,154 @@ function getList(){
 
                                         <a class="far fa-trash-alt table-p__delete-link" onclick="deleteCart(${a.id})"></a></div>
                         </td>
-                </tr>
+                        </tr>
                                  `
+                        }
 
                 }
                 document.getElementById("cart-container").innerHTML = html;
 
-
         })
+}
+function createOrder(){
+        let foods = []
+        let orderProduct = []
+        let shop_index = -1;
+        let shop = document.getElementsByClassName("choose-shop");
+        let address = document.getElementById("f-cart-note-1").value;
+        let delivery = document.getElementById("delivery-select").value;
+        let note = document.getElementById("f-cart-note").value;
+        for (let i = 0; i < shop.length; i++){
+                if(shop[i].checked)
+                        shop_index = shop[i].getAttribute("data-shop");
+        }
+        if(shop_index == -1 || address == "" || delivery == "" || note == ""){
+                alert("Please done fill all the information")
+                return;
+        }
+        axios.get(`http://localhost:8080/cart/${getUser().id}`,getAuth()).then((response) =>{
+                foods = response.data.food;
+                let coupons = [];
+                for (let i = 0; i < foods.length; i++){
+                        if(foods[i].shop.id == shop_index) {
+                                let quantity = parseInt(document.getElementById(foods[i].id).value);
+                                foods[i].quantity = quantity;
+                                let coupon;
+                                if (document.getElementById("coupon-" + foods[i].id) != null) {
+                                        coupon = document.getElementById("coupon-" + foods[i].id).value;
+                                        console.log(quantity)
+                                        coupons.push({
+                                                id: coupon
+                                        });
+                                }
+                                orderProduct.push({
+                                        quantity: quantity,
+                                        orderProductPK: {
+                                                food: foods[i]
+                                        }
+                                })
+                        }
+                }
+
+                let order = {
+                        user: getUser(),
+                        shippingAddress: address,
+                        foods: orderProduct,
+                        delivery: {
+                                id: delivery
+                        },
+                        coupons: coupons,
+                        note: note,
+                        status: "PENDING"
+                }
+                axios.post("http://localhost:8080/orders",order,getAuth()).then((response) => {
+                        alert("ORDER SUCCESS")
+                        showMiniCart()
+                        showCart()
+                        deleteAll();
+                })
+        })
+
+}
+function showCheckOut(){
+         document.getElementById("app-content").innerHTML = `
+                                  <div class="section__content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="checkout-msg-group">
+                                    <div class="msg u-s-m-b-30">
+
+                                        <span class="msg__text">Returning customer?
+
+                                            <a class="gl-link" href="#return-customer" data-toggle="collapse">Click here to login</a></span>
+                                        <div class="collapse" id="return-customer" data-parent="#checkout-msg-group">
+                                            <div class="l-f u-s-m-b-16">
+
+                                                <span class="gl-text u-s-m-b-16">If you have an account with us, please log in.</span>
+                                                <div class="l-f__form">
+                                                    <div class="gl-inline">
+                                                        <div class="u-s-m-b-15">
+
+                                                            <label class="gl-label" for="login-email">E-MAIL *</label>
+
+                                                            <input class="input-text input-text--primary-style" type="text" id="login-email" placeholder="Enter E-mail"></div>
+                                                        <div class="u-s-m-b-15">
+
+                                                            <label class="gl-label" for="login-password">PASSWORD *</label>
+
+                                                            <input class="input-text input-text--primary-style" type="text" id="login-password" placeholder="Enter Password"></div>
+                                                    </div>
+                                                    <div class="gl-inline">
+                                                        <div class="u-s-m-b-15">
+
+                                                            <button class="btn btn--e-transparent-brand-b-2" type="submit">LOGIN</button></div>
+                                                        <div class="u-s-m-b-15">
+
+                                                            <a class="gl-link" href="lost-password.html">Lost Your Password?</a></div>
+                                                    </div>
+
+                                                    <!--====== Check Box ======-->
+                                                    <div class="check-box">
+
+                                                        <input type="checkbox" id="remember-me">
+                                                        <div class="check-box__state check-box__state--primary">
+
+                                                            <label class="check-box__label" for="remember-me">Remember Me</label></div>
+                                                    </div>
+                                                    <!--====== End - Check Box ======-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="msg">
+
+                                        <span class="msg__text">Have a coupon?
+
+                                            <a class="gl-link" href="#have-coupon" data-toggle="collapse">Click Here to enter your code</a></span>
+                                        <div class="collapse" id="have-coupon" data-parent="#checkout-msg-group">
+                                            <div class="c-f u-s-m-b-16">
+
+                                                <span class="gl-text u-s-m-b-16">Enter your coupon code if you have one.</span>
+                                                <div class="c-f__form">
+                                                    <div class="u-s-m-b-16">
+                                                        <div class="u-s-m-b-15">
+
+                                                            <label for="coupon"></label>
+
+                                                            <input class="input-text input-text--primary-style" type="text" id="coupon" placeholder="Coupon Code"></div>
+                                                        <div class="u-s-m-b-15">
+
+                                                            <button class="btn btn--e-transparent-brand-b-2" type="submit">APPLY</button></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>              
+         `
 }

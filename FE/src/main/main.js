@@ -1,4 +1,4 @@
-showMain();
+
 
 function showMain() {
 
@@ -154,8 +154,8 @@ function showMain() {
 
 
             <!--====== Nav 2 ======-->
-            <nav class="secondary-nav-wrapper">
-                <div class="container">
+            <nav class="secondary-nav-wrapper" >
+                <div class="container" id="nav-bar">
 
                     <!--====== Secondary Nav ======-->
                     <div class="secondary-nav">
@@ -1160,11 +1160,12 @@ function showMain() {
                                     </li>
                                     <li>
 
-                                        <a href="shop-side-version-2.html">VALUE OF THE DAY</a></li>
+                                        <a onClick="showOrder()">SHOW ORDER</a></li>
                                     <li>
 
                                         <a onClick="showFood()">SHOW FOOD</a></li>
                                 </ul>
+                            
                                 <!--====== End - List ======-->
                             </div>
                             <!--====== End - Menu ======-->
@@ -1191,7 +1192,7 @@ function showMain() {
                                         <a onclick="showMain()"><i class="fas fa-home u-c-brand"></i></a></li>
                                     <li>
 
-                                        <a href="wishlist.html"><i class="far fa-heart"></i></a></li>
+                                        <a onclick="showWishlist()"><i class="far fa-heart"></i></a></li>
                                     <li class="has-dropdown" id="mini-cart" >
 
                                         <a class="mini-cart-shop-link"><i class="fas fa-shopping-bag"></i>
