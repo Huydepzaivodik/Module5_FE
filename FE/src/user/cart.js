@@ -1,5 +1,3 @@
-
-
 function showMiniCart(){
         document.getElementById("mini-cart").innerHTML =`
                                             
@@ -210,7 +208,7 @@ function showCart(){
                                             <div class="f-cart__pad-box" style="border: 1px solid #888888; border-radius: 25px;">
                                                 <h2 class="gl-h1">DELIVERY</h2>
                                                 <div class="u-s-m-b-30">
-                                                     <select class="select-box select-box--transparent-b-2" id="delivery-select">
+                                                     <select class="select-box select-box--transparent-b-2" id="delivery-select" onchange="calculatePrice()">
                                                         <option selected>SELECT DELIVERY</option>
                                                         <option value="1">GRAB</option>
                                                         <option value="2">SHOPPE</option>                                                     
@@ -288,17 +286,62 @@ function showCart(){
         }
         getList()
 }
-
+function calculatePrice(){
+        const deliveries = [
+                {
+                        value: 1,
+                        cost:  30000
+                }
+        ]
+        let delivery = document.getElementById("delivery-select").value;
+        let ship_cost = 0;
+        if (delivery != ""){
+                for (let i = 0; i < deliveries.length; i++){
+                        if(delivery == deliveries[i].value)
+                                ship_cost = deliveries[i].cost;
+                }
+        }
+        document.getElementById("shipping-cost").innerText = ship_cost;
+        let index = 0;
+        let shops = document.getElementsByClassName("choose-shop");
+        for (let i = 0; i < shops.length;i++){
+                if(shops[i].checked)
+                        index = shops[i].getAttribute("data-shop");
+        }
+        let foods = document.getElementsByClassName("foods-"+index);
+        let subtotal = 0;
+        let quantity = 0;
+        let coupon_index = 0;
+        for (let i = 0; i < foods.length;i++){
+                 if(i == 0) coupon_index = foods[i].id;
+                 subtotal += parseInt(foods[i].getAttribute("price-date")) * foods[i].value;
+                 quantity++;
+        }
+        document.getElementById("food-cost").innerText = subtotal;
+        let total = subtotal + ship_cost;
+        let coupon = document.getElementById("coupon-"+coupon_index);
+        if(coupon.value != "default") {
+                let c = document.getElementById("coupon-number-"+coupon.value);
+                if(c.getAttribute("type") == "minus")
+                        total -=  parseInt(c.getAttribute("discount"))*quantity;
+                else
+                        total -= subtotal * (100 / parseInt(c.getAttribute("discount")));
+                if(total < 0) total = 0;
+        }
+        document.getElementById("total-cost").innerText = total;
+}
 function plusQuantity(id){
          let quantity  = +document.getElementById(id).value;
          quantity++;
-        document.getElementById(id).value = quantity;
+         document.getElementById(id).value = quantity;
+         calculatePrice()
 }
 function minusQuantity(id){
         let quantity  = +document.getElementById(id).value;
         if(quantity == 0) return;
         quantity--;
         document.getElementById(id).value = quantity;
+        calculatePrice()
 }
 function deleteCart(id){
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -335,63 +378,23 @@ function deleteAll(){
         })
 }
 function getCouponsByFood(food_id,shop_id){
-         axios.get(`http://localhost:8080/coupons/shop/${shop_id}`,getAuth()).then((response) =>{
+         let str = shop_id + '-' + getUser().id
+         axios.get(`http://localhost:8080/coupons/user/${str}`,getAuth()).then((response) =>{
                  let data = response.data;
                  let html = "";
                  for (let i = 0; i < data.length; i++){
-                         html  += `<option value="${data[i].id}">${String(data[i].type).toUpperCase()} ${String(data[i].discount).toUpperCase()}</option>`
+                         html  += `<option value="${data[i].id}" type="${data[i].type}" discount="${data[i].discount}" id="coupon-number-${data[i].id}">${String(data[i].type).toUpperCase()} ${String(data[i].discount).toUpperCase()}</option>`
                  }
                  document.getElementById("coupon-"+food_id).innerHTML += html;
          })
-}
-function getFoodsSameShop(food){
-        for(let i = 0 ; i < data.food.length; i++){
-                let a  = data.food[i];
-                html += `
-                        <tr>
-                        <td>
-                                <div class="table-p__box">
-                                        <div class="table-p__img-wrap">
-
-                                                <img class="u-img-fluid" src="${a.image}" alt=""></div>
-                                        <div class="table-p__info">
-
-                                                            <span class="table-p__name">
-
-                                                                <a href="product-detail.html">${a.name}</a></span>
-                                        </div>
-                                </div>
-                        </td>                      
-                                <span class="table-p__price">${a.price} VND</span></td>
-                        <td>
-                                <div class="table-p__input-counter-wrap">
-
-                                        <!--====== Input Counter ======-->
-                                        <div class="input-counter">
-
-                                                <span class="input-counter__minus fas fa-minus" onclick="minusQuantity(${a.id})"></span>
-
-                                                <input class="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000" id="${a.id}">
-
-                                                <span class="input-counter__plus fas fa-plus" onclick="plusQuantity(${a.id})"></span>
-                                        <!--====== End - Input Counter ======-->
-                                </div>
-                        </td>
-                        <td>
-                                <div class="table-p__del-wrap">
-
-                                        <a class="far fa-trash-alt table-p__delete-link" onclick="deleteCart(${a.id})"></a></div>
-                        </td>
-                        </tr>
-                                 `
-        }
 }
 function chooseShop(id){
         let shops = document.getElementsByClassName("choose-shop");
         for (let i = 0; i < shops.length;i++){
                 if(shops[i].getAttribute("data-shop") != id)
-                 shops[i].checked = false;
+                        shops[i].checked = false;
         }
+        calculatePrice()
 }
 function getList(){
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -523,8 +526,8 @@ function getList(){
                                 </div>
                         </td>
                         <td>
-                                <label class="gl-label" for="shipping-country">COUPON</label><select class="select-box select-box--primary-style" id="coupon-${a.id}">
-                                                        <option selected > SELECT COUPON</option></select></td>
+                                <label class="gl-label" for="shipping-country">COUPON</label><select class="select-box select-box--primary-style" id="coupon-${a.id}" onchange="calculatePrice()">
+                                                        <option selected value="default"> SELECT COUPON</option></select></td>
                         </tr>
                                  `
                                 getCouponsByFood(a.id,a.shop.id)
@@ -557,7 +560,7 @@ function getList(){
 
                                                 <span class="input-counter__minus fas fa-minus" onclick="minusQuantity(${a.id})"></span>
 
-                                                <input class="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000" id="${a.id}">
+                                                <input class="input-counter__text input-counter--text-primary-style foods-${a.shop.id}" type="text" value="1" data-min="1" data-max="1000" id="${a.id}" price-date="${a.price}">
 
                                                 <span class="input-counter__plus fas fa-plus" onclick="plusQuantity(${a.id})"></span>
                                         <!--====== End - Input Counter ======-->
@@ -565,13 +568,11 @@ function getList(){
                         </td>
                         <td>
                                 <div class="table-p__del-wrap">
-
                                         <a class="far fa-trash-alt table-p__delete-link" onclick="deleteCart(${a.id})"></a></div>
                         </td>
                         </tr>
                                  `
                         }
-
                 }
                 document.getElementById("cart-container").innerHTML = html;
 
@@ -603,7 +604,6 @@ function createOrder(){
                                 let coupon;
                                 if (document.getElementById("coupon-" + foods[i].id) != null) {
                                         coupon = document.getElementById("coupon-" + foods[i].id).value;
-                                        console.log(quantity)
                                         coupons.push({
                                                 id: coupon
                                         });
@@ -636,86 +636,4 @@ function createOrder(){
                 })
         })
 
-}
-function showCheckOut(){
-         document.getElementById("app-content").innerHTML = `
-                                  <div class="section__content">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div id="checkout-msg-group">
-                                    <div class="msg u-s-m-b-30">
-
-                                        <span class="msg__text">Returning customer?
-
-                                            <a class="gl-link" href="#return-customer" data-toggle="collapse">Click here to login</a></span>
-                                        <div class="collapse" id="return-customer" data-parent="#checkout-msg-group">
-                                            <div class="l-f u-s-m-b-16">
-
-                                                <span class="gl-text u-s-m-b-16">If you have an account with us, please log in.</span>
-                                                <div class="l-f__form">
-                                                    <div class="gl-inline">
-                                                        <div class="u-s-m-b-15">
-
-                                                            <label class="gl-label" for="login-email">E-MAIL *</label>
-
-                                                            <input class="input-text input-text--primary-style" type="text" id="login-email" placeholder="Enter E-mail"></div>
-                                                        <div class="u-s-m-b-15">
-
-                                                            <label class="gl-label" for="login-password">PASSWORD *</label>
-
-                                                            <input class="input-text input-text--primary-style" type="text" id="login-password" placeholder="Enter Password"></div>
-                                                    </div>
-                                                    <div class="gl-inline">
-                                                        <div class="u-s-m-b-15">
-
-                                                            <button class="btn btn--e-transparent-brand-b-2" type="submit">LOGIN</button></div>
-                                                        <div class="u-s-m-b-15">
-
-                                                            <a class="gl-link" href="lost-password.html">Lost Your Password?</a></div>
-                                                    </div>
-
-                                                    <!--====== Check Box ======-->
-                                                    <div class="check-box">
-
-                                                        <input type="checkbox" id="remember-me">
-                                                        <div class="check-box__state check-box__state--primary">
-
-                                                            <label class="check-box__label" for="remember-me">Remember Me</label></div>
-                                                    </div>
-                                                    <!--====== End - Check Box ======-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="msg">
-
-                                        <span class="msg__text">Have a coupon?
-
-                                            <a class="gl-link" href="#have-coupon" data-toggle="collapse">Click Here to enter your code</a></span>
-                                        <div class="collapse" id="have-coupon" data-parent="#checkout-msg-group">
-                                            <div class="c-f u-s-m-b-16">
-
-                                                <span class="gl-text u-s-m-b-16">Enter your coupon code if you have one.</span>
-                                                <div class="c-f__form">
-                                                    <div class="u-s-m-b-16">
-                                                        <div class="u-s-m-b-15">
-
-                                                            <label for="coupon"></label>
-
-                                                            <input class="input-text input-text--primary-style" type="text" id="coupon" placeholder="Coupon Code"></div>
-                                                        <div class="u-s-m-b-15">
-
-                                                            <button class="btn btn--e-transparent-brand-b-2" type="submit">APPLY</button></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>              
-         `
 }

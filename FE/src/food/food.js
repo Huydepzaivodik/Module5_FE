@@ -2465,7 +2465,6 @@ function addToWishlist(id) {
     });
 }
 function showFoodDetail(id){
-    showMain();
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let auth = {
         headers: {
@@ -2484,14 +2483,14 @@ function showFoodDetail(id){
                             <div class="pd-breadcrumb u-s-m-b-30">
                                 <ul class="pd-breadcrumb__list">
                                     <li class="has-separator">
-
                                         <a href="#" onclick="showMain()" style="font-size: 13px">Home</a></li>
                                     <li class="has-separator">
 
                                         <a href="#" onclick="showFood()" style="font-size: 13px">Food</a></li>
                                     <li class="is-marked">
-
                                         <a style="font-size: 13px" href="#">${food.name}</a></li>
+                                        <li  id="wishlist-check">
+                                        </li>
                                 </ul>
                             </div>
                             <!--====== End - Product Breadcrumb ======-->
@@ -2530,8 +2529,9 @@ function showFoodDetail(id){
 
                                         <span class="pd-detail__stock">${food.quantity} in stock</span>
 
-                                    
+                                    </div>
                                 </div>
+                                
                                 <div class="u-s-m-b-15">
 
                                     <span class="pd-detail__preview-desc">${food.description}</span></div>
@@ -2540,9 +2540,19 @@ function showFoodDetail(id){
 
                                         <span class="pd-detail__click-wrap"><i class="far fa-heart u-s-m-r-6"></i>
 
-                                            <a href="#">Add to Wishlist</a>
+                                            <a href="#" onclick="addToWishlist()" n>Add to Wishlist</a>
 
                                             <span class="pd-detail__click-count">(222)</span></span></div>
+                                </div>
+                                
+                                <div class="u-s-m-b-15">
+                                    <div class="pd-detail__inline">
+
+                                        <span class="pd-detail__stock" style="border-radius: 5px; background: #3b5c9f; color: black">COUPONS: </span>
+                                        <div id="coupon-list" style="margin-top: 10px ; width: 50%">
+                                             
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="u-s-m-b-15">
                                     <div class="pd-detail__inline">
@@ -2609,7 +2619,28 @@ function showFoodDetail(id){
                 </div>
             </div>
       `
+        getCouponDetailsByShop(food)
     });
 
 //Test in food
+}
+function checkWishList(food){
+         axios.get(`http://localhost:8080/wishlist/check`,{
+             params: {
+                 foodId: food.id,
+                 userId: getUser().id
+             }
+         },getAuth()).then((response) =>{
+             document.getElementById("wishlist-check").innerText = `<span class="pd-detail__stock" style="border-radius: 5px; background: red; color: black">Wishlist <i class="far fa-heart"></i> </span>`
+         })
+}
+function getCouponDetailsByShop(food){
+    axios.get(`http://localhost:8080/coupons/shop/${food.shop.id}`,getAuth()).then((response)=>{
+        let data = response.data;
+        let html = "";
+        for (let i=0; i< data.length; i++) {
+            html +=  `<span class="pd-detail__stock" style="border-radius: 30px; background: #a0a0a0; color: black; margin-top: 5px ">${String(data[i].type).toUpperCase()} ${String(data[i].discount).toUpperCase()} </span>`
+        }
+        document.getElementById("coupon-list").innerHTML = html;
+    })
 }
