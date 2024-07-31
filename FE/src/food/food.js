@@ -2483,14 +2483,14 @@ function showFoodDetail(id){
                             <div class="pd-breadcrumb u-s-m-b-30">
                                 <ul class="pd-breadcrumb__list">
                                     <li class="has-separator">
-
                                         <a href="#" onclick="showMain()" style="font-size: 13px">Home</a></li>
                                     <li class="has-separator">
 
                                         <a href="#" onclick="showFood()" style="font-size: 13px">Food</a></li>
                                     <li class="is-marked">
-
                                         <a style="font-size: 13px" href="#">${food.name}</a></li>
+                                        <li  id="wishlist-check">
+                                        </li>
                                 </ul>
                             </div>
                             <!--====== End - Product Breadcrumb ======-->
@@ -2624,8 +2624,17 @@ function showFoodDetail(id){
 
 //Test in food
 }
+function checkWishList(food){
+         axios.get(`http://localhost:8080/wishlist/check`,{
+             params: {
+                 foodId: food.id,
+                 userId: getUser().id
+             }
+         },getAuth()).then((response) =>{
+             document.getElementById("wishlist-check").innerText = `<span class="pd-detail__stock" style="border-radius: 5px; background: red; color: black">Wishlist <i class="far fa-heart"></i> </span>`
+         })
+}
 function getCouponDetailsByShop(food){
-
     axios.get(`http://localhost:8080/coupons/shop/${food.shop.id}`,getAuth()).then((response)=>{
         let data = response.data;
         let html = "";
