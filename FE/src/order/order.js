@@ -15,59 +15,241 @@ function showOrder() {
                 getBorderColorByStatus();
                 orders = list;
                 getAllOrderStatus(orders)
-
+                getMegaFilter()
+                getFunctionButton(list)
         });
     })
-
 }
-function searchOrder() {
-         let target = document.getElementById("target-search").value;
-         let type = document.getElementById("order-search-type").value;
 
-    axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response)=>{
-        axios.get(`http://localhost:8080/orders/search`,{
-            params: {
-                shop_id: response.data.id,
-                type: type,
-                target: target
-            }
-        },getAuth()).then((response1) => {
-            console.log("VAO DAY !")
-            console.log(response1.data)
-            let html = "";
-            if(response1.data.length > 0){
-                 html = OrderList(response1.data);
-            }else{
-                 html = ` <div class="u-s-p-y-60">
-                <!--====== Section Content ======-->
-                <div class="section__content">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 u-s-m-b-30">
-                                <div class="empty">
-                                    <div class="empty__wrap">
-                                        <span class="empty__big-text">HAVE NO RESULT</span>
+function filterOrders(){
+         let str = document.getElementById("filter-main-search").value;
+         console.log(str)
+         let ship = document.getElementsByClassName("shipping-list");
+         let ship_ids = [];
+         for (let i = 0; i < ship.length; i++){
+             if(ship[i].checked){
+                 ship.push(ship[i].id);
+             }
+         }
+         let ship_str = "";
+         for (let i = 0; i < ship_ids.length;i++){
+              if(i == 0)
+                   ship_str += ship_ids[0];
+              else
+                   ship_str += "-"+ ship_ids[i];
+         }
+         let start_date = document.getElementById("start-date").value;
+         let end_date = document.getElementById("end-date").value;
+         console.log(new Date().getTime())
+         if(end_date == ""){
+                     end_date = new Date();
+                     if(start_date == ""){
+                         start_date  = new Date();
+                         start_date.setFullYear(end_date.getFullYear() - 1);
+                     }
+                     end_date = end_date.getTime();
+                     start_date = start_date.getTime();
+         }
+         if(ship_str == "") ship_str = "1"
+         let url = `http://localhost:8080/orders/filter?str=${str}&ships=${ship_str}&start=${start_date}&end=${end_date}`;
+         axios.get(url,getAuth()).then((response) =>{
+             let list = response.data;
+             console.log(list)
 
-                                        <span class="empty__text-1">No orders found on your order's shop.</span>
+             let foods = document.getElementsByClassName("food-list");
+             let food_indexes = []
+             for (let i = 0; i < foods.length; i++){
+                      if (foods[i].checked)
+                                food_indexes.push(foods[i].id);
+             }
+             let coupons = document.getElementsByClassName("coupon-list");
+             let coupon_indexes = []
+             for (let i = 0; i < coupons.length;i++){
+                        if(coupons[i].checked)
+                                     coupon_indexes.push(coupons[i].id);
+             }
+             let length = list.length;
+             let show_list = []
+             for (let i = 0; i < length;i++){
+                 console.log("i"+i)
+                  axios.get(`http://localhost:8080/orders/${list[i].id}`,getAuth()).then((response1) => {
+                        let order = response1.data
+                        if(food_indexes.length != 0){
+                            for (let  j = 0; j < order.foods.length;j++){
+                                console.log()
+                                for (let k = 0; k < food_indexes.length; k++){
+                                    console.log(order.foods[j].orderProductPK.food.id)
+                                    console.log("order: "+order.id)
+                                    console.log(food_indexes[k])
+                                     if(order.foods[j].orderProductPK.food.id == food_indexes[k]){
+                                         show_list.push(order);
+                                         console.log("vao day 1111")
+                                         break;
+                                     }
+                                }
+                            }
+                        }
+                        for (let  j = 0; j < coupon_indexes.length;j++){
+                                  if(coupon_indexes[j] == order.coupons[0].id)
+                                           show_list.push(order)
+                        }
+                        console.log(show_list)
+                      if(i == length-1){
+                          console.log(show_list)
+                          document.getElementById("app-content").innerHTML = OrderList(show_list)
+                          getBorderColorByStatus();
+                          getAllOrderStatus(orders)
+                          getFunctionButton(show_list)
+                      }
+                  }).then(
+                  )
 
-                                        <a class="empty__redirect-link btn--e-brand" href="#" onclick="showOrder()">Back To Orders</a></div>
+
+             }
+         })
+}
+
+function getMegaFilter(){
+    document.getElementById("main").innerHTML += `
+    <div class="shop-a" id="side-filter">
+            <div class="shop-a__wrap">
+                <div class="shop-a__inner gl-scroll">
+                    <div class="shop-w-master">
+                        <h1 class="shop-w-master__heading u-s-m-b-30"><i class="fas fa-filter u-s-m-r-8"></i>
+
+                            <span>FILTERS</span></h1>
+                        <div class="shop-w-master__sidebar">
+                            <div class="u-s-m-b-30">
+                                <div class="shop-w">
+                                     <label for="main-search"></label>
+                                     <input class="input-text input-text--border-radius input-text--style-1" type="text" id="filter-main-search" placeholder="Search" style="font-size: 16px">
+                                </div>
+                            </div>
+                            <div class="u-s-m-b-30">
+                                <div class="shop-w">
+                                    <div class="shop-w__intro-wrap">
+                                        <h1 class="shop-w__h">FOODS</h1>
+
+                                        <span class="fas fa-minus shop-w__toggle collapsed" data-target="#foods" data-toggle="collapse"></span>
+                                    </div>
+                                    <div class="shop-w__wrap collapse" id="foods">
+                                        <ul class="shop-w__category-list gl-scroll" id="foods-filter-list">
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="u-s-m-b-30">
+                                <div class="shop-w">
+                                    <div class="shop-w__intro-wrap">
+                                        <h1 class="shop-w__h">COUPONS</h1>
+
+                                        <span class="fas fa-minus shop-w__toggle collapsed" data-target="#s-category" data-toggle="collapse"></span>
+                                    </div>
+                                    <div class="shop-w__wrap collapse" id="s-category">
+                                        <ul class="shop-w__category-list gl-scroll" id="coupon-filter-list">
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="u-s-m-b-30">
+                                <div class="shop-w">
+                                    <div class="shop-w__intro-wrap">
+                                        <h1 class="shop-w__h">SHIPPING</h1>
+
+                                        <span class="fas fa-minus shop-w__toggle collapsed" data-target="#s-shipping" data-toggle="collapse"></span>
+                                    </div>
+                                    <div class="shop-w__wrap collapse" id="s-shipping">
+                                        <ul class="shop-w__list gl-scroll">
+                                            <li>
+                                                <div class="check-box">
+
+                                                    <input class="shipping-list" type="checkbox" id="grab-shipping" value="1">
+                                                    <div class="check-box__state check-box__state--primary">
+                                                        <label class="check-box__label" for="grab-shipping">Grab</label></div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                 <div class="check-box">
+                                                    <input class="shipping-list" type="checkbox" id="shoppe-shipping">
+                                                    <div class="check-box__state check-box__state--primary">
+                                                        <label class="check-box__label" for="shoppe-shipping">Shoppe</label></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="u-s-m-b-30">
+                                <div class="shop-w">
+                                    <div class="shop-w__intro-wrap">
+                                        <h1 class="shop-w__h">DATE</h1>
+
+                                        <span class="fas fa-minus shop-w__toggle collapsed" data-target="#s1-shipping" data-toggle="collapse"></span>
+                                    </div>
+                                    <div class="shop-w__wrap collapse " id="s1-shipping">
+                                        <ul class="shop-w__list gl-scroll">
+                                            <li>
+                                                <div>
+                                                    <label class="gl-label" for="start-date">START TIME</label>
+
+                                                    <input class="input-text input-text--primary-style" type="date" id="start-date" data-bill="" style="width: 100%">
+                                                    <label class="gl-label" for="end-date">END TIME</label>
+
+                                                    <input class="input-text input-text--primary-style" type="date" id="end-date" data-bill="" style="width: 100%">
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="u-s-m-b-30">
+                                <div class="shop-w">
+                                     <button class="btn btn--e-white-brand" style="width: 100%; padding: 25px;font-size: 25px ; border: 1px solid brown; border-radius: 25px" onclick="filterOrders()">FILTER</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--====== End - Section Content ======-->
-            </div>`
+            </div>
+        </div>`
+    axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response)=>{
+        axios.get(`http://localhost:8080/coupons/shop/${response.data.id}`,getAuth()).then((response1) =>{
+            let data = response1.data;
+            let list = ""
+            for (let i = 0; i < data.length; i++){
+                list  += `<li>
+                                                 <div class="check-box">
+                                                    <input class="coupon-list" type="checkbox" id="${data[i].id}">
+                                                    <div class="check-box__state check-box__state--primary">
+                                                        <label class="check-box__label" for="${data[i].id}">${data[i].type.toUpperCase()} ${data[i].discount}</label></div>
+                                                </div>
+                          </li>`
             }
-            document.getElementById("app-content").innerHTML = html;
-            addOrderEventListeners(response1.data);
-            document.getElementById("order-search-type").value = type;
-            chooseSearchType();
-            getBorderColorByStatus()
-            getAllOrderStatus(orders)
+            document.getElementById("coupon-filter-list").innerHTML = list;
+        })
+    })
+    axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response)=>{
+        axios.get(`http://localhost:8080/foods/shop/${response.data.id}`,getAuth()).then((response1) =>{
+            let data = response1.data;
+            let list = ""
+            for (let i = 0; i < data.length; i++){
+                list  += `<li>
+                                                 <div class="check-box" >                                                
+                                                     <input class="food-list" type="checkbox" id="${data[i].id}">                                                  
+                                                    <div class="check-box__state check-box__state--primary" style="margin-left: 40px;display: flex;justify-content: center; align-items: center">
+                                                        <img src="${data[i].image}" class="u-img-fluid" style="width: 40px; height: 40px;border-radius: 999px">
+                                                        <label class="check-box__label" for="${data[i].id}">${data[i].name}</label>
+                                                    </div>
+                                                </div>
+                          </li>`
+            }
+            document.getElementById("foods-filter-list").innerHTML = list;
         })
     })
 }
+
 function getBorderColorByStatus(){
     let orders = document.getElementsByClassName("m-order__get");
     for (let i = 0; i < orders.length; i++) {
@@ -86,67 +268,9 @@ function getBorderColorByStatus(){
             color = "red"
         document.getElementById(orders[i].id).style ="background: #C8C8C8 ;border-radius: 15px;border: 5px solid " + color;
     }
+    // getFunctionButton(list)
 }
-function chooseSearchType(){
-      let type =  document.getElementById("order-search-type").value;
-      let html = "";
-      switch (type.toLowerCase()) {
-          case "status":{
-                html = `<select class="select-box select-box--primary-style" id="target-search" onchange="searchOrder()" style="background: ">
-                                                        <option selected>Choose Status</option>
-                                                        <option value="PENDING" >PENDING</option>
-                                                        <option value="DOING" >DOING</option>
-                                                        <option value="SHIPPING" >SHIPPING</option>
-                                                        <option value="DONE" >DONE</option>
-                         </select>
-                     `
-              break;
-          }
-          case "id":{
-               html = `<label for="main-search"></label>
 
-                            <input class="input-text input-text--border-radius input-text--style-1" type="text" id="target-search" placeholder="Search">
-
-                            <button class="btn btn--icon fas fa-search main-search-button" onclick="searchOrder()"></button>`
-              break;
-          }
-          case "coupon":{
-              axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response)=>{
-                  console.log()
-                  axios.get(`http://localhost:8080/coupons/shop/${response.data.id}`,getAuth()).then((response1) =>{
-                      let data = response1.data;
-                      console.log(data)
-                      let html = `<select class="select-box select-box--primary-style" id="target-search" onchange="searchOrder()">
-                              <option selected>Choose Coupon</option>
-                      </select>`
-                      let list = ""
-                      for (let i = 0; i < data.length; i++){
-                          list  += `<option value="${data[i].id}">${String(data[i].type).toUpperCase()} ${String(data[i].discount).toUpperCase()}</option>`
-                      }
-                      document.getElementById("search-form").innerHTML = html;
-                      document.getElementById("target-search").innerHTML += list;
-                      return;
-                  })
-              })
-              break;
-          }
-           default: {
-               html = `<label for="main-search"></label>
-
-                            <input class="input-text input-text--border-radius input-text--style-1" type="text" id="target-search" placeholder="Search">
-
-                            <button class="btn btn--icon fas fa-search main-search-button" onclick="searchOrder()"></button>`
-               break;
-          }
-      }
-      document.getElementById("search-form").innerHTML = html;
-}
-function updateStatus(status){
-         let sts = ["PENDING", "DOING","SHIPPING","DONE"];
-         let index = sts.indexOf(status.toUpperCase());
-         if(index < sts.length-1)
-              return sts[index+1];
-}
 function getNumberByStatus(status,list){
          let sum = 0;
          console.log(status)
@@ -214,8 +338,8 @@ function getAllOrderStatus(list){
                                             </ul>
                                         </div>
 `
-    getFunctionButton(list)
 }
+
 function getFunctionButton(list){
          for (let i = 0 ; i< list.length ; i++){
              let  order = list[i];
@@ -223,7 +347,7 @@ function getFunctionButton(list){
              if(order.status == "CANCEL")
                  html = ""
              else if(order.status != "PENDING")
-                 html = `<a class="receiveOrder" data-id="${order.id}" onclick="updateOrderStatus(${order.id})">UPDATE STATUS |</a>                                 
+                 html = `<a class="receiveOrder" data-id="${order.id}" onclick="updateOrderStatus(${order.id})">UPDATE STATUS |</a>
                  <a onclick="showOrderDetails(${order.id})" >DETAILS</a>`
              else if(order.status == "DONE" || order.status == "SHIPPING")
                   html = `<a onclick="showOrderDetails(${order.id})" >DETAILS</a>`
@@ -233,6 +357,17 @@ function getFunctionButton(list){
                                     <a onclick="showOrderDetails(${order.id})" >DETAILS</a>`
              document.getElementById("function-bar-"+order.id).innerHTML = html;
     }
+}
+
+function showMegaFilter(){
+         if(!document.getElementById("side-filter").classList.contains("is-open"))
+                 document.getElementById("side-filter").classList.add("is-open");
+         else
+                 document.getElementById("side-filter").classList.remove("is-open")
+    if(!document.getElementById("filter-button").classList.contains("is-active"))
+        document.getElementById("filter-button").classList.add("is-active");
+    else
+        document.getElementById("filter-button").classList.remove("is-active")
 }
 function OrderList(list) {
     let canceledOrdersCount = getCanceledOrdersCount(list);
@@ -259,35 +394,17 @@ function OrderList(list) {
                                             <div class="m-order u-s-m-b-30">
                                              <div class="row">
                                                 <div class="m-order__select-wrapper col-lg-6">
-                                                    <label class="u-s-m-r-8" for="my-order-sort">Show:</label>
-                                                    <select class="select-box select-box--primary-style" id="my-order-sort">
-                                                        <option selected>Last 5 orders</option>
-                                                        <option>Last 15 days</option>
-                                                        <option>Last 30 days</option>
-                                                        <option>Last 6 months</option>
-                                                        <option>Orders placed in 2018</option>
-                                                        <option>All Orders</option>
-                                                    </select>
+                                                    <div class="tool-style__group u-s-m-b-8">
+
+                                                           <span class="js-shop-filter-target" id="filter-button"><a onclick="showMegaFilter()">Filters</a></span>
+
+                                                    </div>                                                 
                                                 </div>                                                
-                                                <div class="m-order__select-wrapper col-lg-6">
-                                                    <label class="u-s-m-r-8" for="order-search-type">Type Of Search:</label>
-                                                    <select class="select-box select-box--primary-style" id="order-search-type" onclick="chooseSearchType()">
-                                                        <option selected>Choose Type</option>
-                                                        <option value="status">Status</option>
-                                                        <option value="id">Order Id</option>
-                                                        <option value="coupon">Coupon</option>
-                                                    </select>
-                                                    <span id="search-form">
-                                                          <label for="target-search"></label>
-
-                            <input class="input-text input-text--border-radius input-text--style-1" type="text" id="target-search" placeholder="Search">
-
-                            <button class="btn btn--icon fas fa-search main-search-button" onclick="searchOrder()"></button>
-                                                    </span>
-                                                </div>
-                                               </div>
-                                            </div>
-                                            <div class="m-order__list" style="background: lightgrey">
+                                                
+                                             </div>
+                                    </div>
+                                </div>
+                                 <div class="m-order__list" style="background: lightgrey">
     `;
 
     for (let i = 0; i < list.length; i++) {
