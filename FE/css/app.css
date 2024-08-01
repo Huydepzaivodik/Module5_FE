@@ -51,13 +51,6 @@ custom-colors, box-mode, custom-header, custom-menu, custom-logo, featured-image
  * Setup box-sizing
  */
 
-.coupon-list tr,td {
-       border: 1px solid black;
-
-}
-.coupon-list tr,td{
-       text-align: center;
-}
 
 html {
   box-sizing: border-box;
