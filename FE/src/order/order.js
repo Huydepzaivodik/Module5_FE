@@ -38,17 +38,20 @@ function filterOrders(){
               else
                    ship_str += "-"+ ship_ids[i];
          }
-         let start_date = document.getElementById("start-date").value;
-         let end_date = document.getElementById("end-date").value;
-         console.log(new Date().getTime())
-         if(end_date == ""){
+         let start_date = document.getElementById("start-date").valueAsDate;
+         let end_date = document.getElementById("end-date").valueAsDate;
+
+         if(end_date == null){
                      end_date = new Date();
-                     if(start_date == ""){
+                     if(start_date == null){
                          start_date  = new Date();
                          start_date.setFullYear(end_date.getFullYear() - 1);
                      }
                      end_date = end_date.getTime();
                      start_date = start_date.getTime();
+         }else{
+             start_date = start_date.getTime();
+             end_date = end_date.getTime()
          }
          if(ship_str == "") ship_str = "1"
          let url = `http://localhost:8080/orders/filter?str=${str}&ships=${ship_str}&start=${start_date}&end=${end_date}`;
@@ -71,7 +74,6 @@ function filterOrders(){
              let length = list.length;
              let show_list = []
              for (let i = 0; i < length;i++){
-                 console.log("i"+i)
                   axios.get(`http://localhost:8080/orders/${list[i].id}`,getAuth()).then((response1) => {
                         let order = response1.data
                         if(food_indexes.length != 0){
@@ -83,19 +85,22 @@ function filterOrders(){
                                     console.log(food_indexes[k])
                                      if(order.foods[j].orderProductPK.food.id == food_indexes[k]){
                                          show_list.push(order);
-                                         console.log("vao day 1111")
                                          break;
                                      }
                                 }
                             }
                         }
-                        for (let  j = 0; j < coupon_indexes.length;j++){
-                                  if(coupon_indexes[j] == order.coupons[0].id)
-                                           show_list.push(order)
-                        }
-                        console.log(show_list)
-                      if(i == length-1){
-                          console.log(show_list)
+                      if(coupon_indexes.length != 0)
+                          for (let  j = 0; j < coupon_indexes.length;j++){
+                              if(coupon_indexes[j] == order.coupons[0].id){
+                                  show_list.push(order)
+                                  break;
+                              }
+                          }
+                      if(coupon_indexes.length ==0 && food_indexes.length == 0){
+                             show_list.push(order)
+                      }
+                         if(i == length-1){
                           document.getElementById("app-content").innerHTML = OrderList(show_list)
                           getBorderColorByStatus();
                           getAllOrderStatus(orders)
@@ -103,12 +108,9 @@ function filterOrders(){
                       }
                   }).then(
                   )
-
-
              }
          })
 }
-
 function getMegaFilter(){
     document.getElementById("main").innerHTML += `
     <div class="shop-a" id="side-filter">
@@ -345,7 +347,7 @@ function getFunctionButton(list){
              let  order = list[i];
              html = ""
              if(order.status == "CANCEL")
-                 html = ""
+                 html = `<a onclick="showOrderDetails(${order.id})" >DETAILS</a>`
              else if(order.status != "PENDING")
                  html = `<a class="receiveOrder" data-id="${order.id}" onclick="updateOrderStatus(${order.id})">UPDATE STATUS |</a>
                  <a onclick="showOrderDetails(${order.id})" >DETAILS</a>`

@@ -511,23 +511,22 @@ function getList(){
                         }
                         let a  = data.food[first];
                                 html += `
-                        <tr style="height: 30px !important; width: 20px; border-bottom: 1px solid black">
-                        <td>
-                                <div class="table-p__box">
-                                        <div class="table-p__img-wrap">
-                                                <input type="checkbox"  class="select-box select-box--primary-style choose-shop" data-shop="${a.shop.id}" onclick="chooseShop(${a.shop.id})">
-                                                <img class="u-img-fluid" src="${a.shop.image}" alt="" style="border-radius: 999px; height: 50px; width: 50px"></div>
-                                        <div class="table-p__info">
-
-                                                            <span class="table-p__name">
-
-                                                                <a href="product-detail.html">${a.shop.name}</a></span>
-                                        </div>
-                                </div>
+                        <tr style=" border-bottom: 1px solid black">
+                        <td>                                                             
+                                                <input type="checkbox"  class="select-box select-box--primary-style choose-shop" data-shop="${a.shop.id}" onclick="chooseShop(${a.shop.id})">                                   
+                                                                                                                          
                         </td>
-                        <td>
-                                <label class="gl-label" for="shipping-country">COUPON</label><select class="select-box select-box--primary-style" id="coupon-${a.id}" onchange="calculatePrice()">
-                                                        <option selected value="default"> SELECT COUPON</option></select></td>
+                        <td style="display: flex; justify-content: center; align-items: center">    
+                                <div>
+                                    <span class="table-p__name">
+                                                                <a href="product-detail.html">${a.shop.name}</a></span>  
+                                </div>
+                                <div style="margin-left: 100px">
+                                <label class="gl-label" for="shipping-country">COUPON</label>
+                                <select class="select-box select-box--primary-style" id="coupon-${a.id}" onchange="calculatePrice()">
+                                                        <option selected value="default"> SELECT COUPON</option></select>
+                                </div> 
+                        </td>        
                         </tr>
                                  `
                                 getCouponsByFood(a.id,a.shop.id)
@@ -535,7 +534,10 @@ function getList(){
                                 let a  = item[j];
                                 html += `
                         <tr>
-                        <td>
+                        <td style="width: 5px">                                
+                               <input type="checkbox"  class="select-box select-box--primary-style choose-shop" data-shop="${a.shop.id}" id="checkbox-${a.id}">                                   
+                        </td>
+                        <td>    
                                 <div class="table-p__box">
                                         <div class="table-p__img-wrap">
 
@@ -599,24 +601,25 @@ function createOrder(){
                 let coupons = [];
                 for (let i = 0; i < foods.length; i++){
                         if(foods[i].shop.id == shop_index) {
-                                let quantity = parseInt(document.getElementById(foods[i].id).value);
-                                foods[i].quantity = quantity;
-                                let coupon;
-                                if (document.getElementById("coupon-" + foods[i].id) != null) {
-                                        coupon = document.getElementById("coupon-" + foods[i].id).value;
-                                        coupons.push({
-                                                id: coupon
-                                        });
-                                }
-                                orderProduct.push({
-                                        quantity: quantity,
-                                        orderProductPK: {
-                                                food: foods[i]
+                                if(document.getElementById("checkbox-"+foods[i].id).checked){
+                                        let quantity = parseInt(document.getElementById(foods[i].id).value);
+                                        foods[i].quantity = quantity;
+                                        let coupon;
+                                        if (document.getElementById("coupon-" + foods[i].id) != null) {
+                                                coupon = document.getElementById("coupon-" + foods[i].id).value;
+                                                coupons.push({
+                                                        id: coupon
+                                                });
                                         }
-                                })
+                                        orderProduct.push({
+                                                quantity: quantity,
+                                                orderProductPK: {
+                                                        food: foods[i]
+                                                }
+                                        })
+                                }
                         }
                 }
-
                 let order = {
                         user: getUser(),
                         shippingAddress: address,
@@ -635,5 +638,4 @@ function createOrder(){
                         deleteAll();
                 })
         })
-
 }
