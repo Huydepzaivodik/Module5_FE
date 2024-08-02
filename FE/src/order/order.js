@@ -25,6 +25,7 @@ function filterOrders(){
          let str = document.getElementById("filter-main-search").value;
          console.log(str)
          let ship = document.getElementsByClassName("shipping-list");
+
          let ship_ids = [];
          for (let i = 0; i < ship.length; i++){
              if(ship[i].checked){
@@ -164,7 +165,6 @@ function getMegaFilter(){
                                         <ul class="shop-w__list gl-scroll">
                                             <li>
                                                 <div class="check-box">
-
                                                     <input class="shipping-list" type="checkbox" id="grab-shipping" value="1">
                                                     <div class="check-box__state check-box__state--primary">
                                                         <label class="check-box__label" for="grab-shipping">Grab</label></div>
