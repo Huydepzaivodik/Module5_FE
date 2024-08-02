@@ -1864,7 +1864,7 @@ function showMain() {
         <!--====== End - Main App ======-->
 `
 
-    showMiniCart();
+    showMiniCart()
 
 }
 
