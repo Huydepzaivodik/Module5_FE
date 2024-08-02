@@ -55,13 +55,16 @@ function showMyProfile(){
                                         </div>
                                     </div>
                                    `;
+
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
     let auth = {
         headers: {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
     }
     let userId = currentUser.id;
+
     axios.get(`http://localhost:8080/users/${userId}`,auth).then((response) => {
             let data = response.data;
             document.getElementById("u-name").innerText = data.name;
@@ -72,14 +75,17 @@ function showMyProfile(){
     })
 }
 function showMyOrder(){
-    document.getElementById('right-dashboard').innerHTML = `                                    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+    document.getElementById('right-dashboard').innerHTML = `<div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30" style="position: relative">
                                         <div class="dash__pad-2">
                                             <h1 class="dash__h1 u-s-m-b-14">My Orders</h1>
-
                                             <span class="dash__text u-s-m-b-30">Here you can see all products that have been delivered.</span>
                                             <div class="m-order u-s-m-b-30">
+                                                <div class="m-order__select-wrapper" id="orders-info">
+                                                     
+                                                </div>                                           
+                                            </div>
+                                            <div class="m-order u-s-m-b-30">
                                                 <div class="m-order__select-wrapper">
-
                                                     <label class="u-s-m-r-8" for="my-order-sort">Show:</label><select class="select-box select-box--primary-style" id="my-order-sort">
                                                         <option selected>Last 5 orders</option>
                                                         <option>Last 15 days</option>
@@ -87,7 +93,8 @@ function showMyOrder(){
                                                         <option>Last 6 months</option>
                                                         <option>Orders placed in 2018</option>
                                                         <option>All Orders</option>
-                                                    </select></div>
+                                                    </select>
+                                                </div>                                           
                                             </div>
                                             <div class="m-order__list" id="order-list" style="overflow: auto; height: 800px">
                                                                                           
@@ -97,12 +104,38 @@ function showMyOrder(){
                                     `;
     getOrderList()
 }
+function showOrdersInfo(arr){
+        document.getElementById("orders-info").innerHTML = `<div class="m-order__get" style="background: orangered; border-radius: 25px; height: 150px">
+                                                    <div class="manage-o__header u-s-m-b-30" style="border: none; display: flex; justify-content: space-around; color: whitesmoke; margin: 0 ">
+                                                         <div>
+                                                             <h3>ORDERS INFORMATION IN MONTH</h3>
+                                                         </div>
+                                                    </div>
+                                                    <div class="manage-o__header u-s-m-b-30" style="border: none; display: flex; justify-content: space-around; color: whitesmoke; ">
+                                                        <div class="dash-l-r">
+                                                            <div style="text-align: center">
+                                                                <div class="manage-o__text-2 " style="font-size: 14px">ORDERS USED</div>
+                                                                <div class="manage-o__text " style="margin-top: 5px; font-size: 18px !important;">${arr[1]}</div>
+                                                            </div>
+                                                            <div style="text-align: center">
+                                                                <div class="manage-o__text-2 " style="font-size: 14px">COUPONS USED</div>
+                                                                <div class="manage-o__text " style="margin-top: 5px; font-size: 18px !important;">${arr[0]}</div>
+                                                            </div>  
+                                                            <div style="text-align: center">
+                                                                <div class="manage-o__text-2 " style="font-size: 14px">TOTAL MONEY USED</div>
+                                                                <div class="manage-o__text " style="margin-top: 5px; font-size: 18px !important;">${arr[2]}</div>
+                                                            </div>                                                            
+                                                        </div>
+                                                    </div>                                               
+                                                </div>`
+}
 function getOrderList(){
          axios.get(`http://localhost:8080/orders/user/${getUser().id}`,getAuth()).then(function(response){
-               let data = response.data;
+               let data = response.data.orders;
+               let info = response.data.info;
                let html = ""
-             getOrderStatusDashBox(data)
-
+               getOrderStatusDashBox(data)
+               showOrdersInfo(response.data.info)
              for (let i = 0; i < data.length; i++){
                     let order = data[i];
                    html += `<div class="m-order__get">
@@ -147,6 +180,7 @@ function getOrderList(){
          })
 }
 function showEditProfile(){
+
     document.getElementById('right-dashboard').innerHTML = `<div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
                                         <div class="dash__pad-2">
                                             <h1 class="dash__h1 u-s-m-b-14">Edit Profile</h1>
@@ -262,15 +296,14 @@ function showEditProfile(){
     </div>
     `;
 
-
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let auth = {
         headers: {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
     };
-    let userId = currentUser.id;
 
+    let userId = currentUser.id;
     axios.get(`http://localhost:8080/users/${userId}`, auth).then((response) => {
         let data = response.data;
         document.getElementById("u-name").value = data.name;
@@ -298,10 +331,12 @@ function showEditProfile(){
 }
 function showUserOrderDetails(index){
     axios.get(`http://localhost:8080/orders/${index}`,getAuth()).then(function(response){
+
         let order = response.data;
         let subtotal = getTotalPrice(order);
         let coupon_discount = getCouponDiscountAmount(order.coupons[0],subtotal);
         let total = getTotalPriceAfterCoupon(order);
+
         document.getElementById('right-dashboard').innerHTML = `<h1 class="dash__h1 u-s-m-b-30">Order Details</h1>
                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                         <div class="dash__pad-2">
@@ -417,9 +452,12 @@ function showUserOrderDetails(index){
                                             </div>
                                         </div>
                                     </div>`
+
                                     let html = ``;
                                     for (let i = 0; i < order.foods.length;i++){
+
                                         let food = order.foods[i];
+
                                         html += `<div class="manage-o__description">
                                                     <div class="description__container">
                                                         <div class="description__img-wrap">
@@ -440,13 +478,16 @@ function showUserOrderDetails(index){
                                                                 <span class="manage-o__text-2 u-c-secondary">${food.quantity * food.orderProductPK.food.price}</span></span></div>
                                                     </div>
                                                 </div>`
+
                                     }
                                     document.getElementById("foods-list").innerHTML = html;
                                     if(order.status == "SHIPPING")
+
                                              document.getElementById("dashbox-info").innerHTML += `<div class="dash-l-r u-s-m-b-8">
                                                         <button class="btn btn--e-brand-b-2" style="padding: 15px 30px; font-size: 25px; border-radius: 10px" onclick="updateOrderStatus(${order.id})">RERCEIVED</button>
                                                     </div>`;
                                     else if(order.status == "PENDING" || order.status == "DOING")
+
                                         document.getElementById("dashbox-info").innerHTML += `<div class="dash-l-r u-s-m-b-8">
                                                         <button class="btn btn--e-brand-b-2" style="padding: 15px 30px; font-size: 25px; border-radius: 10px" onclick="cancelStatus(${order.id})">CANCEL</button>
                                                     </div>`;
