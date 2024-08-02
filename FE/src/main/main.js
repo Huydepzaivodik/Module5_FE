@@ -202,7 +202,7 @@ function showMain() {
                                         <a onClick="showFood()">SHOW FOOD</a></li>
                                     <li>
 
-                                        <a onClick="showFood()">BESTSELLER OF DAY</a></li>
+                                        <a onClick="showBestSeller()">BESTSELLER OF DAY</a></li>
                                     <li>
 
                                         <a onClick="showFood()">SHOW FOOD</a></li>        

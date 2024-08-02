@@ -2621,6 +2621,7 @@ function showFoodDetail(id){
       `
         getCouponDetailsByShop(food)
         checkWishList(food)
+        getSameFoodsGuess(food.shop.id)
     });
 
 //Test in food
@@ -2639,4 +2640,249 @@ function getCouponDetailsByShop(food){
         }
         document.getElementById("coupon-list").innerHTML = html;
     })
+}
+
+
+function getSameFoodsGuess(id){
+         document.getElementById("app-content").innerHTML  += `
+         <div class="u-s-p-b-90">
+                <!--====== Section Intro ======-->
+                <div class="section__intro u-s-m-b-46">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="section__text-wrap">
+                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">FOODS RECOMMEND</h1>
+
+                                    <span class="section__span u-c-grey">FOODS FROM THAT SHOP</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Intro ======-->
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="slider-fouc">
+                            <div class="owl-carousel product-slider" data-item="4" id="shop-list">
+                                                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
+            </div>
+            <div class="u-s-p-b-90">
+
+                <!--====== Section Intro ======-->
+                <div class="section__intro u-s-m-b-46">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="section__text-wrap">
+                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">BESTSELLER OF DAY</h1>
+
+                                    <span class="section__span u-c-grey">FOODS THAT ARE SOLD THE MOST DURING THE DAY</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Intro ======-->
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="slider-fouc">
+                            <div class="owl-carousel product-slider" data-item="4" id="best-list" >
+                                                                                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
+            </div>
+`
+         axios.get(`http://localhost:8080/user/foods/same/${id}`,getAuth()).then(function(response){
+             let bestseller = response.data.bestseller;
+             let shop = response.data.shop;
+             let html = ""
+             for (let i = 0; i < bestseller.length; i++){
+                 let food = bestseller[i];
+                    console.log(food)
+                      html += `<div class="u-s-m-b-30">
+                                    <div class="product-o product-o--hover-on">
+                                        <div class="product-o__wrap">
+
+                                            <a class="aspect aspect--bg-grey aspect--square u-d-block" onclick="showFoodDetail(${food.id})">
+
+                                                <img class="aspect__img" src="${food.image}" alt=""></a>
+                                            
+                                            <div class="product-o__action-wrap">
+                                                <ul class="product-o__action-list">
+                                                   
+                                                    <li>
+
+                                                        <a data-modal="modal" data-modal-id="#add-to-cart" data-tooltip="tooltip" data-placement="top" title="Add to Cart" onclick="addTocart(${food.id})"><i class="fas fa-plus-circle"></i></a></li>
+                                                    <li>
+
+                                                        <a href="wpage/user/signin.html" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${food.id})"><i class="fas fa-heart"></i></a></li>
+                                                </ul>
+                                            </div>   
+                                        </div>
+
+                                        <span class="product-o__category">
+
+                                            <a href="shop-side-version-2.html">${food.shop.name}</a></span>
+
+                                        <span class="product-o__name">
+
+                                            <a onclick="showFoodDetail(${food.id})">${food.name}</a></span>
+                                        <div class="product-o__rating gl-rating-style"></div>
+
+                                        <span class="product-o__price">${food.price}
+                                          </span>
+                                    </div>
+                                </div>`
+             }
+             document.getElementById("best-list").innerHTML = html;
+             for (let i = 0; i < shop.length; i++){
+                 let food = shop[i];
+                 console.log(food)
+                 html += `<div class="u-s-m-b-30">
+                                    <div class="product-o product-o--hover-on">
+                                        <div class="product-o__wrap">
+
+                                            <a class="aspect aspect--bg-grey aspect--square u-d-block" onclick="showFoodDetail(${food.id})">
+
+                                                <img class="aspect__img" src="${food.image}" alt=""></a>
+                                            
+                                            <div class="product-o__action-wrap">
+                                                <ul class="product-o__action-list">
+                                                   
+                                                    <li>
+
+                                                        <a data-modal="modal" data-modal-id="#add-to-cart" data-tooltip="tooltip" data-placement="top" title="Add to Cart" onclick="addTocart(${food.id})"><i class="fas fa-plus-circle"></i></a></li>
+                                                    <li>
+
+                                                        <a href="wpage/user/signin.html" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${food.id})"><i class="fas fa-heart"></i></a></li>
+                                                </ul>
+                                            </div>   
+                                        </div>
+
+                                        <span class="product-o__category">
+
+                                            <a href="shop-side-version-2.html">${food.shop.name}</a></span>
+
+                                        <span class="product-o__name">
+
+                                            <a href="product-detail.html">${food.name}</a></span>
+                                        <div class="product-o__rating gl-rating-style"></div>
+
+                                        <span class="product-o__price">${food.price}
+                                          </span>
+                                    </div>
+                                </div>`
+             }
+             document.getElementById("shop-list").innerHTML = html;
+
+             load_js();
+         })
+}
+function showBestSeller(){
+         document.getElementById("app-content").innerHTML = `            <div class="u-s-p-y-90">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="shop-p">
+                                <div class="shop-p__toolbar u-s-m-b-30">
+                                    <div class="shop-p__meta-wrap u-s-m-b-60">
+                                        <h2 style="text-align: center; color: black">BEST SELLER FOODS OF DAY</h2>
+                                       
+                                    </div>
+                                    <div class="shop-p__tool-style">
+                                        <div class="tool-style__group u-s-m-b-8">
+                                     
+                                            <span class="js-shop-grid-target">Grid</span>
+
+                                            <span class="js-shop-list-target is-active">List</span></div>
+                                      
+                                    </div>
+                                </div>
+                                <div class="shop-p__collection">
+                                    <div class="row is-list-active" id="food-list">
+                                    </div>
+                                </div>
+                                <div class="u-s-p-y-60">
+
+                                    <!--====== Pagination ======-->
+                                    <ul class="shop-p__pagination">
+                                        <li class="is-active">
+
+                                            <a href="shop-list-full.html">1</a></li>
+                                        <li>
+
+                                            <a href="shop-list-full.html">2</a></li>
+                                        <li>
+
+                                            <a href="shop-list-full.html">3</a></li>
+                                        <li>
+
+                                            <a href="shop-list-full.html">4</a></li>
+                                        <li>
+
+                                            <a class="fas fa-angle-right" href="shop-list-full.html"></a></li>
+                                    </ul>
+                                    <!--====== End - Pagination ======-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+`
+        axios.get('http://localhost:8080/user/foods/bestseller',getAuth()).then(function(response) {
+                  let bestseller = response.data;
+                  let html = ""
+                  for (let i = 0; i < bestseller.length; i++) {
+                       let item = bestseller[i];
+                       html += `                                        <div class="col-lg-3 col-md-4 col-sm-6">
+                                            <div class="product-m">
+                                                <div class="product-m__thumb">
+
+                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" onclick="showFoodDetail(${item.id})">
+
+                                                        <img class="aspect__img" src="${item.image}" alt=""></a>
+                                                    <div class="product-m__quick-look">
+
+                                                        <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
+                                                    <div class="product-m__add-cart">
+
+                                                        <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart" onclick="addTocart(${item.id})">Add to Cart</a></div>
+                                                </div>
+                                                <div class="product-m__content">
+                                                    <div class="product-m__category">
+
+                                                        <a href="shop-side-version-2.html">${item.shop.name}</a></div>
+                                                    <div class="product-m__name">
+
+                                                        <a href="product-detail.html">${item.name}</a></div>
+                                            
+                                                    <div class="product-m__price">${item.price}</div>
+                                                    <div class="product-m__hover">
+                                                        <div class="product-m__preview-description">
+
+                                                            <span>${item.description}</span></div>
+                                                        <div class="product-m__wishlist">
+
+                                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${item.id})"></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                 `
+                  }
+                  document.getElementById('food-list').innerHTML = html;
+        })
+        load_js()
 }
