@@ -432,7 +432,10 @@ function OrderList(list) {
                     <div class="manage-o__description">
                         <div class="description__container">
                            
-                            <div class="description-title">Coupon: ${order.coupons[0].type.toUpperCase()} ${order.coupons[0].discount}</div>
+                            <div class="description-title"> `
+                         if (order.coupons.length > 0) html += `Coupon: ${order.coupons[0].type.toUpperCase()} ${order.coupons[0].discount}`
+                         else html += `NO COUPON`
+                   html +=     `</div>
                         </div>
                         <div class="description__info-wrap">
                             <div>

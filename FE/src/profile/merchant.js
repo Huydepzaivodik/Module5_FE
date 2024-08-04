@@ -445,6 +445,170 @@ function showCouponUI(){
              document.getElementById("quick-look").style = "display: none; opacity: 0";
          }
 }
+function chooseTypeStats(){
+         let type = document.getElementById("stats-order-sort").value;
+         console.log(type);
+         getStatsUI(type);
+}
+function showProfitStats(){
+         document.getElementById("app-content").innerHTML = `            
+            <div class="u-s-p-b-60">
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="dash">
+                        <div >
+                            <div class="row">
+                                <div class="col-lg-3 col-md-12">
+                                      <div class="o-summary__section u-s-m-b-30" style="margin-top: 50px;margin-left: 25px">
+                                           <h3 style="text-align: center; font-size: 24px">BEST SELLER FOOD TODAY</h3>
+                                           <div class="o-summary__item-wrap gl-scroll" id="o-summary" style="background: #9D9D9D; min-height: 500px; max-height: 500px; padding: 0; border: 1px solid black; overflow: auto">
+                                                 <div class="o-card" style="background: #F8F0DF; margin: 0">
+                                                    <div class="o-card__flex" style="color: black;width: 100% !important; font-weight: bolder">
+                                                        <div class="o-card__info-wrap" style="width: 10%">
+                                                            <span class="o-card__name">
+                                                                NO</span>
+                                                        </div>
+                                                        <div class="o-card__info-wrap" style="width: 20%">
+                                                            <span class="o-card__name">
+                                                                IMAGE</span>
+                                                        </div>
+                                                        <div class="o-card__info-wrap" style="width: 35%">
+                                                            <span class="o-card__name">
+                                                                FOOD NAME</span>
+                                                        </div>
+                                                        <div class="o-card__info-wrap" style="width: 25%">
+                                                            <span class="o-card__name">QUANTITY</span>
+                                                        </div>
+                                                    </div>
+                                                 </div>
+                                                 
+                                            </div>
+                                        </div>
+                                        
+                                </div>
+                                <div class="col-lg-9 col-md-12">
+                                    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+                                        <div class="dash__pad-2">
+                                            <h1 class="dash__h1 u-s-m-b-14" style="font-size: 34px;width: 100%;text-align: center">SHOP PROFIT</h1>
+                                            <div class="m-order__select-wrapper" >
+                                                    <label class="u-s-m-r-8" for="stats-order-sort">Show:</label>
+                                                    <select class="select-box select-box--primary-style" id="stats-order-sort" onchange="chooseTypeStats()">
+                                                        <option value="month" selected>In Month</option>
+                                                        <option value="week">On Week</option>
+                                                        <option value="quarter">In Quarter</option>
+                                                        <option value="lastmonth">Last Month</option>                                                  
+                                                    </select>
+                                                </div>
+                                            <div class="m-order u-s-m-b-30" style="display: flex; ">
+                                                <div class="m-order__select-wrapper" id="orders-info" style="width: 100%">
+                                                     
+                                                </div>
+                                            </div>
+                                            <div class="m-order__list" >
+                                                 <table id="stats-list" style="width: 100%">
+                                                     <thead>
+                                                         <span class="o-card__name" style="color: orangered; font-size: 24px; font-weight: bold">ORDERS</span>
+                                                         
+                                                       <tr style="text-align: center; font-weight: bold; color: #222222">
+                                                            <td style="width: 25%">ORDER ID</td>
+                                                            <td style="width: 25%">DATE</td>
+                                                            <td style="width: 25%">DELIVERY</td>
+                                                            <td style="width: 25%">TOTAL</td>
+                                                        </tr>
+                                                     </thead>
+                                                     <tbody style="overflow: auto; max-height: 800px" id="orders-list-stats">
+                                                 </tbody> 
+                                                 </table>                                                 
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
+            </div>
+`
+    let type = "month"
+    getStatsUI(type)
+}
+function getStatsUI(type){
+    axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response) =>{
+        axios.get(`http://localhost:8080/orders/stats/${response.data.id}?type=${type}`,getAuth()).then(({data}) =>{
+            let bestseller = data.bestseller;
+            console.log("o day")
+            console.log(data.bestseller)
+            let bestsellerHtml = "";
+            for(let i = 0; i < bestseller.length; i++) {
+                bestsellerHtml += `<div class="o-card" style="background: #9D9D9D; margin: 0">
+                                                    <div class="o-card__flex" style="color: black;width: 100% !important;">
+                                                        <div class="o-card__info-wrap" style="width: 10%">
+                                                            <span class="o-card__name">
+                                                                ${i+1}</span>
+                                                        </div>
+                                                        <div class="o-card__info-wrap" style="width: 20%">
+
+                                                                <img src="${bestseller[i].image}" alt="" style="height: 50px; width: 50px">
+                                                        </div>
+                                                        <div class="o-card__info-wrap" style="width: 35%">
+                                                            <span class="o-card__name">
+                                                                ${bestseller[i].name}</span>
+                                                        </div>
+                                                        <div class="o-card__info-wrap" style="width: 25%">
+                                                            <span class="o-card__name" style="text-align: center">${bestseller[i].quantity}</span>
+                                                        </div>
+                                                    </div>
+                                                 </div>`
+            }
+            document.getElementById('o-summary').innerHTML = bestsellerHtml;
+
+            let subtotal = data.subtotal;
+            let totalCouponDiscount = data.coupon;
+            let platformDiscount = data.platformDis;
+
+            document.getElementById("orders-info").innerHTML = `<div class="m-order__get" style="background: orangered; border-radius: 25px; height: 150px; width: 100%">
+                                                    <div class="manage-o__header u-s-m-b-30" style="border: none; display: flex; justify-content: space-around; color: whitesmoke; margin: 0 ">
+                                                         <div>
+                                                             <h3>PROFIT STATS</h3>
+                                                         </div>
+                                                    </div>
+                                                    <div class="manage-o__header u-s-m-b-30" style="border: none;  color: whitesmoke; ">
+                                                        <div class="dash-l-r" style="display: flex; justify-content: space-around">
+                                                            <div style="text-align: center; width: 25%">
+                                                                <div class="manage-o__text-2 " style="font-size: 18px">REVENUE</div>
+                                                                <div class="manage-o__text " style="margin-top: 5px; font-size: 24px !important;">${String(subtotal).replace(/(.)(?=(\d{3})+$)/g, "$1.")}</div>
+                                                            </div>
+                                                            <div style="text-align: center; width: 25%">
+                                                                <div class="manage-o__text-2 " style="font-size: 18px">TOTAL COUPON DISCOUNT</div>
+                                                                <div class="manage-o__text " style="margin-top: 5px; font-size: 24px !important;">${String(totalCouponDiscount).replace(/(.)(?=(\d{3})+$)/g, "$1.")}</div>
+                                                            </div>  
+                                                            <div style="text-align: center; width: 25%">
+                                                                <div class="manage-o__text-2 " style="font-size: 18px">PLATFORM DISCOUNT</div>
+                                                                <div class="manage-o__text " style="margin-top: 5px; font-size: 24px !important;">${String(platformDiscount).replace(/(.)(?=(\d{3})+$)/g, "$1.")}</div>
+                                                            </div>                                                            
+                                                        </div>
+                                                    </div>                                               
+                                                </div>`
+            console.log(data)
+            let orders = data.orders;
+            let fullHtml = "";
+            for (let i = 0; i < orders.length; i++) {
+                let order = orders[i];
+                fullHtml += `       
+                        <tr style="text-align: center;">
+                           <td style="width: 25%">#${order.id}</td>
+                           <td style="width: 25%">${new Date(order.date).toDateString() }</td>
+                           <td style="width: 25%">${order.delivery.name}</td>
+                           <td style="width: 25%">${order.total - order.delivery.cost}</td>
+                        </tr>
+                    `;
+            }
+            document.getElementById('orders-list-stats').innerHTML = fullHtml;
+
+        })
+    })
+}
 function showMerchantUI(){
          showMain()
          document.getElementById("nav-bar").innerHTML = `
@@ -456,11 +620,11 @@ function showMerchantUI(){
                                 <ul class="ah-list ah-list--design2 ah-list--link-color-secondary">
 
                                     <li>
-
                                         <a onClick="showOrder()"> ORDER MANAGER</a></li>
                                     <li>
-
                                         <a onClick="showFood()"> FOOD MANAGER</a></li>
+                                    <li>
+                                        <a onClick="showProfitStats()"> PROFIT STATS</a></li>
                                     <li>
                                         <a onclick="showCouponUI()">COUPON MANAGER</a></li>    
                                 </ul>

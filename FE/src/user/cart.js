@@ -411,16 +411,14 @@ function chooseShop(id){
 }
 function getTotalList(){
         axios.get(`http://localhost:8080/cart/total/${getUser().id}`,getAuth()).then(function(response){
-                let index=  0;
                 let data = response.data;
-                axios.get(`http://localhost:8080/cart/shop/${getUser().id}`,getAuth()).then((response1)=>{
                           let html = ""
-                          let shop_list = response1.data;
+                          let shop_list = response.data.list_shop;
                           for (let i= 0 ; i < shop_list.length;i++){
                                let shop = data[`${shop_list[i]}`]
                                   let a  = shop[0];
                                   html += `
-                        <tr style=" border-bottom: 1px solid black">
+                        <tr style=" border: 1px solid lightgrey; box-shadow: 5px 5px 5px #888888;">
                         <td>
                                                 <input type="checkbox"  class="select-box select-box--primary-style choose-shop" data-shop="${a.shop.id}" onclick="chooseShop(${a.shop.id})">
 
@@ -486,7 +484,6 @@ function getTotalList(){
                                   }
                           }
                         document.getElementById("cart-container").innerHTML = html;
-                })
         })
 
 }
