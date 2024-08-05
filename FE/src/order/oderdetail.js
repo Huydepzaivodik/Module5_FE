@@ -140,10 +140,9 @@ function showOrderDetails(id){
                 }
             }
             let discountAmount = 0;
-            console.log("aaaaaaa"+order.coupons.length)
             if(order.coupons.length > 0)
                       discountAmount = getCouponDiscountAmount(order.coupons[0],getTotalPrice(order));
-            html += `
+                       html += `
                                                         
                                                     </select>
                                                 </div>

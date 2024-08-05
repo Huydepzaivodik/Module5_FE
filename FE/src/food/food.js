@@ -1122,6 +1122,7 @@ function showFood() {
                                 <div class="product-m">
                                     <div class="product-m__thumb">
                                      <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#" onclick="showFoodDetail(${list[i].id})">
+                                    
                                             <img class="aspect__img" src="${list[i].image}" alt=""></a>
                                         <div class="product-m__quick-look">
 
@@ -2591,7 +2592,7 @@ function showFoodDetail(id){
                                         <div class="pd-detail-inline-2">
                                        <div class="u-s-m-b-15">
                                            <div> 
-                                           <button class="btn " onclick="#" ><i class="fas fa-shopping-bag"></i> Shop</button> 
+                                           <button class="btn " onclick="showShop(${food.shop.id})" ><i class="fas fa-shopping-bag"></i> Shop</button> 
                                            </div>
                                        </div>
                                         
@@ -2640,30 +2641,42 @@ function showShop(id) {
     }
     axios.get(`http://localhost:8080/user/shops/shopDetail/${id}`, auth).then((response) => {
         let shop = response.data;
+        console.log(shop)
         axios.get(`http://localhost:8080/user/shops/${id}`, auth).then((response) => {
             let list = response.data;
             let html = `<div class="u-s-p-y-90">
     <div class="container">
         <div class="row">
-       
          <div class="col-lg-9 col-md-12">           
                 <div class="shop-p">
                     <div class="shop-p__toolbar u-s-m-b-30">
-                        <div class="shop-p__meta-wrap u-s-m-b-60">
-                            <span class="shop-p__meta-text-1">SHOP ${shop.name}</span>
-                            <div class="shop-p__meta-text-2">
-                                <span>Related Searches:</span>
-                                <a class="gl-tag btn--e-brand-shadow" href="#">men's clothing</a>
-                                <a class="gl-tag btn--e-brand-shadow" href="#">mobiles & tablets</a>
-                                <a class="gl-tag btn--e-brand-shadow" href="#">books & audible</a>
+                        <div class="shop-p__meta-wrap u-s-m-b-60" style="display: flex">
+                            <img src="${shop.image}" style="width: 60px; height: 60px;">
+                            <div class="shop-p__meta-text-2" style="margin-left: 15px">
+                                 <div>
+                                      <span class="shop-p__meta-text-1">${shop.name}</span>
+                                 </div>
+                                 <div style=" color: black;" >
+                                      <p id="total-sold"></p>
+                                 </div>
                             </div>
-                        </div>
-                        
-                        
-
+                        </div>                                            
                     <div class="shop-p__collection" id="shop-p__collection">
-                         <div class="row is-list-active">`;
-            for (let i = 0; i < list.length; i++) {
+                         <div class="row" style="margin-bottom: 100px">
+                              <div class="section__content">
+                                   <h3>SHOP COUPONS</h3>
+                                   <div class="container" style="padding: 20px">
+                                       <div class="slider-fouc">
+                                           <div class="owl-carousel product-slider" data-item="4" id="coupon-list">
+                                                                                            
+                                           </div>
+                                       </div>
+                                   </div>
+                             </div>
+                         </div>
+                         <div class="row is-list-active"><h3>SHOP FOODS</h3>`;
+                let total_sold = 0;
+                for (let i = 0; i < list.length; i++) {
                 html += `<div class="col-lg-4 col-md-6 col-sm-6">
                                             <div class="product-m">
                                                 <div class="product-m__thumb">
@@ -2698,15 +2711,31 @@ function showShop(id) {
                                                 </div>
                                             </div>
                                         </div>`
+                    total_sold += list[i].quantity;
             }
-
             html += `</div>
                         </div>`
             document.getElementById("app-content").innerHTML = html;
+            document.getElementById("total-sold").innerText = total_sold + " sold";
+
+            axios.get(`http://localhost:8080/coupons/shop/${shop.id}`,getAuth()).then(({data}) =>{
+                console.log(data)
+                let html = "";
+                for (let  i = 0 ; i < data.length;i++){
+                    let date = new Date(new Date(data[i].endDate).getMilliseconds() - new Date(data[i].startDate).getMilliseconds()).getDay();
+                    let name = getCouponName(data[i]);
+                    html += `<div class="col-lg-3 col-md-4 col-sm-6" style="border-radius: 5px; color: black; margin-top: 5px;">
+                                            <div class="pd-detail__stock" style="width: 200px; height: 50px; text-align: center; border-radius: 10px">
+                                                 <p>${name} </p>
+                                                 <span>${date} day left</span>
+                                            </div>
+                            </div>`
+                }
+                document.getElementById("coupon-list").innerHTML = html;
+                load_js()
+            })
         })
     });
-
-
 }
 function checkWishList(food){
          axios.get(`http://localhost:8080/wishlist/dup?food=${food.id}&user=${getUser().id}`,getAuth()).then((response) =>{
@@ -2724,6 +2753,12 @@ function getCouponDetailsByShop(food){
     })
 }
 
+function getCouponName(coupon){
+         if(coupon.type.toString().toUpperCase() == "PERCENT")
+                   return "DISCOUNT " + coupon.discount + "%";
+         else
+                   return "DISCOUNT " + String(coupon.discount).replace(/(.)(?=(\d{3})+$)/g, "$1.") + " VND";
+}
 
 function getSameFoodsGuess(id){
          document.getElementById("app-content").innerHTML  += `
@@ -2776,7 +2811,7 @@ function getSameFoodsGuess(id){
                 <div class="section__content">
                     <div class="container">
                         <div class="slider-fouc">
-                            <div class="owl-carousel product-slider" data-item="4" id="best-list" >
+                            <div class="owl-carousel product-slider" data-item="8" id="best-list" >
                                                                                             
                             </div>
                         </div>
@@ -2867,7 +2902,6 @@ function getSameFoodsGuess(id){
                                 </div>`
              }
              document.getElementById("shop-list").innerHTML = html;
-
              load_js();
          })
 }
@@ -2928,7 +2962,7 @@ function showBestSeller(){
                   let html = ""
                   for (let i = 0; i < bestseller.length; i++) {
                        let item = bestseller[i];
-                       html += `                                        <div class="col-lg-3 col-md-4 col-sm-6">
+                       html += `<div class="col-lg-3 col-md-4 col-sm-6">
                                             <div class="product-m">
                                                 <div class="product-m__thumb">
 
