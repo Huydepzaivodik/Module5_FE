@@ -998,7 +998,7 @@ function showShop(id) {
                                                 <span class="fas fa-minus shop-w__toggle" data-target="#s-price" data-toggle="collapse"></span>
                                             </div>
                                             <div class="shop-w__wrap collapse show" id="s-price">
-                                                <form class="shop-w__form-p">
+                                                <div class="shop-w__form-p">
                                                     <div class="shop-w__form-p-wrap">
                                                         <div>
 
@@ -1012,9 +1012,9 @@ function showShop(id) {
                                                             <input class="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max"></div>
                                                         <div>
 
-                                                            <button class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" type="submit"></button></div>
+                                                            <button class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" type="submit" onclick="filterByPriceAtShop(${id})"></button></div>
                                                     </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1045,17 +1045,12 @@ function showShop(id) {
                                         <span style="font-size: 50px; margin-top: 51px;margin-left: 20px;color: orangered" class="shop-p__meta-text-1">${shop.name}</span>
                                     </div>
                                       
-                                        <div class="shop-p__meta-text-2">
-
-                                     
-
-                                        
-
+                                        <div class="shop-p__meta-text-2">                                                                            
                                            </div>
                                     </div>
                               
                                 </div>
-                                <div class="shop-p__collection">
+                                <div class="shop-p__collection" id="shop-p__collection">
                                     <div class="row is-list-active">
 `
 
@@ -1352,6 +1347,7 @@ function filterByPrice() {
 
                                                             <button class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" onclick="filterByPrice()"></button></div>
                                                     </div>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -1467,22 +1463,101 @@ function filterByPrice() {
         });
 
 
-
     }
 
 
 }
 
-function filterFood() {
-    let shopIds = [];
-    let shop = document.getElementsByClassName("shop-name");
-    console.log(shop);
-    for (let i = 0; i < shop.length; i++) {
-        if (shop[i].checked) {
-            shopIds.push(shop[i].id);
+// function filterFood() {
+//     let shopIds = [];
+//     let shop = document.getElementsByClassName("shop-name");
+//     console.log(shop);
+//     for (let i = 0; i < shop.length; i++) {
+//         if (shop[i].checked) {
+//             shopIds.push(shop[i].id);
+//         }
+//     }
+//     console.log(shopIds);
+//
+//
+// }
+
+
+function filterByPriceAtShop(id_shop) {
+    console.log(id_shop);
+    let priceMin = document.getElementById("price-min").value;
+    let priceMax = document.getElementById("price-max").value;
+
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    //duyệt qua từng đối tượng trong mảng roles và tạo ra một mảng mới (userRoles) chỉ chứa các giá trị authority
+    let userRoles = currentUser.roles.map(role => role.authority);
+
+    console.log(userRoles);
+
+    if (userRoles.includes("ROLE_USER")) {
+        let auth = {
+            headers: {
+                "Authorization": `Bearer ${currentUser.accessToken}`
+            }
         }
+
+        axios.get(`http://localhost:8080/user/foods/searchPriceAndShopId`, {
+            params: {
+                id_shop: id_shop,
+                priceMin: priceMin,
+                priceMax: priceMax,
+            }, headers: auth.headers
+        }).then((response) => {
+            let list = response.data;
+            console.log(list)
+            let html = '';
+            if (list.length === 0) {
+                html = `<div style="font-size: 30px">No Product...</div>`;
+                document.getElementById("shop-p__collection").innerHTML = html;
+            } else {
+                html = ` <div class="row is-list-active">`
+                for (let i = 0; i < list.length; i++) {
+                    html += `  
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                                            <div class="product-m">
+                                                <div class="product-m__thumb">
+
+                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#" onclick="showFoodDetail(${list[i].id})">
+
+                                                        <img class="aspect__img" src="${list[i].image}" alt=""></a>
+                                               
+                                                    <div class="product-m__add-cart">
+
+                                                        <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart" onclick="addTocart(${list[i].id})">Add to Cart</a></div>
+                                                </div>
+                                                <div class="product-m__content">
+                                                    <div class="product-m__category">
+
+                                                        <a href="#" onclick="showFood()">Food</a></div>
+                                                    <div class="product-m__name">
+
+                                                        <a href="#">${list[i].name}</a></div>
+                                                 
+                                                    <div class="product-m__price">VND ${list[i].price}</div>
+                                                    <div class="product-m__hover">
+                                                        <div class="product-m__preview-description">
+
+                                                            <span>${list[i].description}</span></div>
+                                                        <div class="product-m__wishlist">
+
+                                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" onclick="addToWishlist(${list[i].id})" title="Add to Wishlist"></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                          `
+                }
+                html += `</div>`
+                document.getElementById("shop-p__collection").innerHTML = html;
+            }
+        })
+
+
     }
-    console.log(shopIds);
-
-
 }
