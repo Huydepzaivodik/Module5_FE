@@ -22,9 +22,12 @@ function addTocart(id){
 
 }
 function showFood() {
+    showMain();
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
     //duyệt qua từng đối tượng trong mảng roles và tạo ra một mảng mới (userRoles) chỉ chứa các giá trị authority
     let userRoles = currentUser.roles.map(role => role.authority);
+
     console.log(userRoles);
 
     if (userRoles.includes("ROLE_MERCHANT")) {
@@ -39,6 +42,7 @@ function showFood() {
             axios.get(`http://localhost:8080/foods/shop/${shop_id}`, auth).then((response) => {
                 let list = response.data;
                 let html = `
+<div class="u-s-p-y-90">
     <div class="container">
         <div class="row">
            
@@ -2624,7 +2628,85 @@ function showFoodDetail(id){
         getSameFoodsGuess(food.shop.id)
     });
 
-//Test in food
+
+}
+
+function showShop(id) {
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let auth = {
+        headers: {
+            "Authorization": `Bearer ${currentUser.accessToken}`
+        }
+    }
+    axios.get(`http://localhost:8080/user/shops/shopDetail/${id}`, auth).then((response) => {
+        let shop = response.data;
+        axios.get(`http://localhost:8080/user/shops/${id}`, auth).then((response) => {
+            let list = response.data;
+            let html = `<div class="u-s-p-y-90">
+    <div class="container">
+        <div class="row">
+       
+         <div class="col-lg-9 col-md-12">           
+                <div class="shop-p">
+                    <div class="shop-p__toolbar u-s-m-b-30">
+                        <div class="shop-p__meta-wrap u-s-m-b-60">
+                            <span class="shop-p__meta-text-1">SHOP ${shop.name}</span>
+                            <div class="shop-p__meta-text-2">
+                                <span>Related Searches:</span>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">men's clothing</a>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">mobiles & tablets</a>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">books & audible</a>
+                            </div>
+                        </div>
+                        
+                        
+
+                    <div class="shop-p__collection" id="shop-p__collection">
+                         <div class="row is-list-active">`;
+            for (let i = 0; i < list.length; i++) {
+                html += `<div class="col-lg-4 col-md-6 col-sm-6">
+                                            <div class="product-m">
+                                                <div class="product-m__thumb">
+
+                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#">
+
+                                                        <img class="aspect__img" src="${list[i].image}" alt=""></a>
+                                                    <div class="product-m__quick-look">
+
+                                                        <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
+                                                    <div class="product-m__add-cart">
+
+                                                        <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart" onclick="addTocart(${list[i].id})">Add to Cart</a></div>
+                                                </div>
+                                                <div class="product-m__content">
+                                                    <div class="product-m__category">
+
+                                                        <a href="shop-side-version-2.html">Food</a></div>
+                                                    <div class="product-m__name">
+
+                                                        <a href="product-detail.html">${list[i].name}</a></div>
+                                                
+                                                    <div class="product-m__price">${list[i].price} VND</div>
+                                                    <div class="product-m__hover">
+                                                        <div class="product-m__preview-description">
+
+                                                            <span>${list[i].description}</span></div>
+                                                        <div class="product-m__wishlist">
+
+                                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`
+            }
+
+            html += `</div>
+                        </div>`
+            document.getElementById("app-content").innerHTML = html;
+        })
+    });
+
+
 }
 function checkWishList(food){
          axios.get(`http://localhost:8080/wishlist/dup?food=${food.id}&user=${getUser().id}`,getAuth()).then((response) =>{
