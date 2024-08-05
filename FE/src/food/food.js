@@ -159,25 +159,27 @@ function showFood() {
                                     <div class="u-s-m-b-30">
                                         <div class="shop-w">
                                             <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">SHOP</h1>
+                                                <h1 class="shop-w__h">NUMBER OF SALES </h1>
 
                                                 <span class="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
                                             </div>
                                             <div class="shop-w__wrap collapse show" id="s-shipping">
-                                                <ul class="shop-w__list gl-scroll">`
+                                              <ul class="shop-w__list gl-scroll">
 
-                for (i=0;i<shops.length;i++){
-                    html+=` 
-                                                    <li>                                                     
-                                                        <div class="check-box">
-                                                            <input type="checkbox" id="grab-shipping">
-                                                            <div class="check-box__state check-box__state--primary">
-                                                                <label class="check-box__label" for="grab-shipping">${shops[i].name}</label></div>
-                                                        </div>                                                      
-                                                    </li>`
-                }
-
-                    html+=                            `</ul>
+                                                    <li>                                                                                                          
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                         
+                                                                <label style="color: #0D0A0A">From 50-100 pcs</label>                                                                                                        
+                                                    </li>      
+                                                    <li>                                                                                                       
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                          
+                                                                <label style="color: #0D0A0A">From 100-200 pcs</label>                                                                                                         
+                                                    </li>                                                     
+                                                    <li>                                                                                                          
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                        
+                                                                <label style="color: #0D0A0A">From 200-300 pcs</label>                                                                                                         
+                                                    </li>
+`
+                html += `</ul>
                                             </div>
                                         </div>
                                     </div>
@@ -195,12 +197,12 @@ function showFood() {
 
                                                             <label for="price-min"></label>
 
-                                                            <input class="input-text input-text--primary-style" type="text" id="price-min" placeholder="Min"></div>
+                                                            <input class="input-text input-text--primary-style" type="number" id="price-min" placeholder="Min"></div>
                                                         <div>
 
                                                             <label for="price-max"></label>
 
-                                                            <input class="input-text input-text--primary-style" type="text" id="price-max" placeholder="Max"></div>
+                                                            <input class="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max"></div>
                                                         <div>
 
                                                             <button class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" onclick="filterByPrice()"></button></div>
@@ -208,6 +210,9 @@ function showFood() {
                                                 </form>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="u-s-m-b-30">
+                                        <a style="margin-left: 70px;font-size: 20px; margin-bottom: 20px" class="gl-tag btn--e-brand-shadow" onclick="filterFood()" href="#">Filter Food</a>
                                     </div>
                                 </div>
                             </div>
@@ -278,6 +283,7 @@ function showFood() {
 
                                         <span class="product-m__review"></span></div>
                                         <div class="product-m__price"><b>Price</b>: ${list[i].price}</div>
+                                        <div class="product-m__price" id="sold-quantity-${list[i].id}"><b>Already Sold</b>: Loading...</div>
 
                                         <div class="product-m__hover">
                                             <div class="product-m__preview-description">
@@ -293,6 +299,12 @@ function showFood() {
                                     </div>
                                 </div>
                             </div>`
+                    // Fetch the sold quantity for each product
+                    axios.get(`http://localhost:8080/user/foods/quantities/${list[i].id}`, auth).then((response2) => {
+                        document.getElementById(`sold-quantity-${list[i].id}`).innerHTML = `<b>Already Sold</b>: ${response2.data}`;
+                    }).catch((error) => {
+                        console.error(`Error fetching sold quantity for product ${list[i].id}:`, error);
+                    });
                 }
 
                 html += `</div>
@@ -513,6 +525,8 @@ function searchFood() {
                                         <span class="product-m__review"> </span></div>
                                     <div class="product-m__price"><b>Price</b>: ${list[i].price}</div>
                                     <div class="product-m__price"><b>Quantity</b>: ${list[i].quantity}</div>
+                                    <div class="product-m__price" id="sold-quantity-${list[i].id}"><b>Already Sold</b>: Loading...</div>
+
                                     <div class="product-m__hover">
 <div class="product-m__preview-description">
                                             <span>${list[i].description}</span></div>
@@ -555,19 +569,21 @@ function searchFood() {
                 "Authorization": `Bearer ${currentUser.accessToken}`
             }
         }
+        axios.get("http://localhost:8080/user/shops", auth).then((response1) => {
+            let shops = response1.data;
 
-        axios.get(`http://localhost:8080/user/foods/search`, {
-            params: {
-                foodName: foodName
-            }, headers: auth.headers
-        }).then((response) => {
-            let list = response.data;
-            let html = '';
-            if (list.length === 0) {
-                html = `<div style="font-size: 30px">No Product...</div>`;
-                document.getElementById("shop-p__collection").innerHTML = html;
-            } else {
-                html = `
+            axios.get(`http://localhost:8080/user/foods/search`, {
+                params: {
+                    foodName: foodName
+                }, headers: auth.headers
+            }).then((response) => {
+                let list = response.data;
+                let html = '';
+                if (list.length === 0) {
+                    html = `<div style="font-size: 30px">No Product...</div>`;
+                    document.getElementById("shop-p__collection").innerHTML = html;
+                } else {
+                    html = `
 <div class="u-s-p-y-90">
     <div class="container">
         <div class="row">
@@ -584,34 +600,23 @@ function searchFood() {
 
                                                 <span class="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
                                             </div>
-                                            <div class="shop-w__wrap collapse show" id="s-shipping">
-                                                <ul class="shop-w__list gl-scroll">
-                                                    <li>
+                                             <div class="shop-w__wrap collapse show" id="s-shipping">
+                                               <ul class="shop-w__list gl-scroll">
 
-                                                        <!--====== Check Box ======-->
-                                                        <div class="check-box">
+                                                    <li>                                                                                                          
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                         
+                                                                <label style="color: #0D0A0A">From 50-100 pcs</label>                                                                                                        
+                                                    </li>      
+                                                    <li>                                                                                                       
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                          
+                                                                <label style="color: #0D0A0A">From 100-200 pcs</label>                                                                                                         
+                                                    </li>                                                     
+                                                    <li>                                                                                                          
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                        
+                                                                <label style="color: #0D0A0A">From 200-300 pcs</label>                                                                                                         
+                                                    </li>`
 
-                                                            <input type="checkbox" id="shopee-shipping">
-                                                            <div class="check-box__state check-box__state--primary">
-
-                                                                <label class="check-box__label" for="free-shipping">Shopee Shipping</label></div>
-                                                        </div>
-                                                        <!--====== End - Check Box ======-->
-                                                    </li>
-                                                    
-                                                     <li>
-
-                                                        <!--====== Check Box ======-->
-                                                        <div class="check-box">
-
-                                                            <input type="checkbox" id="grab-shipping">
-                                                            <div class="check-box__state check-box__state--primary">
-
-                                                                <label class="check-box__label" for="grab-shipping">Grab Shipping</label></div>
-                                                        </div>
-                                                        <!--====== End - Check Box ======-->
-                                                    </li>
-                                                </ul>
+                    html += `</ul>
                                             </div>
                                         </div>
                                     </div>
@@ -629,12 +634,12 @@ function searchFood() {
 
                                                             <label for="price-min"></label>
 
-                                                            <input class="input-text input-text--primary-style" type="text" id="price-min" placeholder="Min"></div>
+                                                            <input class="input-text input-text--primary-style" type="number" id="price-min" placeholder="Min"></div>
                                                         <div>
 
                                                             <label for="price-max"></label>
 
-                                                            <input class="input-text input-text--primary-style" type="text" id="price-max" placeholder="Max"></div>
+                                                            <input class="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max"></div>
                                                         <div>
 
                                                             <button class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" onclick="filterByPrice()"></button></div>
@@ -642,6 +647,9 @@ function searchFood() {
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                      <div class="u-s-m-b-30">
+                                        <a style="margin-left: 70px;font-size: 20px; margin-bottom: 20px" class="gl-tag btn--e-brand-shadow" onclick="filterFood()" href="#">Filter Food</a>
                                     </div>
                                 </div>
                             </div>
@@ -685,8 +693,8 @@ function searchFood() {
                     <div class="shop-p__collection" id="shop-p__collection">
                         <div class="row is-grid-active">`;
 
-                for (let i = 0; i < list.length; i++) {
-                    html += `<div class="col-lg-3 col-md-4 col-sm-6">
+                    for (let i = 0; i < list.length; i++) {
+                        html += `<div class="col-lg-3 col-md-4 col-sm-6">
                             <div class="product-m">
                                 <div class="product-m__thumb">
                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#"  onclick="showFoodDetail(${list[i].id})">
@@ -705,6 +713,8 @@ function searchFood() {
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i>
                                         <span class="product-m__review"> </span></div>
                                     <div class="product-m__price"><b>Price</b>: ${list[i].price}</div>
+                                    <div class="product-m__price" id="sold-quantity-${list[i].id}"><b>Already Sold</b>: Loading...</div>
+
                                     <div class="product-m__hover">
                                     <div class="product-m__preview-description">
                                             <span>${list[i].description}</span></div>
@@ -716,8 +726,14 @@ function searchFood() {
                                 </div>
                             </div>
                         </div>`;
-                }
-                html += `
+                        // Fetch the sold quantity for each product
+                        axios.get(`http://localhost:8080/user/foods/quantities/${list[i].id}`, auth).then((response2) => {
+                            document.getElementById(`sold-quantity-${list[i].id}`).innerHTML = `<b>Already Sold</b>: ${response2.data}`;
+                        }).catch((error) => {
+                            console.error(`Error fetching sold quantity for product ${list[i].id}:`, error);
+                        });
+                    }
+                    html += `
                         </div>
                     </div>
                     <div class="u-s-p-y-60">
@@ -734,9 +750,13 @@ function searchFood() {
         </div>
     </div>
 </div>`;
-                document.getElementById("app-content").innerHTML = html;
-            }
+
+
+                    document.getElementById("app-content").innerHTML = html;
+                }
+            })
         })
+
     }
 
 }
@@ -953,32 +973,20 @@ function showShop(id) {
                                             </div>
                                             <div class="shop-w__wrap collapse show" id="s-shipping">
                                                 <ul class="shop-w__list gl-scroll">
-                                                    <li>
 
-                                                        <!--====== Check Box ======-->
-                                                        <div class="check-box">
-
-                                                            <input type="checkbox" id="shopee-shipping">
-                                                            <div class="check-box__state check-box__state--primary">
-
-                                                                <label class="check-box__label" for="shopee-shipping">Shopee Shipping</label></div>
-                                                        </div>
-                                                        <!--====== End - Check Box ======-->
-                                                    </li>
-                                                    
-                                                      <li>
-
-                                                        <!--====== Check Box ======-->
-                                                        <div class="check-box">
-
-                                                            <input type="checkbox" id="grab-shipping">
-                                                            <div class="check-box__state check-box__state--primary">
-
-                                                                <label class="check-box__label" for="grab-shipping">Grab Shipping</label></div>
-                                                        </div>
-                                                        <!--====== End - Check Box ======-->
-                                                    </li>
-                                                </ul>
+                                                    <li>                                                                                                          
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                         
+                                                                <label style="color: #0D0A0A">From 50-100 pcs</label>                                                                                                        
+                                                    </li>      
+                                                    <li>                                                                                                       
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                          
+                                                                <label style="color: #0D0A0A">From 100-200 pcs</label>                                                                                                         
+                                                    </li>                                                     
+                                                    <li>                                                                                                          
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                        
+                                                                <label style="color: #0D0A0A">From 200-300 pcs</label>                                                                                                         
+                                                    </li>`
+            html += `</ul>
                                             </div>
                                         </div>
                                     </div>
@@ -996,12 +1004,12 @@ function showShop(id) {
 
                                                             <label for="price-min"></label>
 
-                                                            <input class="input-text input-text--primary-style" type="text" id="price-min" placeholder="Min"></div>
+                                                            <input class="input-text input-text--primary-style" type="number" id="price-min" placeholder="Min"></div>
                                                         <div>
 
                                                             <label for="price-max"></label>
 
-                                                            <input class="input-text input-text--primary-style" type="text" id="price-max" placeholder="Max"></div>
+                                                            <input class="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max"></div>
                                                         <div>
 
                                                             <button class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" type="submit"></button></div>
@@ -1056,7 +1064,7 @@ function showShop(id) {
                                             <div class="product-m">
                                                 <div class="product-m__thumb">
 
-                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#">
+                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#" onclick="showFoodDetail(${food[i].id})">
 
                                                         <img class="aspect__img" src="${food[i].image}" alt=""></a>
                                                
@@ -1222,7 +1230,7 @@ function filterByPrice() {
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i>
                                         <span class="product-m__review"> </span></div>
                                     <div class="product-m__price"><b>Price</b>: ${list[i].price}</div>
-                                    <div class="product-m__price"><b>Quantity</b>: ${list[i].quantity}</div>
+                                    <div class="product-m__price" id="sold-quantity-${list[i].id}"><b>Already Sold</b>: Loading...</div>
                                     <div class="product-m__hover">
 <div class="product-m__preview-description">
                                             <span>${list[i].description}</span></div>
@@ -1266,20 +1274,23 @@ function filterByPrice() {
             }
         }
 
-        axios.get(`http://localhost:8080/user/foods/searchPrice`, {
-            params: {
-                priceMin: priceMin,
-                priceMax: priceMax,
-            }, headers: auth.headers
-        }).then((response) => {
-            let list = response.data;
-            console.log(list)
-            let html = '';
-            if (list.length === 0) {
-                html = `<div style="font-size: 30px">No Product...</div>`;
-                document.getElementById("shop-p__collection").innerHTML = html;
-            } else {
-                html = `
+        axios.get("http://localhost:8080/user/shops", auth).then((response1) => {
+            let shops = response1.data;
+            console.log(shops);
+            axios.get(`http://localhost:8080/user/foods/searchPrice`, {
+                params: {
+                    priceMin: priceMin,
+                    priceMax: priceMax,
+                }, headers: auth.headers
+            }).then((response) => {
+                let list = response.data;
+                console.log(list)
+                let html = '';
+                if (list.length === 0) {
+                    html = `<div style="font-size: 30px">No Product...</div>`;
+                    document.getElementById("shop-p__collection").innerHTML = html;
+                } else {
+                    html = `
 <div class="u-s-p-y-90">
     <div class="container">
         <div class="row">
@@ -1298,34 +1309,22 @@ function filterByPrice() {
 
                                                 <span class="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
                                             </div>
-                                            <div class="shop-w__wrap collapse show" id="s-shipping">
+                                             <div class="shop-w__wrap collapse show" id="s-shipping">
                                                 <ul class="shop-w__list gl-scroll">
-                                                    <li>
 
-                                                        <!--====== Check Box ======-->
-                                                        <div class="check-box">
-
-                                                            <input type="checkbox" id="shopee-shipping">
-                                                            <div class="check-box__state check-box__state--primary">
-
-                                                                <label class="check-box__label" for="free-shipping">Shopee Shipping</label></div>
-                                                        </div>
-                                                        <!--====== End - Check Box ======-->
-                                                    </li>
-                                                    
-                                                     <li>
-
-                                                        <!--====== Check Box ======-->
-                                                        <div class="check-box">
-
-                                                            <input type="checkbox" id="grab-shipping">
-                                                            <div class="check-box__state check-box__state--primary">
-
-                                                                <label class="check-box__label" for="grab-shipping">Grab Shipping</label></div>
-                                                        </div>
-                                                        <!--====== End - Check Box ======-->
-                                                    </li>
-                                                </ul>
+                                                    <li>                                                                                                          
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                         
+                                                                <label style="color: #0D0A0A">From 50-100 pcs</label>                                                                                                        
+                                                    </li>      
+                                                    <li>                                                                                                       
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                          
+                                                                <label style="color: #0D0A0A">From 100-200 pcs</label>                                                                                                         
+                                                    </li>                                                     
+                                                    <li>                                                                                                          
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                        
+                                                                <label style="color: #0D0A0A">From 200-300 pcs</label>                                                                                                         
+                                                    </li>`
+                    html += `</ul>
                                             </div>
                                         </div>
                                     </div>
@@ -1343,12 +1342,12 @@ function filterByPrice() {
 
                                                             <label for="price-min"></label>
 
-                                                            <input class="input-text input-text--primary-style" type="text" id="price-min" placeholder="Min"></div>
+                                                            <input class="input-text input-text--primary-style" type="number" id="price-min" placeholder="Min"></div>
                                                         <div>
 
                                                             <label for="price-max"></label>
 
-                                                            <input class="input-text input-text--primary-style" type="text" id="price-max" placeholder="Max"></div>
+                                                            <input class="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max"></div>
                                                         <div>
 
                                                             <button class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" onclick="filterByPrice()"></button></div>
@@ -1356,6 +1355,9 @@ function filterByPrice() {
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                     <div class="u-s-m-b-30">
+                                        <a style="margin-left: 70px;font-size: 20px; margin-bottom: 20px" class="gl-tag btn--e-brand-shadow" onclick="filterFood()" href="#">Filter Food</a>
                                     </div>
                                 </div>
                             </div>
@@ -1399,8 +1401,8 @@ function filterByPrice() {
                     <div class="shop-p__collection" id="shop-p__collection">
                         <div class="row is-grid-active">`;
 
-                for (let i = 0; i < list.length; i++) {
-                    html += `<div class="col-lg-3 col-md-4 col-sm-6">
+                    for (let i = 0; i < list.length; i++) {
+                        html += `<div class="col-lg-3 col-md-4 col-sm-6">
                             <div class="product-m">
                                 <div class="product-m__thumb">
                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#"  onclick="showFoodDetail(${list[i].id})">
@@ -1419,6 +1421,8 @@ function filterByPrice() {
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i>
                                         <span class="product-m__review"> </span></div>
                                     <div class="product-m__price"><b>Price</b>: ${list[i].price}</div>
+                                    <div class="product-m__price" id="sold-quantity-${list[i].id}"><b>Already Sold</b>: Loading...</div>
+
                                     <div class="product-m__hover">
                                     <div class="product-m__preview-description">
                                             <span>${list[i].description}</span></div>
@@ -1430,8 +1434,16 @@ function filterByPrice() {
                                 </div>
                             </div>
                         </div>`;
-                }
-                html += `
+                        // Fetch the sold quantity for each product
+                        axios.get(`http://localhost:8080/user/foods/quantities/${list[i].id}`, auth).then((response2) => {
+                            document.getElementById(`sold-quantity-${list[i].id}`).innerHTML = `<b>Already Sold</b>: ${response2.data}`;
+                        }).catch((error) => {
+                            console.error(`Error fetching sold quantity for product ${list[i].id}:`, error);
+                        });
+
+                    }
+
+                    html += `
                         </div>
                     </div>
                     <div class="u-s-p-y-60">
@@ -1448,10 +1460,29 @@ function filterByPrice() {
         </div>
     </div>
 </div>`;
-                document.getElementById("app-content").innerHTML = html;
-            }
-        })
+                    document.getElementById("app-content").innerHTML = html;
+                }
+            })
+
+        });
+
+
+
     }
+
+
+}
+
+function filterFood() {
+    let shopIds = [];
+    let shop = document.getElementsByClassName("shop-name");
+    console.log(shop);
+    for (let i = 0; i < shop.length; i++) {
+        if (shop[i].checked) {
+            shopIds.push(shop[i].id);
+        }
+    }
+    console.log(shopIds);
 
 
 }

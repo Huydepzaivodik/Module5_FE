@@ -174,7 +174,7 @@ function getMegaFilter(){
                                             </li>
                                             <li>
                                                  <div class="check-box">
-                                                    <input class="shipping-list" type="checkbox" id="shoppe-shipping">
+                                                        <input class="shipping-list" type="checkbox" id="shoppe-shipping">
                                                     <div class="check-box__state check-box__state--primary">
                                                         <label class="check-box__label" for="shoppe-shipping">Shoppe</label></div>
                                                 </div>
