@@ -1,33 +1,30 @@
-
-function addTocart(id){
+function addTocart(id) {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if(currentUser == null) return;
+    if (currentUser == null) return;
     let auth = {
         headers: {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
     }
-    axios.get(`http://localhost:8080/user/foods/${id}`,auth).then((respone)=>{
+    axios.get(`http://localhost:8080/user/foods/${id}`, auth).then((respone) => {
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
         let auth = {
             headers: {
                 "Authorization": `Bearer ${currentUser.accessToken}`
             }
         }
-        axios.post(`http://localhost:8080/cart/${currentUser.id}`,respone.data,auth).then((response) =>{
+        axios.post(`http://localhost:8080/cart/${currentUser.id}`, respone.data, auth).then((response) => {
             alert(response.data);
             showMiniCart();
         })
     })
 
 }
-function showFood() {
-    showMain();
-    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
+function showFood() {
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     //duyệt qua từng đối tượng trong mảng roles và tạo ra một mảng mới (userRoles) chỉ chứa các giá trị authority
     let userRoles = currentUser.roles.map(role => role.authority);
-
     console.log(userRoles);
 
     if (userRoles.includes("ROLE_MERCHANT")) {
@@ -37,12 +34,11 @@ function showFood() {
             }
         }
         let id = currentUser.id;
-        axios.get(`http://localhost:8080/merchant/shop/${id}`,auth).then((response) => {
+        axios.get(`http://localhost:8080/merchant/shop/${id}`, auth).then((response) => {
             let shop_id = response.data.id;
             axios.get(`http://localhost:8080/foods/shop/${shop_id}`, auth).then((response) => {
                 let list = response.data;
                 let html = `
-<div class="u-s-p-y-90">
     <div class="container">
         <div class="row">
            
@@ -266,7 +262,6 @@ function showFood() {
                                 <div class="product-m">
                                     <div class="product-m__thumb">
                                      <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#" onclick="showFoodDetail(${list[i].id})">
-                                    
                                             <img class="aspect__img" src="${list[i].image}" alt=""></a>
                                         <div class="product-m__quick-look">
 
@@ -312,7 +307,7 @@ function showFood() {
                     });
                 }
 
-            html+=`</div>
+                html += `</div>
                         </div>`
                 document.getElementById("app-content").innerHTML = html;
             });
@@ -388,7 +383,7 @@ function addFood() {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
     }
-    axios.get(`http://localhost:8080/merchant/shop/${currentUser.id}`,auth).then((response) => {
+    axios.get(`http://localhost:8080/merchant/shop/${currentUser.id}`, auth).then((response) => {
         let name = document.getElementById('food-name').value;
         let description = document.getElementById('food-description').value;
         let price = document.getElementById('food-price').value;
@@ -445,14 +440,14 @@ function searchFood() {
 
     console.log(userRoles);
 
-    if(userRoles.includes("ROLE_MERCHANT")){
+    if (userRoles.includes("ROLE_MERCHANT")) {
         let auth = {
             headers: {
                 "Authorization": `Bearer ${currentUser.accessToken}`
             }
         }
         let id = currentUser.id;
-        axios.get(`http://localhost:8080/merchant/shop/${id}`,auth).then((response) => {
+        axios.get(`http://localhost:8080/merchant/shop/${id}`, auth).then((response) => {
             let shop_id = response.data.id;
             axios.get(`http://localhost:8080/foods/${shop_id}/search`, {
                 params: {
@@ -568,7 +563,7 @@ function searchFood() {
         });
 
 
-    }else if(userRoles.includes("ROLE_USER")){
+    } else if (userRoles.includes("ROLE_USER")) {
         let auth = {
             headers: {
                 "Authorization": `Bearer ${currentUser.accessToken}`
@@ -765,6 +760,7 @@ function searchFood() {
     }
 
 }
+
 function addToWishlist(id) {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     if (currentUser == null) return;
@@ -791,7 +787,7 @@ function showFoodDetail(id) {
             "Authorization": `Bearer ${currentUser.accessToken}`
         }
     }
-    axios.get(`http://localhost:8080/user/foods/${id}`,auth).then(response => {
+    axios.get(`http://localhost:8080/user/foods/${id}`, auth).then(response => {
         let food = response.data;
         console.log(food);
         document.getElementById(`app-content`).innerHTML = `   <!--====== Section 1 ======-->
@@ -924,308 +920,178 @@ function showFoodDetail(id) {
       `
         getCouponDetailsByShop(food)
         checkWishList(food)
-        getSameFoodsGuess(food.shop.id)
     });
 
-
+//Test in food
 }
 
-function showShop(id) {
-    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    let auth = {
-        headers: {
-            "Authorization": `Bearer ${currentUser.accessToken}`
-        }
-    }
-    axios.get(`http://localhost:8080/user/shops/shopDetail/${id}`, auth).then((response) => {
-        let shop = response.data;
-        console.log(shop)
-        axios.get(`http://localhost:8080/user/shops/${id}`, auth).then((response) => {
-            let list = response.data;
-            let html = `<div class="u-s-p-y-90">
-    <div class="container">
-        <div class="row">
-         <div class="col-lg-9 col-md-12">           
-                <div class="shop-p">
-                    <div class="shop-p__toolbar u-s-m-b-30">
-                        <div class="shop-p__meta-wrap u-s-m-b-60" style="display: flex">
-                            <img src="${shop.image}" style="width: 60px; height: 60px;">
-                            <div class="shop-p__meta-text-2" style="margin-left: 15px">
-                                 <div>
-                                      <span class="shop-p__meta-text-1">${shop.name}</span>
-                                 </div>
-                                 <div style=" color: black;" >
-                                      <p id="total-sold"></p>
-                                 </div>
-                            </div>
-                        </div>                                            
-                    <div class="shop-p__collection" id="shop-p__collection">
-                         <div class="row" style="margin-bottom: 100px">
-                              <div class="section__content">
-                                   <h3>SHOP COUPONS</h3>
-                                   <div class="container" style="padding: 20px">
-                                       <div class="slider-fouc">
-                                           <div class="owl-carousel product-slider" data-item="4" id="coupon-list">
-                                                                                            
-                                           </div>
-                                       </div>
-                                   </div>
-                             </div>
-                         </div>
-                         <div class="row is-list-active"><h3>SHOP FOODS</h3>`;
-                let total_sold = 0;
-                for (let i = 0; i < list.length; i++) {
-                html += `<div class="col-lg-4 col-md-6 col-sm-6">
-                                            <div class="product-m">
-                                                <div class="product-m__thumb">
-
-                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#">
-
-                                                        <img class="aspect__img" src="${list[i].image}" alt=""></a>
-                                                    <div class="product-m__quick-look">
-
-                                                        <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
-                                                    <div class="product-m__add-cart">
-
-                                                        <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart" onclick="addTocart(${list[i].id})">Add to Cart</a></div>
-                                                </div>
-                                                <div class="product-m__content">
-                                                    <div class="product-m__category">
-
-                                                        <a href="shop-side-version-2.html">Food</a></div>
-                                                    <div class="product-m__name">
-
-                                                        <a href="product-detail.html">${list[i].name}</a></div>
-                                                
-                                                    <div class="product-m__price">${list[i].price} VND</div>
-                                                    <div class="product-m__hover">
-                                                        <div class="product-m__preview-description">
-
-                                                            <span>${list[i].description}</span></div>
-                                                        <div class="product-m__wishlist">
-
-                                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>`
-                    total_sold += list[i].quantity;
-            }
-            html += `</div>
-                        </div>`
-            document.getElementById("app-content").innerHTML = html;
-            document.getElementById("total-sold").innerText = total_sold + " sold";
-
-            axios.get(`http://localhost:8080/coupons/shop/${shop.id}`,getAuth()).then(({data}) =>{
-                console.log(data)
-                let html = "";
-                for (let  i = 0 ; i < data.length;i++){
-                    let date = new Date(new Date(data[i].endDate).getMilliseconds() - new Date(data[i].startDate).getMilliseconds()).getDay();
-                    let name = getCouponName(data[i]);
-                    html += `<div class="col-lg-3 col-md-4 col-sm-6" style="border-radius: 5px; color: black; margin-top: 5px;">
-                                            <div class="pd-detail__stock" style="width: 200px; height: 50px; text-align: center; border-radius: 10px">
-                                                 <p>${name} </p>
-                                                 <span>${date} day left</span>
-                                            </div>
-                            </div>`
-                }
-                document.getElementById("coupon-list").innerHTML = html;
-                load_js()
-            })
-        })
-    });
+function checkWishList(food) {
+    axios.get(`http://localhost:8080/wishlist/dup?food=${food.id}&user=${getUser().id}`, getAuth()).then((response) => {
+        document.getElementById("wishlist-check").innerHTML = `<span class="pd-detail__stock" style="border-radius: 5px; background: red; color: black">Wishlist <i class="far fa-heart"></i> </span>`
+    })
 }
-function checkWishList(food){
-         axios.get(`http://localhost:8080/wishlist/dup?food=${food.id}&user=${getUser().id}`,getAuth()).then((response) =>{
-             document.getElementById("wishlist-check").innerHTML = `<span class="pd-detail__stock" style="border-radius: 5px; background: red; color: black">Wishlist <i class="far fa-heart"></i> </span>`
-         })
-}
-function getCouponDetailsByShop(food){
-    axios.get(`http://localhost:8080/coupons/shop/${food.shop.id}`,getAuth()).then((response)=>{
+
+function getCouponDetailsByShop(food) {
+    axios.get(`http://localhost:8080/coupons/shop/${food.shop.id}`, getAuth()).then((response) => {
         let data = response.data;
         let html = "";
-        for (let i=0; i< data.length; i++) {
-            html +=  `<span class="pd-detail__stock" style="border-radius: 30px; background: #a0a0a0; color: black; margin-top: 5px ">${String(data[i].type).toUpperCase()} ${String(data[i].discount).toUpperCase()} </span>`
+        for (let i = 0; i < data.length; i++) {
+            html += `<span class="pd-detail__stock" style="border-radius: 30px; background: #a0a0a0; color: black; margin-top: 5px ">${String(data[i].type).toUpperCase()} ${String(data[i].discount).toUpperCase()} </span>`
         }
         document.getElementById("coupon-list").innerHTML = html;
     })
 }
 
-function getCouponName(coupon){
-         if(coupon.type.toString().toUpperCase() == "PERCENT")
-                   return "DISCOUNT " + coupon.discount + "%";
-         else
-                   return "DISCOUNT " + String(coupon.discount).replace(/(.)(?=(\d{3})+$)/g, "$1.") + " VND";
-}
+function showShop(id) {
+    axios.get(`http://localhost:8080/user/shops/shopDetail/${id}`, getAuth()).then((response) => {
+        let shop = response.data;
+        console.log(shop);
+        axios.get(`http://localhost:8080/user/foods/shop/${id}`, getAuth()).then((response) => {
+            let food = response.data;
+            console.log(food);
+            for (let i = 0; i < food.length; i++) {
+                let list = ``
+            }
+            let html = ` 
 
-function getSameFoodsGuess(id){
-         document.getElementById("app-content").innerHTML  += `
-         <div class="u-s-p-b-90">
-                <!--====== Section Intro ======-->
-                <div class="section__intro u-s-m-b-46">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">FOODS RECOMMEND</h1>
-
-                                    <span class="section__span u-c-grey">FOODS FROM THAT SHOP</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--====== End - Section Intro ======-->
-                <!--====== Section Content ======-->
-                <div class="section__content">
-                    <div class="container">
-                        <div class="slider-fouc">
-                            <div class="owl-carousel product-slider" data-item="4" id="shop-list">
-                                                              
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--====== End - Section Content ======-->
-            </div>
-            <div class="u-s-p-b-90">
-
-                <!--====== Section Intro ======-->
-                <div class="section__intro u-s-m-b-46">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="section__text-wrap">
-                                    <h1 class="section__heading u-c-secondary u-s-m-b-12">BESTSELLER OF DAY</h1>
-
-                                    <span class="section__span u-c-grey">FOODS THAT ARE SOLD THE MOST DURING THE DAY</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--====== End - Section Intro ======-->
-                <!--====== Section Content ======-->
-                <div class="section__content">
-                    <div class="container">
-                        <div class="slider-fouc">
-                            <div class="owl-carousel product-slider" data-item="8" id="best-list" >
-                                                                                            
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--====== End - Section Content ======-->
-            </div>
-`
-         axios.get(`http://localhost:8080/user/foods/same/${id}`,getAuth()).then(function(response){
-             let bestseller = response.data.bestseller;
-             let shop = response.data.shop;
-             let html = ""
-             for (let i = 0; i < bestseller.length; i++){
-                 let food = bestseller[i];
-                    console.log(food)
-                      html += `<div class="u-s-m-b-30">
-                                    <div class="product-o product-o--hover-on">
-                                        <div class="product-o__wrap">
-
-                                            <a class="aspect aspect--bg-grey aspect--square u-d-block" onclick="showFoodDetail(${food.id})">
-
-                                                <img class="aspect__img" src="${food.image}" alt=""></a>
-                                            
-                                            <div class="product-o__action-wrap">
-                                                <ul class="product-o__action-list">
-                                                   
-                                                    <li>
-
-                                                        <a data-modal="modal" data-modal-id="#add-to-cart" data-tooltip="tooltip" data-placement="top" title="Add to Cart" onclick="addTocart(${food.id})"><i class="fas fa-plus-circle"></i></a></li>
-                                                    <li>
-
-                                                        <a href="wpage/user/signin.html" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${food.id})"><i class="fas fa-heart"></i></a></li>
-                                                </ul>
-                                            </div>   
-                                        </div>
-
-                                        <span class="product-o__category">
-
-                                            <a href="shop-side-version-2.html">${food.shop.name}</a></span>
-
-                                        <span class="product-o__name">
-
-                                            <a onclick="showFoodDetail(${food.id})">${food.name}</a></span>
-                                        <div class="product-o__rating gl-rating-style"></div>
-
-                                        <span class="product-o__price">${food.price}
-                                          </span>
-                                    </div>
-                                </div>`
-             }
-             document.getElementById("best-list").innerHTML = html;
-             for (let i = 0; i < shop.length; i++){
-                 let food = shop[i];
-                 console.log(food)
-                 html += `<div class="u-s-m-b-30">
-                                    <div class="product-o product-o--hover-on">
-                                        <div class="product-o__wrap">
-
-                                            <a class="aspect aspect--bg-grey aspect--square u-d-block" onclick="showFoodDetail(${food.id})">
-
-                                                <img class="aspect__img" src="${food.image}" alt=""></a>
-                                            
-                                            <div class="product-o__action-wrap">
-                                                <ul class="product-o__action-list">
-                                                   
-                                                    <li>
-
-                                                        <a data-modal="modal" data-modal-id="#add-to-cart" data-tooltip="tooltip" data-placement="top" title="Add to Cart" onclick="addTocart(${food.id})"><i class="fas fa-plus-circle"></i></a></li>
-                                                    <li>
-
-                                                        <a href="wpage/user/signin.html" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${food.id})"><i class="fas fa-heart"></i></a></li>
-                                                </ul>
-                                            </div>   
-                                        </div>
-
-                                        <span class="product-o__category">
-
-                                            <a href="shop-side-version-2.html">${food.shop.name}</a></span>
-
-                                        <span class="product-o__name">
-
-                                            <a href="product-detail.html">${food.name}</a></span>
-                                        <div class="product-o__rating gl-rating-style"></div>
-
-                                        <span class="product-o__price">${food.price}
-                                          </span>
-                                    </div>
-                                </div>`
-             }
-             document.getElementById("shop-list").innerHTML = html;
-             load_js();
-         })
-}
-function showBestSeller(){
-         document.getElementById("app-content").innerHTML = `            <div class="u-s-p-y-90">
+            <!--====== Section 1 ======-->
+            <div class="u-s-p-y-90">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-3 col-md-12">
+                            <div class="shop-w-master">
+                                <h1 class="shop-w-master__heading u-s-m-b-30"><i class="fas fa-filter u-s-m-r-8"></i>
+
+                                    <span>FILTERS</span></h1>
+                                <div class="shop-w-master__sidebar sidebar--bg-snow">                                
+                                    <div class="u-s-m-b-30">
+                                        <div class="shop-w">
+                                            <div class="shop-w__intro-wrap">
+                                                <h1 class="shop-w__h">SHOP</h1>
+
+                                                <span class="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
+                                            </div>
+                                            <div class="shop-w__wrap collapse show" id="s-shipping">
+                                                <ul class="shop-w__list gl-scroll">
+
+                                                    <li>                                                                                                          
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                         
+                                                                <label style="color: #0D0A0A">From 50-100 pcs</label>                                                                                                        
+                                                    </li>      
+                                                    <li>                                                                                                       
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                          
+                                                                <label style="color: #0D0A0A">From 100-200 pcs</label>                                                                                                         
+                                                    </li>                                                     
+                                                    <li>                                                                                                          
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                        
+                                                                <label style="color: #0D0A0A">From 200-300 pcs</label>                                                                                                         
+                                                    </li>`
+            html += `</ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="u-s-m-b-30">
+                                        <div class="shop-w">
+                                            <div class="shop-w__intro-wrap">
+                                                <h1 class="shop-w__h">PRICE</h1>
+
+                                                <span class="fas fa-minus shop-w__toggle" data-target="#s-price" data-toggle="collapse"></span>
+                                            </div>
+                                            <div class="shop-w__wrap collapse show" id="s-price">
+                                                <div class="shop-w__form-p">
+                                                    <div class="shop-w__form-p-wrap">
+                                                        <div>
+
+                                                            <label for="price-min"></label>
+
+                                                            <input class="input-text input-text--primary-style" type="number" id="price-min" placeholder="Min"></div>
+                                                        <div>
+
+                                                            <label for="price-max"></label>
+
+                                                            <input class="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max"></div>
+                                                        <div>
+
+                                                            <button class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" type="submit" onclick="filterByPriceAtShop(${id})"></button></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                         
+                        <div class="col-lg-9 col-md-12">
+                           <!--====== Product Breadcrumb ======-->
+                            <div class="pd-breadcrumb u-s-m-b-30">
+                                <ul class="pd-breadcrumb__list">
+                                    <li class="has-separator">
+                                        <a href="#" onclick="showMain()" style="font-size: 13px">Home</a></li>
+                                    <li class="has-separator">
+
+                                        <a href="#" onclick="showFood()" style="font-size: 13px">Food</a></li>
+                                    <li class="is-marked">
+                                        <a style="font-size: 13px" href="#">Shop</a></li>
+                                        <li  id="wishlist-check">
+                                        </li>
+                                </ul>
+                            </div>
+                            <!--====== End - Product Breadcrumb ======-->
                             <div class="shop-p">
                                 <div class="shop-p__toolbar u-s-m-b-30">
                                     <div class="shop-p__meta-wrap u-s-m-b-60">
-                                        <h2 style="text-align: center; color: black">BEST SELLER FOODS OF DAY</h2>
-                                       
+                                    <div style="display: flex">  
+                                        <img src="${shop.image}" style="width: 40%" alt="">
+                                        <span style="font-size: 50px; margin-top: 51px;margin-left: 20px;color: orangered" class="shop-p__meta-text-1">${shop.name}</span>
                                     </div>
-                                    <div class="shop-p__tool-style">
-                                        <div class="tool-style__group u-s-m-b-8">
-                                     
-                                            <span class="js-shop-grid-target">Grid</span>
-
-                                            <span class="js-shop-list-target is-active">List</span></div>
                                       
+                                        <div class="shop-p__meta-text-2">                                                                            
+                                           </div>
                                     </div>
+                              
                                 </div>
-                                <div class="shop-p__collection">
-                                    <div class="row is-list-active" id="food-list">
-                                    </div>
+                                <div class="shop-p__collection" id="shop-p__collection">
+                                    <div class="row is-list-active">
+`
+
+            for (i = 0; i < food.length; i++) {
+                html += `<div class="col-lg-4 col-md-6 col-sm-6">
+                                            <div class="product-m">
+                                                <div class="product-m__thumb">
+
+                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#" onclick="showFoodDetail(${food[i].id})">
+
+                                                        <img class="aspect__img" src="${food[i].image}" alt=""></a>
+                                               
+                                                    <div class="product-m__add-cart">
+
+                                                        <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart" onclick="addTocart(${food[i].id})">Add to Cart</a></div>
+                                                </div>
+                                                <div class="product-m__content">
+                                                    <div class="product-m__category">
+
+                                                        <a href="#" onclick="showFood()">Food</a></div>
+                                                    <div class="product-m__name">
+
+                                                        <a href="#">${food[i].name}</a></div>
+                                                 
+                                                    <div class="product-m__price">VND ${food[i].price}</div>
+                                                    <div class="product-m__hover">
+                                                        <div class="product-m__preview-description">
+
+                                                            <span>${food[i].description}</span></div>
+                                                        <div class="product-m__wishlist">
+
+                                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" onclick="addToWishlist(${food[i].id})" title="Add to Wishlist"></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+`
+            }
+
+
+            html += `</div>
                                 </div>
                                 <div class="u-s-p-y-60">
 
@@ -1233,19 +1099,19 @@ function showBestSeller(){
                                     <ul class="shop-p__pagination">
                                         <li class="is-active">
 
-                                            <a href="shop-list-full.html">1</a></li>
+                                            <a href="shop-list-left.html">1</a></li>
                                         <li>
 
-                                            <a href="shop-list-full.html">2</a></li>
+                                            <a href="shop-list-left.html">2</a></li>
                                         <li>
 
-                                            <a href="shop-list-full.html">3</a></li>
+                                            <a href="shop-list-left.html">3</a></li>
                                         <li>
 
-                                            <a href="shop-list-full.html">4</a></li>
+                                            <a href="shop-list-left.html">4</a></li>
                                         <li>
 
-                                            <a class="fas fa-angle-right" href="shop-list-full.html"></a></li>
+                                            <a class="fas fa-angle-right" href="shop-list-left.html"></a></li>
                                     </ul>
                                     <!--====== End - Pagination ======-->
                                 </div>
@@ -1254,49 +1120,444 @@ function showBestSeller(){
                     </div>
                 </div>
             </div>
-`
-        axios.get('http://localhost:8080/user/foods/bestseller',getAuth()).then(function(response) {
-                  let bestseller = response.data;
-                  let html = ""
-                  for (let i = 0; i < bestseller.length; i++) {
-                       let item = bestseller[i];
-                       html += `<div class="col-lg-3 col-md-4 col-sm-6">
+            <!--====== End - Section 1 ======-->        `;
+
+            document.getElementById("app-content").innerHTML = html;
+        })
+    })
+
+
+}
+
+function filterByPrice() {
+    let priceMin = document.getElementById("price-min").value;
+    let priceMax = document.getElementById("price-max").value;
+
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    //duyệt qua từng đối tượng trong mảng roles và tạo ra một mảng mới (userRoles) chỉ chứa các giá trị authority
+    let userRoles = currentUser.roles.map(role => role.authority);
+
+    console.log(userRoles);
+
+    if (userRoles.includes("ROLE_MERCHANT")) {
+        let auth = {
+            headers: {
+                "Authorization": `Bearer ${currentUser.accessToken}`
+            }
+        }
+        let id = currentUser.id;
+        axios.get(`http://localhost:8080/merchant/shop/${id}`, auth).then((response) => {
+            let shop_id = response.data.id;
+            axios.get(`http://localhost:8080/foods/${shop_id}/searchPrice`, {
+                params: {
+                    priceMin: priceMin,
+                    priceMax: priceMax
+                }, headers: auth.headers
+            }).then((response) => {
+                let list = response.data;
+                let html = '';
+                if (list.length === 0) {
+                    html = `<div style="font-size: 30px">No Product...</div>`;
+                    document.getElementById("shop-p__collection").innerHTML = html;
+                } else {
+                    html = `
+<div class="u-s-p-y-90">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shop-p">
+                    <div class="shop-p__toolbar u-s-m-b-30">
+                        <div class="shop-p__meta-wrap u-s-m-b-60">
+                            <span class="shop-p__meta-text-1">FOUND ${list.length} RESULTS</span>
+                            <div class="shop-p__meta-text-2">
+                                <span>Related Searches:</span>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">men's clothing</a>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">mobiles & tablets</a>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">books & audible</a>
+                            </div>
+                        </div>
+                        <!--====== Search Form ======-->
+                                        <div style="display: flex">
+
+    <div class="main-form" style="margin-bottom: 20px">
+        <label for="main-search-food"></label>
+        <input class="input-text input-text--border-radius input-text--style-1" type="text" style="width: 90%;" id="main-search-food" placeholder="Search" name="foodName">
+        <button class="btn btn--icon fas fa-search main-search-button-food" onclick="searchFood()"></button>
+    </div>
+    <!--====== End - Search Form ======-->
+
+    <div class="shop-p__tool-style">
+        <button  onclick="AddFoodForm()" style="font-family: sans-serif;
+                        margin-left: 500px;
+                        font-weight: bold;
+                        font-size: 16px;
+                        background-color: orangered ;
+                        border: none;
+                        color: white;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        transition: background-color 0.3s ease; ;">Add Product
+        </button>
+    </div>
+
+</div>
+                    <div class="shop-p__collection" id="shop-p__collection">
+                        <div class="row is-grid-active">`;
+
+                    for (let i = 0; i < list.length; i++) {
+                        html += `<div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="product-m">
+                                <div class="product-m__thumb">
+                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#" onclick="showEdit(${list[i].id})">
+                                        <img class="aspect__img" src="${list[i].image}" alt=""></a>
+                                    <div class="product-m__quick-look">
+                                        <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
+                                    <div class="product-m__add-cart">
+                                            <a></a></div>
+                                </div>
+                                <div class="product-m__content">
+                                    <div class="product-m__category">
+                                        <a  href="#"></a></div>
+                                    <div class="product-m__name">
+                                        <a href="product-detail.html">${list[i].name}</a></div>
+                                    <div class="product-m__rating gl-rating-style">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                        <span class="product-m__review"> </span></div>
+                                    <div class="product-m__price"><b>Price</b>: ${list[i].price}</div>
+                                    <div class="product-m__price" id="sold-quantity-${list[i].id}"><b>Already Sold</b>: Loading...</div>
+                                    <div class="product-m__hover">
+<div class="product-m__preview-description">
+                                            <span>${list[i].description}</span></div>
+                                        <div class="product-m__wishlist">
+                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
+                                        <button class="button-5" role="button" onclick="deleteFood(${list[i].id})">Delete</button>
+                                        <button class="button-6" role="button" onclick="showEdit(${list[i].id})">Update</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                    }
+                    html += `
+                        </div>
+                    </div>
+                    <div class="u-s-p-y-60">
+                        <ul class="shop-p__pagination">
+                            <li class="is-active"><a href="shop-grid-full.html">1</a></li>
+                            <li><a href="shop-grid-full.html">2</a></li>
+                            <li><a href="shop-grid-full.html">3</a></li>
+                            <li><a href="shop-grid-full.html">4</a></li>
+                            <li><a class="fas fa-angle-right" href="shop-grid-full.html"></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`;
+                    document.getElementById("app-content").innerHTML = html;
+                }
+            })
+        });
+
+
+    } else if (userRoles.includes("ROLE_USER")) {
+        let auth = {
+            headers: {
+                "Authorization": `Bearer ${currentUser.accessToken}`
+            }
+        }
+
+        axios.get("http://localhost:8080/user/shops", auth).then((response1) => {
+            let shops = response1.data;
+            console.log(shops);
+            axios.get(`http://localhost:8080/user/foods/searchPrice`, {
+                params: {
+                    priceMin: priceMin,
+                    priceMax: priceMax,
+                }, headers: auth.headers
+            }).then((response) => {
+                let list = response.data;
+                console.log(list)
+                let html = '';
+                if (list.length === 0) {
+                    html = `<div style="font-size: 30px">No Product...</div>`;
+                    document.getElementById("shop-p__collection").innerHTML = html;
+                } else {
+                    html = `
+<div class="u-s-p-y-90">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-12">
+                            <div class="shop-w-master">
+                                <h1 class="shop-w-master__heading u-s-m-b-30"><i class="fas fa-filter u-s-m-r-8"></i>
+
+                                    <span>FILTERS</span></h1>
+                                <div class="shop-w-master__sidebar sidebar--bg-snow">
+                                 
+                                
+                                    <div class="u-s-m-b-30">
+                                        <div class="shop-w">
+                                            <div class="shop-w__intro-wrap">
+                                                <h1 class="shop-w__h">SHOP</h1>
+
+                                                <span class="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
+                                            </div>
+                                             <div class="shop-w__wrap collapse show" id="s-shipping">
+                                                <ul class="shop-w__list gl-scroll">
+
+                                                    <li>                                                                                                          
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                         
+                                                                <label style="color: #0D0A0A">From 50-100 pcs</label>                                                                                                        
+                                                    </li>      
+                                                    <li>                                                                                                       
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                          
+                                                                <label style="color: #0D0A0A">From 100-200 pcs</label>                                                                                                         
+                                                    </li>                                                     
+                                                    <li>                                                                                                          
+                                                            <input type="radio" class="quantity" name="quantity_range">                                                        
+                                                                <label style="color: #0D0A0A">From 200-300 pcs</label>                                                                                                         
+                                                    </li>`
+                    html += `</ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="u-s-m-b-30">
+                                        <div class="shop-w">
+                                            <div class="shop-w__intro-wrap">
+                                                <h1 class="shop-w__h">PRICE</h1>
+
+                                                <span class="fas fa-minus shop-w__toggle" data-target="#s-price" data-toggle="collapse"></span>
+                                            </div>
+                                            <div class="shop-w__wrap collapse show" id="s-price">
+                                                <div class="shop-w__form-p">
+                                                    <div class="shop-w__form-p-wrap">
+                                                        <div>
+
+                                                            <label for="price-min"></label>
+
+                                                            <input class="input-text input-text--primary-style" type="number" id="price-min" placeholder="Min"></div>
+                                                        <div>
+
+                                                            <label for="price-max"></label>
+
+                                                            <input class="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max"></div>
+                                                        <div>
+
+                                                            <button class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" onclick="filterByPrice()"></button></div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="u-s-m-b-30">
+                                        <a style="margin-left: 70px;font-size: 20px; margin-bottom: 20px" class="gl-tag btn--e-brand-shadow" onclick="filterFood()" href="#">Filter Food</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            <div class="col-lg-9 col-md-12">
+              <!--====== Product Breadcrumb ======-->
+                            <div class="pd-breadcrumb u-s-m-b-30">
+                                <ul class="pd-breadcrumb__list">
+                                    <li class="has-separator">
+
+                                        <a href="#" onclick="showMain()" style="font-size: 13px">Home</a></li>
+                                    <li class="is-marked">
+
+                                        <a href="#" onclick="showFood()"  style="font-size: 13px">Food</a></li>
+                                   
+                                </ul>
+                            </div>
+                            <!--====== End - Product Breadcrumb ======-->
+                <div class="shop-p">
+                    <div class="shop-p__toolbar u-s-m-b-30">
+                        <div class="shop-p__meta-wrap u-s-m-b-60">
+                            <span class="shop-p__meta-text-1">FOUND ${list.length} RESULTS</span>
+                            <div class="shop-p__meta-text-2">
+                                <span>Related Searches:</span>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">men's clothing</a>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">mobiles & tablets</a>
+                                <a class="gl-tag btn--e-brand-shadow" href="#">books & audible</a>
+                            </div>
+                        </div>
+                        <!--====== Search Form ======-->
+                                        <div style="display: flex">
+
+    <div class="main-form" style="margin-bottom: 20px">
+        <label for="main-search-food"></label>
+        <input class="input-text input-text--border-radius input-text--style-1" type="text" style="width: 90%;" id="main-search-food" placeholder="Search" name="foodName">
+        <button class="btn btn--icon fas fa-search main-search-button-food" onclick="searchFood()"></button>
+    </div>
+    <!--====== End - Search Form ======-->
+
+</div>
+                    <div class="shop-p__collection" id="shop-p__collection">
+                        <div class="row is-grid-active">`;
+
+                    for (let i = 0; i < list.length; i++) {
+                        html += `<div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="product-m">
+                                <div class="product-m__thumb">
+                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#"  onclick="showFoodDetail(${list[i].id})">
+                                        <img class="aspect__img" src="${list[i].image}" alt=""></a>
+                                    <div class="product-m__quick-look">
+                                        <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
+                                    <div class="product-m__add-cart">
+                                            <a></a></div>
+                                </div>
+                                <div class="product-m__content">
+                                    <div class="product-m__category">
+                                        <a  href="#"></a></div>
+                                    <div class="product-m__name">
+                                        <a href="product-detail.html">${list[i].name}</a></div>
+                                    <div class="product-m__rating gl-rating-style">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                        <span class="product-m__review"> </span></div>
+                                    <div class="product-m__price"><b>Price</b>: ${list[i].price}</div>
+                                    <div class="product-m__price" id="sold-quantity-${list[i].id}"><b>Already Sold</b>: Loading...</div>
+
+                                    <div class="product-m__hover">
+                                    <div class="product-m__preview-description">
+                                            <span>${list[i].description}</span></div>
+                                        <div class="product-m__wishlist">
+                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${list[i].id})"></a></div>
+                                        <button class="button-5" role="button" onclick="addTocart(${list[i].id})">Add To Cart</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                        // Fetch the sold quantity for each product
+                        axios.get(`http://localhost:8080/user/foods/quantities/${list[i].id}`, auth).then((response2) => {
+                            document.getElementById(`sold-quantity-${list[i].id}`).innerHTML = `<b>Already Sold</b>: ${response2.data}`;
+                        }).catch((error) => {
+                            console.error(`Error fetching sold quantity for product ${list[i].id}:`, error);
+                        });
+
+                    }
+
+                    html += `
+                        </div>
+                    </div>
+                    <div class="u-s-p-y-60">
+                        <ul class="shop-p__pagination">
+                            <li class="is-active"><a href="shop-grid-full.html">1</a></li>
+                            <li><a href="shop-grid-full.html">2</a></li>
+                            <li><a href="shop-grid-full.html">3</a></li>
+                            <li><a href="shop-grid-full.html">4</a></li>
+                            <li><a class="fas fa-angle-right" href="shop-grid-full.html"></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`;
+                    document.getElementById("app-content").innerHTML = html;
+                }
+            })
+
+        });
+
+
+    }
+
+
+}
+
+// function filterFood() {
+//     let shopIds = [];
+//     let shop = document.getElementsByClassName("shop-name");
+//     console.log(shop);
+//     for (let i = 0; i < shop.length; i++) {
+//         if (shop[i].checked) {
+//             shopIds.push(shop[i].id);
+//         }
+//     }
+//     console.log(shopIds);
+//
+//
+// }
+
+
+function filterByPriceAtShop(id_shop) {
+    console.log(id_shop);
+    let priceMin = document.getElementById("price-min").value;
+    let priceMax = document.getElementById("price-max").value;
+
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    //duyệt qua từng đối tượng trong mảng roles và tạo ra một mảng mới (userRoles) chỉ chứa các giá trị authority
+    let userRoles = currentUser.roles.map(role => role.authority);
+
+    console.log(userRoles);
+
+    if (userRoles.includes("ROLE_USER")) {
+        let auth = {
+            headers: {
+                "Authorization": `Bearer ${currentUser.accessToken}`
+            }
+        }
+
+        axios.get(`http://localhost:8080/user/foods/searchPriceAndShopId`, {
+            params: {
+                id_shop: id_shop,
+                priceMin: priceMin,
+                priceMax: priceMax,
+            }, headers: auth.headers
+        }).then((response) => {
+            let list = response.data;
+            console.log(list)
+            let html = '';
+            if (list.length === 0) {
+                html = `<div style="font-size: 30px">No Product...</div>`;
+                document.getElementById("shop-p__collection").innerHTML = html;
+            } else {
+                html = ` <div class="row is-list-active">`
+                for (let i = 0; i < list.length; i++) {
+                    html += `  
+                        <div class="col-lg-4 col-md-6 col-sm-6">
                                             <div class="product-m">
                                                 <div class="product-m__thumb">
 
-                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" onclick="showFoodDetail(${item.id})">
+                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#" onclick="showFoodDetail(${list[i].id})">
 
-                                                        <img class="aspect__img" src="${item.image}" alt=""></a>
-                                                    <div class="product-m__quick-look">
-
-                                                        <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
+                                                        <img class="aspect__img" src="${list[i].image}" alt=""></a>
+                                               
                                                     <div class="product-m__add-cart">
 
-                                                        <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart" onclick="addTocart(${item.id})">Add to Cart</a></div>
+                                                        <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart" onclick="addTocart(${list[i].id})">Add to Cart</a></div>
                                                 </div>
                                                 <div class="product-m__content">
                                                     <div class="product-m__category">
 
-                                                        <a href="shop-side-version-2.html">${item.shop.name}</a></div>
+                                                        <a href="#" onclick="showFood()">Food</a></div>
                                                     <div class="product-m__name">
 
-                                                        <a href="product-detail.html">${item.name}</a></div>
-                                            
-                                                    <div class="product-m__price">${item.price}</div>
+                                                        <a href="#">${list[i].name}</a></div>
+                                                 
+                                                    <div class="product-m__price">VND ${list[i].price}</div>
                                                     <div class="product-m__hover">
                                                         <div class="product-m__preview-description">
 
-                                                            <span>${item.description}</span></div>
+                                                            <span>${list[i].description}</span></div>
                                                         <div class="product-m__wishlist">
 
-                                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${item.id})"></a></div>
+                                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" onclick="addToWishlist(${list[i].id})" title="Add to Wishlist"></a></div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                 `
-                  }
-                  document.getElementById('food-list').innerHTML = html;
+                          `
+                }
+                html += `</div>`
+                document.getElementById("shop-p__collection").innerHTML = html;
+            }
         })
-        load_js()
+
+
+    }
 }
