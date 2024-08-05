@@ -129,7 +129,7 @@ function showOrderDetails(id){
                                                  <label class="u-s-m-r-8" for="my-order-sort">Coupon:</label>
                                                     <select class="select-box select-box--primary-style" id="my-order-sort" disabled>
                                                         `;
-
+            if(order.coupons.length == 0) html += `<option selected>NO COUPON</option>`
             for (let i = 0; i < order.coupons.length; i++) {
                 if(order.coupons[i].type.toUpperCase() == "MINUS")
                 html += `                                                      
@@ -139,8 +139,10 @@ function showOrderDetails(id){
                     <option selected> ${order.coupons[i].discount} PERCENT</option>`;
                 }
             }
-            let discountAmount = getCouponDiscountAmount(order.coupons[0],getTotalPrice(order));
-            html += `
+            let discountAmount = 0;
+            if(order.coupons.length > 0)
+                      discountAmount = getCouponDiscountAmount(order.coupons[0],getTotalPrice(order));
+                       html += `
                                                         
                                                     </select>
                                                 </div>
@@ -198,7 +200,10 @@ function getTotalPrice(order) {
     return total;
 }
 function getTotalPriceAfterCoupon(order) {
+    if(order.coupons.length > 0)
     return getTotalPrice(order) + order.delivery.cost - getCouponDiscountAmount(order.coupons[0],getTotalPrice(order));
+    else
+    return getTotalPrice(order) + order.delivery.cost
 }
 function getFoodTakeStatus(status,foodTakeStatus) {
     return status && foodTakeStatus ? 'timeline-l-i--finish' : '';

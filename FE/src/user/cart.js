@@ -29,7 +29,7 @@ function showMiniCart(){
                                             
                                             <!--====== End - Mini Product Statistics ======-->                           
 `
-        getList();
+        getMiniList()
 }
 function turnOffAddressEdit(){
         document.getElementById("address-edit-modal").style = "display:none; opacity:1"
@@ -284,7 +284,7 @@ function showCart(){
                         document.getElementById("f-cart-note-1").value = "";
                 }
         }
-        getList()
+        getTotalList()
 }
 function calculatePrice(){
         const deliveries = [
@@ -309,13 +309,16 @@ function calculatePrice(){
                         index = shops[i].getAttribute("data-shop");
         }
         let foods = document.getElementsByClassName("foods-"+index);
+        let check = document.getElementsByClassName("checkbox-"+index);
         let subtotal = 0;
         let quantity = 0;
         let coupon_index = 0;
         for (let i = 0; i < foods.length;i++){
                  if(i == 0) coupon_index = foods[i].id;
-                 subtotal += parseInt(foods[i].getAttribute("price-date")) * foods[i].value;
-                 quantity++;
+                 if(check[i].checked){
+                         subtotal += parseInt(foods[i].getAttribute("price-date")) * foods[i].value;
+                         quantity++;
+                 }
         }
         document.getElementById("food-cost").innerText = subtotal;
         let total = subtotal + ship_cost;
@@ -394,9 +397,97 @@ function chooseShop(id){
                 if(shops[i].getAttribute("data-shop") != id)
                         shops[i].checked = false;
         }
+        let checkbox_food = document.getElementsByClassName("checkbox-food");
+        for (let i = 0; i < checkbox_food.length;i++){
+               checkbox_food[i] = false;
+               checkbox_food[i].setAttribute("disabled",true)
+        }
+        let check = document.getElementsByClassName("checkbox-"+ id);
+        for (let i = 0; i < check.length;i++){
+                check[i].checked = true;
+                check[i].removeAttribute("disabled")
+        }
         calculatePrice()
 }
-function getList(){
+function getTotalList(){
+        axios.get(`http://localhost:8080/cart/total/${getUser().id}`,getAuth()).then(function(response){
+                let data = response.data;
+                          let html = ""
+                          let shop_list = response.data.list_shop;
+                          for (let i= 0 ; i < shop_list.length;i++){
+                               let shop = data[`${shop_list[i]}`]
+                                  let a  = shop[0];
+                                  html += `
+                        <tr style=" border: 1px solid lightgrey; box-shadow: 5px 5px 5px #888888;">
+                        <td>
+                                                <input type="checkbox"  class="select-box select-box--primary-style choose-shop" data-shop="${a.shop.id}" onclick="chooseShop(${a.shop.id})">
+
+                        </td>
+                        <td style="display: flex; justify-content: center; align-items: center">
+                                <div>
+                                    <span class="table-p__name">
+                                                                <a href="product-detail.html">${a.shop.name}</a></span>
+                                </div>
+                                <div style="margin-left: 100px">
+                                <label class="gl-label" for="shipping-country">COUPON</label>
+                                <select class="select-box select-box--primary-style" id="coupon-${a.id}" onchange="calculatePrice()">
+                                                        <option selected value="default"> SELECT COUPON</option></select>
+                                </div>
+                        </td>
+                        </tr>
+                                 `
+                                  getCouponsByFood(a.id,a.shop.id)
+                                  for (let j = 0 ; j < shop.length;j++){
+                                          a = shop[j];
+                                          html += `
+                        <tr>
+                        <td style="width: 5px">
+                               <input type="checkbox"  class="select-box select-box--primary-style choose-shop checkbox-${a.shop.id} checkbox-food" data-shop="${a.shop.id}" data-food="${a.id}" id="checkbox-${a.id}" onclick="calculatePrice()">
+                        </td>
+                        <td>
+                                <div class="table-p__box">
+                                        <div class="table-p__img-wrap">
+
+                                                <img class="u-img-fluid" src="${a.image}" alt="" style="height: 120px"></div>
+                                        <div class="table-p__info">
+
+                                                            <span class="table-p__name">
+
+                                                                <a href="product-detail.html">${a.name}</a></span>
+                                        </div>
+                                </div>
+                        </td>
+                        <td>
+                                <span class="table-p__price">${a.price} VND</span></td>
+
+                        <td>
+
+                                <div class="table-p__input-counter-wrap">
+
+                                        <!--====== Input Counter ======-->
+                                        <div class="input-counter">
+
+                                                <span class="input-counter__minus fas fa-minus" onclick="minusQuantity(${a.id})"></span>
+
+                                                <input class="input-counter__text input-counter--text-primary-style foods-${a.shop.id}" type="text" value="1" data-min="1" data-max="1000" id="${a.id}" price-date="${a.price}">
+
+                                                <span class="input-counter__plus fas fa-plus" onclick="plusQuantity(${a.id})"></span>
+                                        <!--====== End - Input Counter ======-->
+                                </div>
+                        </td>
+                        <td>
+                                <div class="table-p__del-wrap">
+                                        <a class="far fa-trash-alt table-p__delete-link" onclick="deleteCart(${a.id})"></a></div>
+                        </td>
+                        </tr>
+                                 `
+                                  }
+                          }
+                        document.getElementById("cart-container").innerHTML = html;
+        })
+
+}
+function getMiniList(){
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
         if(currentUser == null) return;
         let auth = {
@@ -483,101 +574,6 @@ function getList(){
 
                         }
                 document.getElementById("cart-container-mini").innerHTML = html;
-                html = "";
-                let index=  0;
-                for (index = 0; index < data.food.length;index++){
-                        let item = [];
-                        let first = index;
-                        if(data.food.length == 1){
-                                item.push(data.food[0]);
-                        }else
-                        for (let j = index; j < data.food.length;j++){
-                                console.log(j)
-                                if(j < data.food.length-1){
-                                        if(data.food[j].shop.id == data.food[j+1].shop.id){
-                                                item.push(data.food[j]);
-                                                item.push(data.food[j+1]);
-                                                index += 2;
-                                        }else{
-                                                item.push(data.food[j]);
-                                                index++;
-                                        }
-                                }else if(j + 1 > data.food.length){
-                                        if(data.food[j].shop.id == data.food[j+1].shop.id){
-                                               item.push(data.food[j]);
-                                               index++;
-                                        }
-                                }
-                        }
-                        let a  = data.food[first];
-                                html += `
-                        <tr style=" border-bottom: 1px solid black">
-                        <td>                                                             
-                                                <input type="checkbox"  class="select-box select-box--primary-style choose-shop" data-shop="${a.shop.id}" onclick="chooseShop(${a.shop.id})">                                   
-                                                                                                                          
-                        </td>
-                        <td style="display: flex; justify-content: center; align-items: center">    
-                                <div>
-                                    <span class="table-p__name">
-                                                                <a href="product-detail.html">${a.shop.name}</a></span>  
-                                </div>
-                                <div style="margin-left: 100px">
-                                <label class="gl-label" for="shipping-country">COUPON</label>
-                                <select class="select-box select-box--primary-style" id="coupon-${a.id}" onchange="calculatePrice()">
-                                                        <option selected value="default"> SELECT COUPON</option></select>
-                                </div> 
-                        </td>        
-                        </tr>
-                                 `
-                                getCouponsByFood(a.id,a.shop.id)
-                        for(let j = 0 ; j < item.length; j++){
-                                let a  = item[j];
-                                html += `
-                        <tr>
-                        <td style="width: 5px">                                
-                               <input type="checkbox"  class="select-box select-box--primary-style choose-shop" data-shop="${a.shop.id}" id="checkbox-${a.id}">                                   
-                        </td>
-                        <td>    
-                                <div class="table-p__box">
-                                        <div class="table-p__img-wrap">
-
-                                                <img class="u-img-fluid" src="${a.image}" alt="" style="height: 120px"></div>
-                                        <div class="table-p__info">
-
-                                                            <span class="table-p__name">
-
-                                                                <a href="product-detail.html">${a.name}</a></span>
-                                        </div>
-                                </div>
-                        </td>   
-                        <td>                   
-                                <span class="table-p__price">${a.price} VND</span></td>
-                                
-                        <td>
-                       
-                                <div class="table-p__input-counter-wrap">
-
-                                        <!--====== Input Counter ======-->
-                                        <div class="input-counter">
-
-                                                <span class="input-counter__minus fas fa-minus" onclick="minusQuantity(${a.id})"></span>
-
-                                                <input class="input-counter__text input-counter--text-primary-style foods-${a.shop.id}" type="text" value="1" data-min="1" data-max="1000" id="${a.id}" price-date="${a.price}">
-
-                                                <span class="input-counter__plus fas fa-plus" onclick="plusQuantity(${a.id})"></span>
-                                        <!--====== End - Input Counter ======-->
-                                </div>
-                        </td>
-                        <td>
-                                <div class="table-p__del-wrap">
-                                        <a class="far fa-trash-alt table-p__delete-link" onclick="deleteCart(${a.id})"></a></div>
-                        </td>
-                        </tr>
-                                 `
-                        }
-                }
-                document.getElementById("cart-container").innerHTML = html;
-
         })
 }
 function createOrder(){
@@ -605,7 +601,7 @@ function createOrder(){
                                         let quantity = parseInt(document.getElementById(foods[i].id).value);
                                         foods[i].quantity = quantity;
                                         let coupon;
-                                        if (document.getElementById("coupon-" + foods[i].id) != null) {
+                                        if (document.getElementById("coupon-" + foods[i].id).value != "default") {
                                                 coupon = document.getElementById("coupon-" + foods[i].id).value;
                                                 coupons.push({
                                                         id: coupon
@@ -635,7 +631,6 @@ function createOrder(){
                         alert("ORDER SUCCESS")
                         showMiniCart()
                         showCart()
-                        deleteAll();
                 })
         })
 }

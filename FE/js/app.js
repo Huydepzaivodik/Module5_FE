@@ -33,9 +33,6 @@
         $shopListBtn = $('.js-shop-list-target'),
         $shopPerspectiveRow = $('.shop-p__collection > div'),
         $shopFilterBtn = $('.js-shop-filter-target');
-
-
-
     // Bind Scroll Up to all pages
     RESHOP.initScrollUp = function() {
         $.scrollUp({

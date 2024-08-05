@@ -71,7 +71,6 @@
     axios.post('http://localhost:8080/wishlist/deleteAll', currentUser.id, auth).then((response) => {
     alert(response.data);
     showWishlist();
-    showMiniWishlist();
 });
 }
 
@@ -158,7 +157,7 @@
                                     </div>
                                 </div>
                     `;
-}
+    }
     document.getElementById("wishlist-container").innerHTML = fullHtml;
 });
 }

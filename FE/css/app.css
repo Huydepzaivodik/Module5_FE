@@ -5997,6 +5997,12 @@ input::-ms-clear {
 /*--------------------------------------------------------------
 20.3 Owl-Carousel
 --------------------------------------------------------------*/
+#orders-list-stats tr,td {
+     border: 1px solid black;
+}
+#stats-list {
+      border-collapse: collapse;
+}
 .slider-fouc {
   display: none; }
 
