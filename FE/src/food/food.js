@@ -1385,8 +1385,9 @@ function filterFood(){
              if(category[i].checked)
                  categoryList.push(category[i].value);
          }
+         console.log(categoryList)
          let url = `http://localhost:8080/user/foods/filter?`
-         if(address != "") url += "address=" + address;
+         if(city != "" && district != "") url += "address=" + address;
          if(coupons_type != ""){
              if(url.at(url.length-1) == "?")
                  url += `coupon=${coupons_type}`
@@ -1399,9 +1400,20 @@ function filterFood(){
              else
                  url += `&start=${start}&end=${end}`
          }
+         if(url.at(url.length-1) == "?")
+             url = `http://localhost:8080/user/foods/filter`
          axios.get(url,getAuth()).then((response) => {
+                 let foods = response.data.foods;
+                 let foods_check = []
+                 for (let i = 0 ; i < foods.length;i++){
+                      let name = foods[i].name;
+                      for (let j = 0 ; j < categoryList.length;j++){
+                           if(name.toUpperCase().includes(categoryList[j]))
+                                   foods_check.push(foods[i])
+                      }
+                 }
                  if(response.data.foods.length > 0)
-                     getFoodListHtml(response.data.foods)
+                     getFoodListHtml(foods_check)
                  else
                      document.getElementById("food-list").innerHTML = `
                               <div class="section__content">
