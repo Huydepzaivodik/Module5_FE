@@ -150,73 +150,9 @@ function showFood() {
                 let html = `<div class="u-s-p-y-90">
     <div class="container">
         <div class="row">
-         <div class="col-lg-3 col-md-12">
-                            <div class="shop-w-master">
-                                <h1 class="shop-w-master__heading u-s-m-b-30"><i class="fas fa-filter u-s-m-r-8"></i>
-
-                                    <span>FILTERS</span></h1>
-                                <div class="shop-w-master__sidebar sidebar--bg-snow">                                
-                                    <div class="u-s-m-b-30">
-                                        <div class="shop-w">
-                                            <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">NUMBER OF SALES </h1>
-
-                                                <span class="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
-                                            </div>
-                                            <div class="shop-w__wrap collapse show" id="s-shipping">
-                                              <ul class="shop-w__list gl-scroll">
-
-                                                    <li>                                                                                                          
-                                                            <input type="radio" class="quantity" name="quantity_range">                                                         
-                                                                <label style="color: #0D0A0A">From 50-100 pcs</label>                                                                                                        
-                                                    </li>      
-                                                    <li>                                                                                                       
-                                                            <input type="radio" class="quantity" name="quantity_range">                                                          
-                                                                <label style="color: #0D0A0A">From 100-200 pcs</label>                                                                                                         
-                                                    </li>                                                     
-                                                    <li>                                                                                                          
-                                                            <input type="radio" class="quantity" name="quantity_range">                                                        
-                                                                <label style="color: #0D0A0A">From 200-300 pcs</label>                                                                                                         
-                                                    </li>
-`
-                html += `</ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="u-s-m-b-30">
-                                        <div class="shop-w">
-                                            <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">PRICE</h1>
-
-                                                <span class="fas fa-minus shop-w__toggle" data-target="#s-price" data-toggle="collapse"></span>
-                                            </div>
-                                            <div class="shop-w__wrap collapse show" id="s-price">
-                                                <form class="shop-w__form-p">
-                                                    <div class="shop-w__form-p-wrap">
-                                                        <div>
-
-                                                            <label for="price-min"></label>
-
-                                                            <input class="input-text input-text--primary-style" type="number" id="price-min" placeholder="Min"></div>
-                                                        <div>
-
-                                                            <label for="price-max"></label>
-
-                                                            <input class="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max"></div>
-                                                        <div>
-
-                                                            <button class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" onclick="filterByPrice()"></button></div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="u-s-m-b-30">
-                                        <a style="margin-left: 70px;font-size: 20px; margin-bottom: 20px" class="gl-tag btn--e-brand-shadow" onclick="filterFood()" href="#">Filter Food</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+         <div class="col-lg-3 col-md-12" id="food-mega-filter">
+                            
+         </div>
          <div class="col-lg-9 col-md-12">
               <!--====== Product Breadcrumb ======-->
                             <div class="pd-breadcrumb u-s-m-b-30">
@@ -256,9 +192,9 @@ function showFood() {
 </div>
 
                     <div class="shop-p__collection" id="shop-p__collection">
-                        <div class="row is-grid-active">`;
-                for (let i = 0; i < list.length; i++) {
-                    html += `               <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="row is-grid-active" id="food-list">`;
+            for (let i = 0; i < list.length; i++) {
+                html += `               <div class="col-lg-3 col-md-4 col-sm-6">
                                 <div class="product-m">
                                     <div class="product-m__thumb">
                                      <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#" onclick="showFoodDetail(${list[i].id})">
@@ -309,9 +245,9 @@ function showFood() {
 
                 html += `</div>
                         </div>`
-                document.getElementById("app-content").innerHTML = html;
-            });
-        })
+            document.getElementById("app-content").innerHTML = html;
+            getFoodFilterUI()
+        });
     }
 
 
@@ -366,17 +302,13 @@ function AddFoodForm() {
                                             </div>
                                         </div>
                                     </div>   
-                                                                        </div>   
-
-                                      
+                               </div>                                        
 `
     document.getElementById('shop-p__collection').innerHTML = html;
 
 }
 
 function addFood() {
-
-
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let auth = {
         headers: {
@@ -592,65 +524,21 @@ function searchFood() {
                                 <h1 class="shop-w-master__heading u-s-m-b-30"><i class="fas fa-filter u-s-m-r-8"></i>
 
                                     <span>FILTERS</span></h1>
-                                <div class="shop-w-master__sidebar sidebar--bg-snow">                                
-                                    <div class="u-s-m-b-30">
-                                        <div class="shop-w">
-                                            <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">SHOP</h1>
+                                <div class="shop-w-master__sidebar sidebar--bg-snow">
+                                     <div class="u-s-m-b-30">
+                                            <div class="shop-w">
+                                               <div class="shop-w__intro-wrap">
+                                                  <h1 class="shop-w__h">FOODS</h1>
 
-                                                <span class="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
-                                            </div>
-                                             <div class="shop-w__wrap collapse show" id="s-shipping">
-                                               <ul class="shop-w__list gl-scroll">
-
-                                                    <li>                                                                                                          
-                                                            <input type="radio" class="quantity" name="quantity_range">                                                         
-                                                                <label style="color: #0D0A0A">From 50-100 pcs</label>                                                                                                        
-                                                    </li>      
-                                                    <li>                                                                                                       
-                                                            <input type="radio" class="quantity" name="quantity_range">                                                          
-                                                                <label style="color: #0D0A0A">From 100-200 pcs</label>                                                                                                         
-                                                    </li>                                                     
-                                                    <li>                                                                                                          
-                                                            <input type="radio" class="quantity" name="quantity_range">                                                        
-                                                                <label style="color: #0D0A0A">From 200-300 pcs</label>                                                                                                         
-                                                    </li>`
-
-                    html += `</ul>
-                                            </div>
-                                        </div>
+                                                  <span class="fas fa-minus shop-w__toggle collapsed" data-target="#foods" data-toggle="collapse"></span>
+                                               </div>
+                                               <div class="shop-w__wrap collapse" id="foods">
+                                               <ul class="shop-w__category-list gl-scroll" id="foods-filter-list">
+                                            
+                                               </ul>
                                     </div>
-                                    <div class="u-s-m-b-30">
-                                        <div class="shop-w">
-                                            <div class="shop-w__intro-wrap">
-                                                <h1 class="shop-w__h">PRICE</h1>
-
-                                                <span class="fas fa-minus shop-w__toggle" data-target="#s-price" data-toggle="collapse"></span>
-                                            </div>
-                                            <div class="shop-w__wrap collapse show" id="s-price">
-                                                <div class="shop-w__form-p">
-                                                    <div class="shop-w__form-p-wrap">
-                                                        <div>
-
-                                                            <label for="price-min"></label>
-
-                                                            <input class="input-text input-text--primary-style" type="number" id="price-min" placeholder="Min"></div>
-                                                        <div>
-
-                                                            <label for="price-max"></label>
-
-                                                            <input class="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max"></div>
-                                                        <div>
-
-                                                            <button class="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" onclick="filterByPrice()"></button></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                      <div class="u-s-m-b-30">
-                                        <a style="margin-left: 70px;font-size: 20px; margin-bottom: 20px" class="gl-tag btn--e-brand-shadow" onclick="filterFood()" href="#">Filter Food</a>
-                                    </div>
+                                </div>
+                                     </div>                                    
                                 </div>
                             </div>
                         </div>
@@ -1367,65 +1255,34 @@ function filterByPrice() {
                                         <a href="#" onclick="showMain()" style="font-size: 13px">Home</a></li>
                                     <li class="is-marked">
 
-                                        <a href="#" onclick="showFood()"  style="font-size: 13px">Food</a></li>
-                                   
-                                </ul>
-                            </div>
-                            <!--====== End - Product Breadcrumb ======-->
-                <div class="shop-p">
-                    <div class="shop-p__toolbar u-s-m-b-30">
-                        <div class="shop-p__meta-wrap u-s-m-b-60">
-                            <span class="shop-p__meta-text-1">FOUND ${list.length} RESULTS</span>
-                            <div class="shop-p__meta-text-2">
-                                <span>Related Searches:</span>
-                                <a class="gl-tag btn--e-brand-shadow" href="#">men's clothing</a>
-                                <a class="gl-tag btn--e-brand-shadow" href="#">mobiles & tablets</a>
-                                <a class="gl-tag btn--e-brand-shadow" href="#">books & audible</a>
-                            </div>
-                        </div>
-                        <!--====== Search Form ======-->
-                                        <div style="display: flex">
+                                        <span class="product-o__price">${food.price}
+                                          </span>
+                                    </div>
+                                </div>`
+             }
+             document.getElementById("shop-list").innerHTML = html;
+             load_js();
+         })
+}
+function showBestSeller(){
+         document.getElementById("app-content").innerHTML = `            
+            <div class="u-s-p-y-90">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="shop-p">
+                                <div class="shop-p__toolbar u-s-m-b-30">
+                                    <div class="shop-p__meta-wrap u-s-m-b-60">
+                                        <h2 style="text-align: center; color: black">BEST SELLER FOODS OF DAY</h2>
+                                       
+                                    </div>
+                                    <div class="shop-p__tool-style">
+                                        <div class="tool-style__group u-s-m-b-8">
+                                     
+                                            <span class="js-shop-grid-target">Grid</span>
 
-    <div class="main-form" style="margin-bottom: 20px">
-        <label for="main-search-food"></label>
-        <input class="input-text input-text--border-radius input-text--style-1" type="text" style="width: 90%;" id="main-search-food" placeholder="Search" name="foodName">
-        <button class="btn btn--icon fas fa-search main-search-button-food" onclick="searchFood()"></button>
-    </div>
-    <!--====== End - Search Form ======-->
-
-</div>
-                    <div class="shop-p__collection" id="shop-p__collection">
-                        <div class="row is-grid-active">`;
-
-                    for (let i = 0; i < list.length; i++) {
-                        html += `<div class="col-lg-3 col-md-4 col-sm-6">
-                            <div class="product-m">
-                                <div class="product-m__thumb">
-                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#"  onclick="showFoodDetail(${list[i].id})">
-                                        <img class="aspect__img" src="${list[i].image}" alt=""></a>
-                                    <div class="product-m__quick-look">
-                                        <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
-                                    <div class="product-m__add-cart">
-                                            <a></a></div>
-                                </div>
-                                <div class="product-m__content">
-                                    <div class="product-m__category">
-                                        <a  href="#"></a></div>
-                                    <div class="product-m__name">
-                                        <a href="product-detail.html">${list[i].name}</a></div>
-                                    <div class="product-m__rating gl-rating-style">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i>
-                                        <span class="product-m__review"> </span></div>
-                                    <div class="product-m__price"><b>Price</b>: ${list[i].price}</div>
-                                    <div class="product-m__price" id="sold-quantity-${list[i].id}"><b>Already Sold</b>: Loading...</div>
-
-                                    <div class="product-m__hover">
-                                    <div class="product-m__preview-description">
-                                            <span>${list[i].description}</span></div>
-                                        <div class="product-m__wishlist">
-                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${list[i].id})"></a></div>
-                                        <button class="button-5" role="button" onclick="addTocart(${list[i].id})">Add To Cart</button>
-
+                                            <span class="js-shop-list-target is-active">List</span></div>
+                                      
                                     </div>
                                 </div>
                             </div>
@@ -1557,7 +1414,341 @@ function filterByPriceAtShop(id_shop) {
                 document.getElementById("shop-p__collection").innerHTML = html;
             }
         })
+        load_js()
+}
+var getJSON = function(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            callback(null, xhr.response);
+        } else {
+            callback(xhr.status, xhr.response);
+        }
+    };
+    xhr.send();
+};
 
+function addressSelector(){
+    getJSON('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json', function(err, data) {
+        console.log(data);
+        var citis = document.getElementById("city-filter");
+        var districts = document.getElementById("district-filter");
+        if (err !== null) {
+            console.error('Something went wrong: ' + err);
+        } else {
+            for (const x of data) {
+                citis.options[citis.options.length] = new Option(x.Name, x.Id);
+                citis.options[citis.options.length-1].setAttribute("address",x.Name)
+                citis.options[citis.options.length-1].classList.add("city-list")
+            }
+            citis.onchange = function () {
+                districts.length = 1;
+                if(this.value != ""){
+                    const result = data.filter(n => n.Id === this.value);
 
+                    for (const k of result[0].Districts) {
+                        districts.options[districts.options.length] = new Option(k.Name, k.Id);
+                    }
+                }
+            };
+
+        }
+    });
+}
+function getFoodListHtml(list){
+    let html = "";
+    for (let i = 0; i < list.length; i++) {
+        html += `               <div class="col-lg-3 col-md-4 col-sm-6">
+                                <div class="product-m">
+                                    <div class="product-m__thumb">
+                                     <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#" onclick="showFoodDetail(${list[i].id})">
+                                    
+                                            <img class="aspect__img" src="${list[i].image}" alt=""></a>
+                                        <div class="product-m__quick-look">
+
+                                            <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
+                                        <div class="product-m__add-cart">
+
+                                            
+                                            </div>
+
+                                    </div>
+                                    <div class="product-m__content">
+                                        <div class="product-m__category">
+
+                                            <a href="#"></a></div>
+                                        <div class="product-m__name">
+
+                                            <a href="product-detail.html">${list[i].name}</a></div>
+                                        <div class="product-m__rating gl-rating-style"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+
+                                        <span class="product-m__review"></span></div>
+                                        <div class="product-m__price"><b>Price</b>: ${list[i].price}</div>
+
+                                        <div class="product-m__hover">
+                                            <div class="product-m__preview-description">
+
+                                                <span>${list[i].description}</span></div>
+                                            <div class="product-m__wishlist">
+
+                                                <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" onclick="addToWishlist(${list[i].id})"></a></div>
+                                        <button class="button-5" role="button" onclick="addTocart(${list[i].id})">Add To Cart</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+    }
+        document.getElementById('food-list').innerHTML = html;
+}
+
+function getFoodFilterUI(){
+         document.getElementById('food-mega-filter').innerHTML = `
+                          <div class="shop-w-master">
+                                <h1 class="shop-w-master__heading u-s-m-b-30"><i class="fas fa-filter u-s-m-r-8"></i>
+                                    <span>FILTERS</span></h1>
+                                <div class="shop-w-master__sidebar sidebar--bg-snow">
+                                     <div class="u-s-m-b-30">
+                                           <div class="shop-w">
+                                                <div class="shop-w__intro-wrap">
+                                                    <h1 class="shop-w__h">ADDRESS</h1>
+                                                    <span class="fas fa-minus shop-w__toggle collapsed" data-target="#address" data-toggle="collapse"></span>
+                                                </div>
+                                                <div class="shop-w__wrap collapse" id="address">
+                                                     <select class="select-box select-box--primary-style" id="city-filter">
+                                                        <option selected value="">Choose State/Province</option>                                                        
+                                                     </select>
+                                                     <select class="select-box select-box--primary-style" id="district-filter">
+                                                        <option selected value="">Choose District</option>                                                        
+                                                     </select>
+                                                </div>
+                                           </div>
+                                     </div>
+                                     <div class="u-s-m-b-30">
+                                           <div class="shop-w">
+                                                <div class="shop-w__intro-wrap">
+                                                    <h1 class="shop-w__h">CATEGORY</h1>
+                                                    <span class="fas fa-minus shop-w__toggle collapsed" data-target="#category" data-toggle="collapse"></span>
+                                                </div>
+                                                <div class="shop-w__wrap collapse" id="category">
+                                                      <ul id="category-list">
+                                                          
+                                                      </ul>
+                                                </div>
+                                           </div>
+                                     </div>
+                                     <div class="u-s-m-b-30">
+                                           <div class="shop-w">
+                                                <div class="shop-w__intro-wrap">
+                                                    <h1 class="shop-w__h">PRICE RANGE</h1>
+                                                    <span class="fas fa-minus shop-w__toggle collapsed" data-target="#price" data-toggle="collapse"></span>
+                                                </div>
+                                                <div class="shop-w__wrap collapse" id="price">
+                                                      <label id="start-price" class="check-box__label">FROM</label>
+                                                      <input  class="input-text input-text--primary-style" id="start-price" style="width: 100%">
+                                                      <label id="start-price" class="check-box__label">TO</label>
+                                                      <input class="input-text input-text--primary-style" id="end-price" style="width: 100%">
+                                                </div>
+                                           </div>
+                                     </div>
+                                     <div class="u-s-m-b-30">
+                                           <div class="shop-w">
+                                                <div class="shop-w__intro-wrap">
+                                                    <h1 class="shop-w__h">COUPON</h1>
+                                                    <span class="fas fa-minus shop-w__toggle collapsed" data-target="#coupon" data-toggle="collapse"></span>
+                                                </div>
+                                                <div class="shop-w__wrap collapse" id="coupon">
+                                                      <ul>
+                                                          <li>
+                                                             <div class="check-box">
+                                                                <input class="coupon-list" type="checkbox" value="minus">
+                                                                <div class="check-box__state check-box__state--primary">
+                                                                <label class="check-box__label" >MINUS</label></div>
+                                                              </div>
+                                                          </li>
+                                                          <li>
+                                                             <div class="check-box">
+                                                                <input class="coupon-list" type="checkbox" value="percent">
+                                                                <div class="check-box__state check-box__state--primary">
+                                                                <label class="check-box__label" >PERCENT</label></div>
+                                                              </div>
+                                                          </li>
+                                                      </ul>
+                                                </div>
+                                           </div>
+                                     </div>                                     
+                            <div class="u-s-m-b-30">
+                                <div class="shop-w">
+                                     <button class="btn btn--e-white-brand" style="width: 100%; padding: 25px;font-size: 25px ; border: 1px solid brown; border-radius: 25px" onclick="filterFood()">FILTER</button>
+                                </div>
+                            </div>
+                                </div>
+                          </div>`
+         addressSelector();
+         let items = ["PIZZA","NOODLE","CREAM","TEA","CHICKEN","PHO","HOTPOT","VEGETARIAN","DESSERT","SUSHI","DRINK"]
+         let category = "";
+         for (let i = 0 ; i < items.length; i++) {
+             category += `<li>
+                                <div class="check-box">
+                                                    <input class="category-list" type="checkbox" id="category-${i}" value="${items[i]}" onchange="chooseCategory(${i})">
+                                                    <div class="check-box__state check-box__state--primary">
+                                                    <label class="check-box__label" for="category-${i}">${items[i]}</label></div>
+                               </div>
+                          </li>`
+         }
+         document.getElementById("category-list").innerHTML = category;
+}
+function filterFood(){
+         let city= document.getElementById("city-filter").value;
+         let district= document.getElementById("district-filter").value;
+         let address = city+"-"+district;
+         let coupons = document.getElementsByClassName("coupon-list");
+         let coupons_type =""
+         for (let i = 0; i < coupons.length; i++) {
+              if (coupons[i].checked)
+                   coupons_type = coupons[i].value;
+         }
+         let start = +document.getElementById("start-price").value;
+         let end = +document.getElementById("end-price").value;
+         let category = document.getElementsByClassName("category-list");
+         let categoryList = []
+         for (let i = 0; i < category.length; i++) {
+             if(category[i].checked)
+                 categoryList.push(category[i].value);
+         }
+         console.log(categoryList)
+         let url = `http://localhost:8080/user/foods/filter?`
+         if(city != "" && district != "") url += "address=" + address;
+         if(coupons_type != ""){
+             if(url.at(url.length-1) == "?")
+                 url += `coupon=${coupons_type}`
+             else
+                 url += `&coupon=${coupons_type}`
+         }
+         if(start != 0 && end != 0){
+             if(url.at(url.length-1) == "?")
+                 url += `start=${start}&end=${end}`
+             else
+                 url += `&start=${start}&end=${end}`
+         }
+         if(url.at(url.length-1) == "?")
+             url = `http://localhost:8080/user/foods/filter`
+         axios.get(url,getAuth()).then((response) => {
+                 let foods = response.data.foods;
+                 let foods_check = []
+                 for (let i = 0 ; i < foods.length;i++){
+                      let name = foods[i].name;
+                      for (let j = 0 ; j < categoryList.length;j++){
+                           if(name.toUpperCase().includes(categoryList[j]))
+                                   foods_check.push(foods[i])
+                      }
+                 }
+                 if(response.data.foods.length > 0)
+                     getFoodListHtml(foods_check)
+                 else
+                     document.getElementById("food-list").innerHTML = `
+                              <div class="section__content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 u-s-m-b-30">
+                                <div class="empty">
+                                    <div class="empty__wrap">
+
+                                        <span class="empty__big-text">NO RESULTS FOUND</span>
+
+                                        <span class="empty__text-1">Your search, did not match any foods</span>
+
+                                        <a class="empty__redirect-link btn--e-brand" href="#" onclick="showFood()">CONTINUE SHOPPING</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                     `
+         })
+}
+function chooseCategory(id){
+         let categorys = document.getElementsByClassName("category-list");
+         for (let i = 0; i < categorys.length; i++){
+             if(i != id)
+                categorys[i].checked = false;
+         }
+}
+function filterByPriceAtShop(id_shop) {
+    console.log(id_shop);
+    let priceMin = document.getElementById("price-min").value;
+    let priceMax = document.getElementById("price-max").value;
+
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    //duyệt qua từng đối tượng trong mảng roles và tạo ra một mảng mới (userRoles) chỉ chứa các giá trị authority
+    let userRoles = currentUser.roles.map(role => role.authority);
+
+    console.log(userRoles);
+
+    if (userRoles.includes("ROLE_USER")) {
+        let auth = {
+            headers: {
+                "Authorization": `Bearer ${currentUser.accessToken}`
+            }
+        }
+
+        axios.get(`http://localhost:8080/user/foods/searchPriceAndShopId`, {
+            params: {
+                id_shop: id_shop,
+                priceMin: priceMin,
+                priceMax: priceMax,
+            }, headers: auth.headers
+        }).then((response) => {
+            let list = response.data;
+            console.log(list)
+            let html = '';
+            if (list.length === 0) {
+                html = `<div style="font-size: 30px">No Product...</div>`;
+                document.getElementById("shop-p__collection").innerHTML = html;
+            } else {
+                html = ` <div class="row is-list-active">`
+                for (let i = 0; i < list.length; i++) {
+                    html += `  
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                                            <div class="product-m">
+                                                <div class="product-m__thumb">
+
+                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="#" onclick="showFoodDetail(${list[i].id})">
+
+                                                        <img class="aspect__img" src="${list[i].image}" alt=""></a>
+                                               
+                                                    <div class="product-m__add-cart">
+
+                                                        <a class="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart" onclick="addTocart(${list[i].id})">Add to Cart</a></div>
+                                                </div>
+                                                <div class="product-m__content">
+                                                    <div class="product-m__category">
+
+                                                        <a href="#" onclick="showFood()">Food</a></div>
+                                                    <div class="product-m__name">
+
+                                                        <a href="#">${list[i].name}</a></div>
+                                                 
+                                                    <div class="product-m__price">VND ${list[i].price}</div>
+                                                    <div class="product-m__hover">
+                                                        <div class="product-m__preview-description">
+
+                                                            <span>${list[i].description}</span></div>
+                                                        <div class="product-m__wishlist">
+
+                                                            <a class="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" onclick="addToWishlist(${list[i].id})" title="Add to Wishlist"></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                          `
+                }
+                html += `</div>`
+                document.getElementById("shop-p__collection").innerHTML = html;
+            }
+        })
     }
 }
