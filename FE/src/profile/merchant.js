@@ -537,7 +537,6 @@ function getStatsUI(type){
     axios.get(`http://localhost:8080/merchant/shop/${getUser().id}`,getAuth()).then((response) =>{
         axios.get(`http://localhost:8080/orders/stats/${response.data.id}?type=${type}`,getAuth()).then(({data}) =>{
             let bestseller = data.bestseller;
-            console.log("o day")
             console.log(data.bestseller)
             let bestsellerHtml = "";
             for(let i = 0; i < bestseller.length; i++) {
@@ -609,6 +608,7 @@ function getStatsUI(type){
         })
     })
 }
+
 function showMerchantUI(){
          showMain()
          document.getElementById("nav-bar").innerHTML = `

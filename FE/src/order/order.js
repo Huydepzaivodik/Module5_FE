@@ -1,5 +1,7 @@
 let orders = []
 function showOrder() {
+    if(document.getElementById("orders-button") != null)
+    document.getElementById("orders-button").classList.add("is-active");
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let auth = {
         headers: {
@@ -371,14 +373,50 @@ function showMegaFilter(){
     else
         document.getElementById("filter-button").classList.remove("is-active")
 }
+
+function showOrdersCustomer(user,shop){
+    axios.get(`http://localhost:8080/orders/shop/user?user=${user}&shop=${shop}`,getAuth()).then((respone)=>{
+        let data = respone.data;
+        document.getElementById("app-content").innerHTML = OrderList(data);
+        getAllOrderStatus(orders)
+        getFunctionButton(data)
+        document.getElementById("customer-button").classList.add("is-active");
+        document.getElementById("orders-button").classList.remove("is-active");
+    })
+}
+function showCustomerBought(id){
+    document.getElementById("customer-button").classList.add("is-active");
+    document.getElementById("orders-button").classList.remove("is-active");
+    axios.get(`http://localhost:8080/orders/shop/users/${id}`,getAuth()).then((response)=>{
+        let customers = response.data;
+        console.log(customers)
+        let html = "";
+        for (let i = 0; i < customers.length; i++){
+            let customer = customers[i];
+            html += `<div class="w-r u-s-m-b-30">
+                                    <div class="w-r__container">
+                                        <div class="w-r__wrap-1">                                          
+                                            <div class="w-r__info">
+                                                <span class="w-r__name">${customer.name}</span>
+                                                <span class="w-r__name">${customer.phoneNumber}</span>
+                                                <span class="w-r__price">${customer.address}</span>
+                                            </div>
+                                        </div>
+                                        <div class="w-r__wrap-2">                                          
+                                            <a class="w-r__link btn--e-transparent-platinum-b-2" onclick="showOrdersCustomer(${customer.id},${id})">VIEW</a>
+                                    </div>
+                                </div>`
+        }
+        document.getElementById('orders-list').innerHTML = html;
+    })
+
+}
 function OrderList(list) {
     let canceledOrdersCount = getCanceledOrdersCount(list);
     let ordersCount = getOrdersCount(list);
     let doneCount = getDoneCount(list);
     let foodTakenCount = getFoodTakeCount(list);
     let foodShipCount = getFoodShipCount(list);
-
-
     let html = `
         <div class="u-s-p-y-60">
             <div class="u-s-p-b-60">
@@ -386,7 +424,7 @@ function OrderList(list) {
                 <div class="section__content">
                     <div class="dash">
                         <div class="container">
-                            <div class="row">
+                            <div class="row" id="orders-container">
                                 <div class="col-lg-3" id="order-status">
                                 </div>
                                 <div class="col-lg-9 col-md-12" >
@@ -399,14 +437,15 @@ function OrderList(list) {
                                                     <div class="tool-style__group u-s-m-b-8">
 
                                                            <span class="js-shop-filter-target" id="filter-button"><a onclick="showMegaFilter()">Filters</a></span>
-
+                                                          <span class="js-shop-filter-target is-active" id="orders-button"><a onclick="showOrder()">Orders</a></span>
+                                                          <span class="js-shop-filter-target" id="customer-button"><a onclick="showCustomerBought(${list[0].shops[0].id})">Customer</a></span>
                                                     </div>                                                 
                                                 </div>                                                
                                                 
                                              </div>
                                     </div>
                                 </div>
-                                 <div class="m-order__list" style="background: lightgrey">
+                                 <div class="m-order__list" style="background: lightgrey" id="orders-list">
     `;
 
     for (let i = 0; i < list.length; i++) {
