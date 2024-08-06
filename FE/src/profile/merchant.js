@@ -510,10 +510,10 @@ function showProfitStats(){
                                                          <span class="o-card__name" style="color: orangered; font-size: 24px; font-weight: bold">ORDERS</span>
                                                          
                                                        <tr style="text-align: center; font-weight: bold; color: #222222">
-                                                            <td style="width: 25%">ORDER ID</td>
-                                                            <td style="width: 25%">DATE</td>
-                                                            <td style="width: 25%">DELIVERY</td>
-                                                            <td style="width: 25%">TOTAL</td>
+                                                            <td style="width: 25%; border: 1px solid black">ORDER ID</td>
+                                                            <td style="width: 25%;  border: 1px solid black">DATE</td>
+                                                            <td style="width: 25%;  border: 1px solid black">DELIVERY</td>
+                                                            <td style="width: 25%;  border: 1px solid black">TOTAL</td>
                                                         </tr>
                                                      </thead>
                                                      <tbody style="overflow: auto; max-height: 800px" id="orders-list-stats">
@@ -596,10 +596,10 @@ function getStatsUI(type){
                 let order = orders[i];
                 fullHtml += `       
                         <tr style="text-align: center;">
-                           <td style="width: 25%">#${order.id}</td>
-                           <td style="width: 25%">${new Date(order.date).toDateString() }</td>
-                           <td style="width: 25%">${order.delivery.name}</td>
-                           <td style="width: 25%">${order.total - order.delivery.cost}</td>
+                           <td style="width: 25%;  border: 1px solid black">#${order.id}</td>
+                           <td style="width: 25%;  border: 1px solid black">${new Date(order.date).toDateString() }</td>
+                           <td style="width: 25%;  border: 1px solid black">${order.delivery.name}</td>
+                           <td style="width: 25%;  border: 1px solid black">${order.total - order.delivery.cost}</td>
                         </tr>
                     `;
             }

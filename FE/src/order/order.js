@@ -350,11 +350,11 @@ function getFunctionButton(list){
              html = ""
              if(order.status == "CANCEL")
                  html = `<a onclick="showOrderDetails(${order.id})" >DETAILS</a>`
+             else if(order.status == "DONE" || order.status == "SHIPPING")
+                 html = `<a onclick="showOrderDetails(${order.id})" >DETAILS</a>`
              else if(order.status != "PENDING")
                  html = `<a class="receiveOrder" data-id="${order.id}" onclick="updateOrderStatus(${order.id})">UPDATE STATUS |</a>
                  <a onclick="showOrderDetails(${order.id})" >DETAILS</a>`
-             else if(order.status == "DONE" || order.status == "SHIPPING")
-                  html = `<a onclick="showOrderDetails(${order.id})" >DETAILS</a>`
              else
                  html = `<a class="receiveOrder" data-id="${order.id}" onclick="updateOrderStatus(${order.id})">UPDATE STATUS |</a>
                                     <a class="cancelOrder" onclick="cancelStatus(${order.id})" >CANCEL |</a>

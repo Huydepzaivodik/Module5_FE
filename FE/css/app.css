@@ -5997,9 +5997,6 @@ input::-ms-clear {
 /*--------------------------------------------------------------
 20.3 Owl-Carousel
 --------------------------------------------------------------*/
-#orders-list-stats tr,td {
-     border: 1px solid black;
-}
 #stats-list {
       border-collapse: collapse;
 }
@@ -6422,4 +6419,5 @@ input::-ms-clear {
 
 #js-product-detail-modal-thumbnail:hover .pt-prev, #js-product-detail-modal-thumbnail:hover .pt-next {
   opacity: .8; }
+
 

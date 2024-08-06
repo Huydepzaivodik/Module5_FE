@@ -12,16 +12,8 @@ function showMiniCart(){
                                              <div class="mini-product-container gl-scroll u-s-m-b-15" id="cart-container-mini">
                                             
                                             </div>
-                                            <div class="mini-product-stat">
-                                                <div class="mini-total">
-
-                                                    <span class="subtotal-text">SUBTOTAL</span>
-
-                                                    <span class="subtotal-value" id="total-value"></span></div>
-                                                <div class="mini-action">
-
-                                                    <a class="mini-link btn--e-brand-b-2" href="checkout.html">PROCEED TO CHECKOUT</a>
-
+                                            <div class="mini-product-stat">                                              
+                                                <div class="mini-action">                                                
                                                     <a class="mini-link btn--e-transparent-secondary-b-2" onclick="showCart()">VIEW CART</a></div>
                                             </div>
                                         </div>
